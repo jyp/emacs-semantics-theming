@@ -96,7 +96,7 @@ portions of the display, whose relevant state is transient.
 Transience can be as low as isearch matches, balanced parens or
 high TODOs, etc.  Attention can be grabbed using a remarkable hue
 and high staturation." :type 'color :group 'sfl)
-(defcustom est-color-fg-critical nil
+(defcustom est-color-fg-critical "#FF2F00"
 "Color indicating that urgent attention is required.
 Not taking care of the issue will most likely lead to problems
 down the road: this is for critical problems, and can be
@@ -186,10 +186,6 @@ background color that is barely perceptible."
 (defface est-heading-1 nil "Face for level 1 headings" :group 'sfl)
 (defface est-heading-2 nil "Face for level 2 headings" :group 'sfl)
 (defface est-heading-3 nil "Face for level 3 headings" :group 'sfl)
-
-
-
-
 
 
 (defun est-build-theme (theme)
@@ -449,34 +445,30 @@ background color that is barely perceptible."
 
 (est-build-theme-with 'est-lunarized 'est-themes
   ((est-color-fg-default  "#839496")
-   (est-color-fg-critical "#dc322f")
    (est-color-fg-salient  "#268bd2")
    (est-color-fg-popout   "#eee8d5")
    (est-color-bg-default   "#002b36")
    (est-color-bg-subtle    "#06303c")
    (est-color-bg-selected  "#073642")))
 
-(est-build-theme-with 'est-light 'est-themes
+(est-build-theme-with 'est-day 'est-themes
  ((est-color-fg-default     "#3e4759")
-  (est-color-bg-default     "#eceff4")
+  (est-color-bg-default     "#ffffff")
   (est-color-bg-subtle      "#e5e9f0")
-  (est-color-bg-selected    "#ffffff")
-  (est-color-fg-critical    "#FF2F00")
+  (est-color-bg-selected    "#eceff4")
   (est-color-fg-salient     "#5a8bca")
   (est-color-fg-popout      "#00e0ff")))
 
 
-(est-build-theme-with 'est-dark 'est-themes ;; dark palette
+(est-build-theme-with 'est-night 'est-themes ;; dark palette
   ((est-color-bg-selected "#192435")
    (est-color-bg-subtle   "#242e41")
    (est-color-bg-default  "#2b3547")
    (est-color-fg-default  "#cccfd4")
    (est-color-fg-salient  "#5a8bca")
-   (est-color-fg-popout   "#00c8ff")
-   (est-color-fg-critical "#FF2F00")))
+   (est-color-fg-popout   "#00c8ff")))
 
 (provide 'est)
 
-(jyp-switch-theme 'est-dark)
 
 ;;; est.el ends here

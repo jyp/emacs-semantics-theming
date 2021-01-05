@@ -188,14 +188,12 @@ background color that is barely perceptible."
 (defface est-heading-3 nil "Face for level 3 headings" :group 'sfl)
 
 
-;;;;;;;;;;;;
-;; Setup
 
 
-(defun est-build-theme (theme theme-feature)
+
+
+(defun est-build-theme (theme)
   (interactive)
-
-  (custom-declare-theme theme theme-feature)
 
   (setq est-color-bg-hilight1  (est-paint-over  est-color-bg-default 0.15 est-color-fg-popout))   ;; bg. highlight 1st kind
   (setq est-color-bg-hilight2  (est-paint-over  est-color-bg-default 0.15 est-color-fg-salient))  ;; bg. highlight 2nd kind
@@ -324,6 +322,9 @@ background color that is barely perceptible."
    `(helm-visible-mark               ((t :inherit est-strong)))
    `(helm-buffer-size                ((t :inherit est-faded)))
    `(helm-buffer-process             ((t :inherit shadow)))
+   `(helm-buffer-not-saved           ((t :inherit est-popout)))
+   `(helm-buffer-directory           ((t :inherit est-salient)))
+   `(helm-buffer-saved-out           ((t :inherit est-critical)))
 
    `(ido-only-match ((t :inherit match)))
 
@@ -422,8 +423,6 @@ background color that is barely perceptible."
    `(org-verbatim                 ((t :inherit est-emph)))
    `(org-verse                    ((t :inherit est-faded)))
 
-
-   
    `(powerline-active1    ((t :inverse-video t :inherit (est-emph default))))
    `(powerline-active2    ((t :inherit powerline-active1)))
    `(powerline-inactive1  ((t :inherit (est-faded est-subtle))))
@@ -440,39 +439,44 @@ background color that is barely perceptible."
    ))
 
 
+(defmacro est-build-theme-with (theme theme-feature custom-vars)
+  "est"
+  `(progn
+     (custom-declare-theme ,theme ,theme-feature)
+     (let (,@custom-vars)
+       (est-build-theme ,theme))))
 
 
-(custom-set-variables ;; solarized dark inspiration palette
-  '(est-color-fg-default  "#839496")
-  '(est-color-fg-critical "#dc322f")
-  '(est-color-fg-salient  "#268bd2")
-  '(est-color-fg-popout   "#eee8d5")
-  '(est-color-bg-default   "#002b36")
-  '(est-color-bg-subtle    "#06303c")
-  '(est-color-bg-selected  "#073642"))
-(est-build-theme 'est-lunarized 'est-themes)
+(est-build-theme-with 'est-lunarized 'est-themes
+  ((est-color-fg-default  "#839496")
+   (est-color-fg-critical "#dc322f")
+   (est-color-fg-salient  "#268bd2")
+   (est-color-fg-popout   "#eee8d5")
+   (est-color-bg-default   "#002b36")
+   (est-color-bg-subtle    "#06303c")
+   (est-color-bg-selected  "#073642")))
 
-(custom-set-variables ;; dark palette
-  '(est-color-bg-selected "#192435")
-  '(est-color-bg-subtle   "#242e41")
-  '(est-color-bg-default  "#2b3547")
-  '(est-color-fg-default  "#cccfd4")
-  '(est-color-fg-salient  "#5a8bca")
-  '(est-color-fg-popout   "#00c8ff")
-  '(est-color-fg-critical "#FF2F00"))
-(est-build-theme 'est-dark 'est-themes)
+(est-build-theme-with 'est-light 'est-themes
+ ((est-color-fg-default     "#3e4759")
+  (est-color-bg-default     "#eceff4")
+  (est-color-bg-subtle      "#e5e9f0")
+  (est-color-bg-selected    "#ffffff")
+  (est-color-fg-critical    "#FF2F00")
+  (est-color-fg-salient     "#5a8bca")
+  (est-color-fg-popout      "#00e0ff")))
 
-(custom-set-variables ;; light palette
-  '(est-color-fg-default     "#3e4759")
-  '(est-color-bg-default     "#eceff4")
-  '(est-color-bg-subtle      "#e5e9f0")
-  '(est-color-bg-selected    "#ffffff")
-  '(est-color-fg-critical    "#FF2F00")
-  '(est-color-fg-salient     "#5a8bca")
-  '(est-color-fg-popout      "#00e0ff"))
-(est-build-theme 'est-light 'est-themes)
 
+(est-build-theme-with 'est-dark 'est-themes ;; dark palette
+  ((est-color-bg-selected "#192435")
+   (est-color-bg-subtle   "#242e41")
+   (est-color-bg-default  "#2b3547")
+   (est-color-fg-default  "#cccfd4")
+   (est-color-fg-salient  "#5a8bca")
+   (est-color-fg-popout   "#00c8ff")
+   (est-color-fg-critical "#FF2F00")))
 
 (provide 'est)
+
+(jyp-switch-theme 'est-dark)
 
 ;;; est.el ends here

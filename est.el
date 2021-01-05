@@ -191,11 +191,18 @@ background color that is barely perceptible."
 (defun est-build-theme (theme)
   (interactive)
 
-  (setq est-color-bg-hilight1  (est-paint-over  est-color-bg-default 0.15 est-color-fg-popout))   ;; bg. highlight 1st kind
-  (setq est-color-bg-hilight2  (est-paint-over  est-color-bg-default 0.15 est-color-fg-salient))  ;; bg. highlight 2nd kind
-  (setq est-color-fg-shadowed  (est-paint-over  est-color-fg-default 0.6 est-color-bg-default))   ;; de-selected/disabled menu options
-  (setq est-color-fg-faded     (est-paint-over  est-color-fg-default 0.2 est-color-bg-default))   ;; de-emphasized (comments, etc.)
-  (setq est-color-fg-emph      (est-scrape-paint est-color-fg-default 0.2 est-color-bg-default))
+  (let ((est-color-bg-hilight1  (est-paint-over  est-color-bg-default 0.15 est-color-fg-popout))   ;; bg. highlight 1st kind
+        (est-color-bg-hilight2  (est-paint-over  est-color-bg-default 0.15 est-color-fg-salient))  ;; bg. highlight 2nd kind
+        (est-color-fg-shadowed  (est-paint-over  est-color-fg-default 0.6 est-color-bg-default))   ;; de-selected/disabled menu options
+        (est-color-fg-faded     (est-paint-over  est-color-fg-default 0.2 est-color-bg-default))   ;; de-emphasized (comments, etc.)
+        (est-color-fg-emph      (est-scrape-paint est-color-fg-default 0.2 est-color-bg-default))  ;; subtle emphasis
+        )
+
+  (custom-theme-set-variables theme
+   `(hl-paren-colors (list ,est-color-fg-salient
+                           ,(est-paint-over est-color-fg-salient 0.25 est-color-fg-emph)
+                           ,(est-paint-over est-color-fg-salient 0.5 est-color-fg-emph)
+                           ,(est-paint-over est-color-fg-salient 0.75 est-color-fg-emph))))
 
   ;; palette-dependent faces
   (custom-theme-set-faces theme
@@ -219,8 +226,7 @@ background color that is barely perceptible."
 
    `(default ((t :foreground ,est-color-fg-default :background ,est-color-bg-default)))
    `(cursor  ((t :background ,est-color-fg-default)))
-   `(shadow  ((t :foreground ,est-color-fg-shadowed)))
-   )
+   `(shadow  ((t :foreground ,est-color-fg-shadowed))))
 
   ;; palette-independent faces
   (custom-theme-set-faces theme
@@ -350,16 +356,19 @@ background color that is barely perceptible."
    `(ivy-virtual                    ((t :inherit est-faded)))
    `(ivy-yanked-word                ((t :inherit est-faded)))
 
+   `(magit-diff-hunk-heading           ((t :extend t :inherit est-heading)))
    `(magit-diff-added                  ((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 "#00FF00"))))
-   `(magit-diff-added-highlight        ((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 "#00FF00"))))
-   `(magit-diff-context-highlight      ((t :extend t :background ,est-color-bg-selected)))
-   `(magit-diff-hunk-heading           ((t :extend t :foreground ,est-color-fg-emph :background ,est-color-bg-subtle)))
-   `(magit-diff-hunk-heading-highlight ((t :extend t :foreground ,est-color-fg-emph :background ,est-color-bg-selected :inherit est-strong)))
    `(magit-diff-removed                ((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 "#FF0000"))))
+
+   `(magit-diff-hunk-heading-highlight ((t :extend t :inherit (est-heading est-choice))))
+   `(magit-diff-context-highlight      ((t :extend t :inherit est-choice)))
+   `(magit-diff-added-highlight        ((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 "#00FF00"))))
    `(magit-diff-removed-highlight      ((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 "#FF0000"))))
-   `(magit-hash                        ((t :inherit est-salient)))
-   `(magit-section-heading             ((t :inherit est-strong)))
+
+   `(magit-section-heading             ((t :inherit est-heading-3)))
    `(magit-section-highlight           ((t :inherit est-choice)))
+
+   `(magit-hash                        ((t :inherit est-salient)))
 
    `(makefile-space               ((t :inherit warning)))
 
@@ -432,18 +441,20 @@ background color that is barely perceptible."
    `(swiper-match-face-4 ((t :inherit match)))
 
    `(widget-field ((t :inherit (est-faded est-subtle))))
-   ))
+   )))
 
 
 (defmacro est-build-theme-with (theme theme-feature custom-vars)
-  "est"
+  "Construct THEME with THEME-FEATURE.
+Local variable assignments, such as palette, can be provides in
+CUSTOM-VARS."
   `(progn
      (custom-declare-theme ,theme ,theme-feature)
      (let (,@custom-vars)
        (est-build-theme ,theme))))
 
 
-(est-build-theme-with 'est-lunarized 'est-themes
+(est-build-theme-with 'est-lunarized-dark 'est-themes ;; solarized inspiration theme
   ((est-color-fg-default  "#839496")
    (est-color-fg-salient  "#268bd2")
    (est-color-fg-popout   "#eee8d5")
@@ -451,22 +462,31 @@ background color that is barely perceptible."
    (est-color-bg-subtle    "#06303c")
    (est-color-bg-selected  "#073642")))
 
-(est-build-theme-with 'est-day 'est-themes
+(est-build-theme-with 'est-lunarized-light 'est-themes ;; solarized inspiration theme
+  ((est-color-fg-default  "#657b83")
+   (est-color-fg-salient  "#268bd2")
+   (est-color-fg-popout   "#d33682")
+   (est-color-bg-default   "#fdf6e3")
+   (est-color-bg-subtle    "#eee8d5")
+   (est-color-bg-selected  "#ffffff")))
+
+(est-build-theme-with 'est-cloudy-day 'est-themes
  ((est-color-fg-default     "#3e4759")
   (est-color-bg-default     "#ffffff")
-  (est-color-bg-subtle      "#e5e9f0")
-  (est-color-bg-selected    "#eceff4")
-  (est-color-fg-salient     "#5a8bca")
+  (est-color-bg-subtle      "#eef1f6")
+  (est-color-bg-selected    "#e5e9f0")
+  (est-color-fg-salient     "#2056a2")
   (est-color-fg-popout      "#00e0ff")))
 
-
-(est-build-theme-with 'est-night 'est-themes ;; dark palette
+(est-build-theme-with 'est-cloudy-night 'est-themes ;; dark palette
   ((est-color-bg-selected "#192435")
    (est-color-bg-subtle   "#242e41")
    (est-color-bg-default  "#2b3547")
    (est-color-fg-default  "#cccfd4")
    (est-color-fg-salient  "#5a8bca")
    (est-color-fg-popout   "#00c8ff")))
+
+(jyp-switch-theme 'est-cloudy-night)
 
 (provide 'est)
 

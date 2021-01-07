@@ -305,10 +305,10 @@ be used instead."
    `(cursor  ((t :background ,est-color-fg-default)))
    `(shadow  ((t :foreground ,est-color-fg-shadowed)))
 
-   `(magit-diff-added                  ((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-removed))))
-   `(magit-diff-removed                ((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-added))))
-   `(magit-diff-added-highlight        ((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-removed))))
-   `(magit-diff-removed-highlight      ((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-added))))
+   `(magit-diff-removed                  ((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-removed))))
+   `(magit-diff-added                ((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-added))))
+   `(magit-diff-removed-highlight        ((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-removed))))
+   `(magit-diff-added-highlight      ((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-added))))
 
    `(boon-modeline-ins ((t :foreground ,est-color-bg-default :background ,(est-paint-over est-color-fg-default 0.7 est-color-fg-popout))))
    `(boon-modeline-spc ((t :foreground ,est-color-bg-default :background ,(est-paint-over est-color-fg-default 0.7 est-color-fg-salient))))

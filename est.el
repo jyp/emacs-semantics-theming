@@ -43,9 +43,9 @@
 ;; - a way to define the small set of standard faces, in a visually
 ;; coherent manner, from an even smaller palette of colors.
 
- This is
+;;  This is
 ;; achieved by inheriting from   See also
-;; `est-build-base-theme-with'")
+;; `est-build-base-theme-with'"
 
 ;;; Code:
 

@@ -254,15 +254,7 @@ and secondary information."
 (defface est-heading-3 nil "Face for level 3 headings" :group 'sfl)
 (defface est-heading   nil "Face for level 4 headings and below" :group 'sfl)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-
-(defun est-build-theme (theme)
-  "Customize THEME by defining all the est-... faces based on
-est- customization. Typically, `est-build-base-theme-with' will
-be used instead."
-  (interactive)
-
+(defun est-apply-palette ()
   (let ((est-color-bg-hilight1  (est-paint-over  est-color-bg-default 0.15 est-color-fg-popout))   ;; bg. highlight 1st kind
         (est-color-bg-hilight2  (est-paint-over  est-color-bg-default 0.15 est-color-fg-salient))  ;; bg. highlight 2nd kind
         (est-color-fg-shadowed  (est-paint-over  est-color-fg-default 0.6 est-color-bg-default))   ;; de-selected/disabled menu options
@@ -270,54 +262,48 @@ be used instead."
         (est-color-fg-emph      (est-scrape-paint est-color-fg-default 0.2 est-color-bg-default))  ;; subtle emphasis
         )
 
-  (custom-theme-set-variables theme
-   `(hl-paren-colors (list ,est-color-fg-salient
-                           ,(est-paint-over est-color-fg-salient 0.25 est-color-fg-emph)
-                           ,(est-paint-over est-color-fg-salient 0.5 est-color-fg-emph)
-                           ,(est-paint-over est-color-fg-salient 0.75 est-color-fg-emph))))
+    (setq hl-paren-colors (list est-color-fg-salient
+                                (est-paint-over est-color-fg-salient 0.25 est-color-fg-emph)
+                                (est-paint-over est-color-fg-salient 0.5 est-color-fg-emph)
+                                (est-paint-over est-color-fg-salient 0.75 est-color-fg-emph)))
 
-  ;; palette-dependent faces
-  (custom-theme-set-faces theme
-   `(est-heading   ((t :inherit bold)))
-   `(est-heading-1 ((t :height 1.3 :inherit  est-heading)))
-   `(est-heading-2 ((t :height 1.2 :inherit  est-heading)))
-   `(est-heading-3 ((t :height 1.15 :inherit est-heading)))
-   `(est-faded     ((t :foreground ,est-color-fg-faded)))
-   `(est-emph      ((t :foreground ,est-color-fg-emph)))
-   `(est-strong    ((t :inherit (bold est-emph))))
-   `(est-salient   ((t :foreground ,est-color-fg-salient)))
-   `(est-popout    ((t :foreground ,est-color-fg-popout)))
-   `(est-critical  ((t :foreground ,est-color-fg-critical)))
+    (dolist (faces `((est-heading   ((t :inherit bold)))
+                     (est-heading-1 ((t :height 1.3 :inherit  est-heading)))
+                     (est-heading-2 ((t :height 1.2 :inherit  est-heading)))
+                     (est-heading-3 ((t :height 1.15 :inherit est-heading)))
+                     (est-faded     ((t :foreground ,est-color-fg-faded)))
+                     (est-emph      ((t :foreground ,est-color-fg-emph)))
+                     (est-strong    ((t :inherit (bold est-emph))))
+                     (est-salient   ((t :foreground ,est-color-fg-salient)))
+                     (est-popout    ((t :foreground ,est-color-fg-popout)))
+                     (est-critical  ((t :foreground ,est-color-fg-critical)))
+                     (est-separator ((t :foreground ,est-color-bg-selected)))
+                     (est-subtle ((t :background ,est-color-bg-subtle)))
+                     (est-choice ((t :background ,est-color-bg-selected :extend t)))
+                     (est-highlight-1 ((t :background ,est-color-bg-hilight1)))
+                     (est-highlight-2 ((t :background ,est-color-bg-hilight2)))
+                     (mode-line           ((t :foreground ,est-color-bg-default :background ,est-color-fg-default)))
+                     (mode-line-highlight ((t :foreground ,est-color-bg-default :background ,est-color-fg-faded)))
+                     (mode-line-inactive  ((t :foreground ,est-color-fg-faded :background ,est-color-bg-subtle)))
+                     (default ((t :foreground ,est-color-fg-default :background ,est-color-bg-default)))
+                     (cursor  ((t :background ,est-color-fg-default)))
+                     (shadow  ((t :foreground ,est-color-fg-shadowed)))
+                     (magit-diff-removed                  ((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-removed))))
+                     (magit-diff-added                ((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-added))))
+                     (magit-diff-removed-highlight        ((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-removed))))
+                     (magit-diff-added-highlight      ((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-added))))
+                     (boon-modeline-ins ((t :foreground ,est-color-bg-default :background ,(est-paint-over est-color-fg-default 0.7 est-color-fg-popout))))
+                     (boon-modeline-spc ((t :foreground ,est-color-bg-default :background ,(est-paint-over est-color-fg-default 0.7 est-color-fg-salient))))
+                     (boon-modeline-cmd ((t :inherit (est-subtle default))))
+                     (boon-modeline-off ((t :inherit error)))
+                     ))
+      (face-spec-set (car faces) (purecopy (cadr faces)) 'face-defface-spec))))
 
-   `(est-separator ((t :foreground ,est-color-bg-selected)))
 
-   `(est-subtle ((t :background ,est-color-bg-subtle)))
-   `(est-choice ((t :background ,est-color-bg-selected :extend t)))
-   `(est-highlight-1 ((t :background ,est-color-bg-hilight1)))
-   `(est-highlight-2 ((t :background ,est-color-bg-hilight2)))
+(deftheme est-top-layer)
 
-   `(mode-line           ((t :foreground ,est-color-bg-default :background ,est-color-fg-default)))
-   `(mode-line-highlight ((t :foreground ,est-color-bg-default :background ,est-color-fg-faded)))
-   `(mode-line-inactive  ((t :foreground ,est-color-fg-faded :background ,est-color-bg-subtle)))
-
-
-   `(default ((t :foreground ,est-color-fg-default :background ,est-color-bg-default)))
-   `(cursor  ((t :background ,est-color-fg-default)))
-   `(shadow  ((t :foreground ,est-color-fg-shadowed)))
-
-   `(magit-diff-removed                  ((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-removed))))
-   `(magit-diff-added                ((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-added))))
-   `(magit-diff-removed-highlight        ((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-removed))))
-   `(magit-diff-added-highlight      ((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-added))))
-
-   `(boon-modeline-ins ((t :foreground ,est-color-bg-default :background ,(est-paint-over est-color-fg-default 0.7 est-color-fg-popout))))
-   `(boon-modeline-spc ((t :foreground ,est-color-bg-default :background ,(est-paint-over est-color-fg-default 0.7 est-color-fg-salient))))
-   `(boon-modeline-cmd ((t :inherit (est-subtle default))))
-   `(boon-modeline-off ((t :inherit error)))
-   )
-
-  ;; palette-independent faces
-  (custom-theme-set-faces theme
+(custom-theme-set-faces
+ 'est-top-layer
    `(buffer-menu-buffer           ((t :inherit est-strong)))
    `(success ((t :inherit est-strong)))
    `(warning ((t :inherit (est-salient bold))))
@@ -531,46 +517,45 @@ be used instead."
 
    `(eshell-prompt ((t :inherit est-strong)))
 
-   `(widget-field ((t :inherit (est-faded est-subtle))))
-   )))
+   `(widget-field ((t :inherit (est-faded est-subtle)))))
 
 
-(defmacro est-build-theme-with (theme theme-feature custom-vars)
+
+(defmacro est-use-palette (theme theme-feature custom-vars)
   "Construct THEME with THEME-FEATURE.
 Local variable assignments, such as palette, can be provides in
 CUSTOM-VARS."
   `(progn
-     (custom-declare-theme ,theme ,theme-feature)
      (let (,@custom-vars)
-       (est-build-theme ,theme))))
+       (est-apply-palette)
+       )))
+
+;; (est-use-palette 'est-lunarized-dark 'est-themes ;; solarized inspire theme
+;;   ((est-color-fg-default  "#839496")
+;;    (est-color-fg-salient  "#268bd2")
+;;    (est-color-fg-popout   "#eee8d5")
+;;    (est-color-bg-default   "#002b36")
+;;    (est-color-bg-subtle    "#06303c")
+;;    (est-color-bg-selected  "#073642")))
 
 
-(est-build-theme-with 'est-lunarized-dark 'est-themes ;; solarized inspire theme
-  ((est-color-fg-default  "#839496")
-   (est-color-fg-salient  "#268bd2")
-   (est-color-fg-popout   "#eee8d5")
-   (est-color-bg-default   "#002b36")
-   (est-color-bg-subtle    "#06303c")
-   (est-color-bg-selected  "#073642")))
+;; (est-use-palette 'est-lunarized-light 'est-themes ;; solarized inspired theme
+;;   ((est-color-fg-default  "#657b83")
+;;    (est-color-fg-salient  "#268bd2")
+;;    (est-color-fg-popout   "#d33682")
+;;    (est-color-bg-default   "#fdf6e3")
+;;    (est-color-bg-subtle    "#eee8d5")
+;;    (est-color-bg-selected  "#ffffff")))
 
+;; (est-use-palette 'est-cloudy-day 'est-themes ;; light palette, blue tones
+;;  ((est-color-fg-default     "#3e4759")
+;;   (est-color-bg-default     "#ffffff")
+;;   (est-color-bg-subtle      "#eef1f6")
+;;   (est-color-bg-selected    "#e5e9f0")
+;;   (est-color-fg-salient     "#2056a2")
+;;   (est-color-fg-popout      "#00e0ff")))
 
-(est-build-theme-with 'est-lunarized-light 'est-themes ;; solarized inspired theme
-  ((est-color-fg-default  "#657b83")
-   (est-color-fg-salient  "#268bd2")
-   (est-color-fg-popout   "#d33682")
-   (est-color-bg-default   "#fdf6e3")
-   (est-color-bg-subtle    "#eee8d5")
-   (est-color-bg-selected  "#ffffff")))
-
-(est-build-theme-with 'est-cloudy-day 'est-themes ;; light palette, blue tones
- ((est-color-fg-default     "#3e4759")
-  (est-color-bg-default     "#ffffff")
-  (est-color-bg-subtle      "#eef1f6")
-  (est-color-bg-selected    "#e5e9f0")
-  (est-color-fg-salient     "#2056a2")
-  (est-color-fg-popout      "#00e0ff")))
-
-(est-build-theme-with 'est-cloudy-night 'est-themes ;; dark palette, blue accents
+(est-use-palette 'est-cloudy-night 'est-themes ;; dark palette, blue accents
   ((est-color-bg-selected "#192435")
    (est-color-bg-subtle   "#242e41")
    (est-color-bg-default  "#2b3547")
@@ -578,15 +563,15 @@ CUSTOM-VARS."
    (est-color-fg-salient  "#5a8bca")
    (est-color-fg-popout   "#00c8ff")))
 
-(est-build-theme-with 'est-starry-night 'est-themes
-  ((est-color-bg-selected "#00128d")
-   (est-color-bg-subtle   "#000010")
-   (est-color-bg-default  "#000050")
-   (est-color-fg-default  "#819ce6")
-   (est-color-fg-salient  "#74a5b3")
-   (est-color-fg-popout   "#e7d97b")))
+;; (est-use-palette 'est-starry-night 'est-themes
+;;   ((est-color-bg-selected "#00128d")
+;;    (est-color-bg-subtle   "#000010")
+;;    (est-color-bg-default  "#000050")
+;;    (est-color-fg-default  "#819ce6")
+;;    (est-color-fg-salient  "#74a5b3")
+;;    (est-color-fg-popout   "#e7d97b")))
 
-;; (jyp-switch-theme 'est-cloudy-night)
+(enable-theme 'est-top-layer)
 
 (provide 'est)
 

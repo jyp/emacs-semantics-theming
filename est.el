@@ -1,8 +1,64 @@
 ;;; Commentary
 
-;;; Code
+;; Copyright: FSF
+
+;; Author: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
+;; Maintainer: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
+;; URL: https://github.com/jyp/emacs-semantics-theming
+;; Created: January 2021
+;; Keywords: theming
+;; Package-Requires: ((emacs "26") (dash "2.17.0"))
+;; Version: 1
+
+;; This file is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3, or (at your option)
+;; any later version.
+
+;; This file is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
+
+;;; Commentary:
+
+;; This file attempts to est ablish an Emacs Semantically-sound
+;; Theming foundation. The goal is to provide a visually pleasant and
+;; semantically coherent meta-theme, which is easy to customize.
+;;
+;; This a achieved through:
+;;
+;; - a small set of faces which are assigned a meaning. Sometimes
+;; standard emacs faces can be used for that (`shadow'), but otherwise
+;; we define new ones. Use customize-apropos-faces est- for a list of
+;; those.
+;;
+;; - a common theme base, mapping (many) emacs faces to this small set.
+;;
+;; - a way to define the small set of standard faces, in a visually
+;; coherent manner, from an even smaller palette of colors.
+
+ This is
+;; achieved by inheriting from   See also
+;; `est-build-base-theme-with'")
+
+;;; Code:
+
 (require 'color)
 (require 'dash)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Color manipulation
+
+(defcustom est-gamma 1.5
+  "Gamma correction parameter for `est'.
+2.2 is the standard value but for light palettes tends to yield
+too bright colors due to too accurate additive color.")
 
 (defun est-scale-color (scale col)
   "Multiply every entry in COL by SCALE."
@@ -15,11 +71,6 @@
 (defun est-sub-color (a b)
   "Subtract entries of B from A indexwise."
   (-zip-with '- a b))
-
-(defcustom est-gamma 1.5
-  "Gamma correction parameter for `est'.
-2.2 is the standard value but for light palettes tends to yield
-too bright colors due to too accurate additive color.")
 
 (defun est-exp-gamma (x)
   "Apply gamma correction to X."
@@ -78,38 +129,45 @@ Inputs colors are names."
     (apply 'color-rgb-to-hex (color-hsl-to-rgb hue saturation lightness))))
 
 
-;;Note: bg colors MUST be contrasting with all other foreground colors.
+;;;;;;;;;;;;;;;;;;
+;; Color palette
 
-(defcustom est-color-fg-default  nil
+
+(defcustom est-color-fg-default "#3e4759"
 "Default foreground color." :type 'color :group 'sfl)
-(defcustom est-color-bg-default nil
+
+(defcustom est-color-bg-default "#ffffff"
 "Default background color."
 :type 'color :group 'sfl)
-(defcustom est-color-fg-salient nil
+
+(defcustom est-color-fg-salient "#2056a2"
   "Color of persistent accents.
 It is suitable for links and names which can be followed, such as
 directories, required elisp modules, etc." :type 'color :group 'sfl)
-(defcustom est-color-fg-popout   nil
+
+(defcustom est-color-fg-popout "#00e0ff"
 "Accented color which should be easy to spot.
 It is used mostly to attract attention immediately relevant
 portions of the display, whose relevant state is transient.
 Transience can be as low as isearch matches, balanced parens or
 high TODOs, etc.  Attention can be grabbed using a remarkable hue
 and high staturation." :type 'color :group 'sfl)
+
 (defcustom est-color-fg-critical "#FF2F00"
 "Color indicating that urgent attention is required.
 Not taking care of the issue will most likely lead to problems
 down the road: this is for critical problems, and can be
 indicated with extra strong, even disturbing contrast, saturation
 and a red hue." :type 'color :group 'sfl)
-(defcustom est-color-bg-subtle nil
+
+(defcustom est-color-bg-subtle "#eef1f6"
 "A background color sublty different from the default.
 This can be used for slight emphasis, or to delineate areas, such
 as the region.  This color can even be used exceptionally as
 foreground in case the text is not meant to be read, for example
 to display weak separators."  :type 'color :group 'sfl)
 
-(defcustom est-color-bg-selected nil
+(defcustom est-color-bg-selected "#e5e9f0"
 "A background color which is notably different from the default.
 Still, it should be contrasting with all foreground colors to
 enable easy reading.  It is used for to indicate selected menu
@@ -117,78 +175,92 @@ items, or delinate areas with stronger emphasis." :type 'color
 :group 'sfl)
 
 
+(defcustom est-taint-vc-added "#00FF00"
+"A taint to indicate added stuff in VC contexts.
+This is not used directly in faces, but blended with various background
+colors. So it is fine to use saturated bright colors here." :type 'color :group
+'sfl)
+
+(defcustom est-taint-vc-removed "#FF0000"
+"A taint to indicate removed stuff in VC contexts.
+This is not used directly in faces, but blended with various background
+colors.  So it is fine to use saturated bright colors here."
+:type 'color :group 'sfl)
 
 ;;;;;;;;;;;;;;;
 ;; Faces
-
 
 (defface est-separator nil
   "Face for separators (such as --------)" :group 'sfl)
 
 (defface est-choice nil
-  "Background face for the current choice (in helm, ivy, selectrum, etc.)"
+  "Background face for the current selection (in completions frameworks, but also magit, etc.) Not the region!"
   :group 'sfl)
 
-(defface est-highlight-1 nil "Face for primary highlight" :group 'sfl)
+(defface est-highlight-1 nil "Face for semi-transient
+highlights. The meaning is similar to `est-popout', but for
+backgrounds (when changing the foreground color is somehow
+inappropriate)." :group 'sfl)
 
-(defface est-highlight-2 nil "Face for primary highlight" :group 'sfl)
+(defface est-highlight-2 nil "Face for secondary highlights" :group 'sfl)
 
 (defface est-critical nil
   "Critical face is for information that requires immediate action.
-It should be of high constrast when compared to other faces. This
-can be realized (for example) by setting an intense background
-color, typically a shade of red. It must be used scarcely."
+  See also `est-color-fg-critical'."
   :group 'sfl)
 
 (defface est-popout nil
   "Popout face is used for information that needs attention.
-To achieve such effect, the hue of the face has to be
-sufficiently different from other faces such that it attracts
-attention through the popout effect."
+See also `est-color-fg-popout'."
   :group 'sfl)
 
 (defface est-emph nil
-  "An subtle emphasis face.
-This effect can be achieved by using the `est-color-fg-emph'
-color."
+  "A mild emphasis face.
+This roughly corresponds to italics in mainstream typsetting
+practice. By defaut the emphasis effect is achieved by using the
+`est-color-fg-emph' color, which is by default slightly more
+contrasted than the default color.  Besides, italics do not mesh
+well with monospace fonts."
   :group 'sfl)
 
 
 (defface est-strong nil
-  "A strong emphasis face.
-It should be used more sparingly that `est-emph', while still not
-disturb reading."
+  "A face with stronger emphasis than `est-emph'.
+Accordingly it is used more sparingly. By default the effect is
+achieved by using a bold weight together with a higher constrast
+(`est-color-fg-emph')."
   :group 'sfl)
 
 (defface est-salient nil
-  "Salient face is used for information that are important.
-To suggest the information is of the same nature but important,
-the face uses a different hue with approximately the same
-intensity as the default face. This is typically used for links."
+  "Salient face is used for information of same urgency,
+but different nature than regular text. See also
+`est-color-fg-salient'."
   :group 'sfl)
 
 (defface est-faded nil
-  "Faded face is for information that are less important.
-It is made by using the same hue as the default but with a lesser
-intensity than the default. It can be used for comments,
-secondary information and also replace italic (which is generally
-abused anyway)."
+  "Faded face is for information that is less important.
+It is achieved by using the same hue as the default foreground
+color, but with a lesser contrast. It can be used for comments
+and secondary information."
   :group 'sfl)
 
 (defface est-subtle nil
   "Subtle face is used to suggest a physical area on the screen.
-It is important to not disturb too strongly the reading of
-information and this can be made by setting a very light
-background color that is barely perceptible."
-  :group 'sfl)
+  See also `est-color-bg-subtle.'" :group 'sfl)
 
-(defface est-heading   nil "Face for headings"         :group 'sfl)
+
 (defface est-heading-1 nil "Face for level 1 headings" :group 'sfl)
 (defface est-heading-2 nil "Face for level 2 headings" :group 'sfl)
 (defface est-heading-3 nil "Face for level 3 headings" :group 'sfl)
+(defface est-heading   nil "Face for level 4 headings and below" :group 'sfl)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 
 (defun est-build-theme (theme)
+  "Customize THEME by defining all the est-... faces based on
+est- customization. Typically, `est-build-base-theme-with' will
+be used instead."
   (interactive)
 
   (let ((est-color-bg-hilight1  (est-paint-over  est-color-bg-default 0.15 est-color-fg-popout))   ;; bg. highlight 1st kind
@@ -224,13 +296,29 @@ background color that is barely perceptible."
    `(est-highlight-1 ((t :background ,est-color-bg-hilight1)))
    `(est-highlight-2 ((t :background ,est-color-bg-hilight2)))
 
+   `(mode-line           ((t :foreground ,est-color-bg-default :background ,est-color-fg-default)))
+   `(mode-line-highlight ((t :foreground ,est-color-bg-default :background ,est-color-fg-faded)))
+   `(mode-line-inactive  ((t :foreground ,est-color-fg-faded :background ,est-color-bg-subtle)))
+
+
    `(default ((t :foreground ,est-color-fg-default :background ,est-color-bg-default)))
    `(cursor  ((t :background ,est-color-fg-default)))
-   `(shadow  ((t :foreground ,est-color-fg-shadowed))))
+   `(shadow  ((t :foreground ,est-color-fg-shadowed)))
+
+   `(magit-diff-added                  ((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-removed))))
+   `(magit-diff-removed                ((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-added))))
+   `(magit-diff-added-highlight        ((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-removed))))
+   `(magit-diff-removed-highlight      ((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-added))))
+
+   `(boon-modeline-ins ((t :foreground ,est-color-bg-default :background ,(est-paint-over est-color-fg-default 0.7 est-color-fg-popout))))
+   `(boon-modeline-spc ((t :foreground ,est-color-bg-default :background ,(est-paint-over est-color-fg-default 0.7 est-color-fg-salient))))
+   `(boon-modeline-cmd ((t :inherit (est-subtle default))))
+   `(boon-modeline-off ((t :inherit error)))
+   )
 
   ;; palette-independent faces
   (custom-theme-set-faces theme
-  
+   `(buffer-menu-buffer           ((t :inherit est-strong)))
    `(success ((t :inherit est-strong)))
    `(warning ((t :inherit (est-salient bold))))
 
@@ -253,9 +341,6 @@ background color that is barely perceptible."
    `(show-paren-mismatch ((t :inherit est-critical)))
    `(trailing-whitespace ((t :inherit est-subtle)))
    
-   `(mode-line           ((t :foreground ,est-color-bg-default :background ,est-color-fg-default)))
-   `(mode-line-highlight ((t :foreground ,est-color-bg-default :background ,est-color-fg-faded)))
-   `(mode-line-inactive  ((t :foreground ,est-color-fg-faded :background ,est-color-bg-subtle)))
 
    `(avy-background-face ((t :inherit shadow)))
    `(avy-lead-face       ((t :inherit est-popout)))
@@ -263,22 +348,16 @@ background color that is barely perceptible."
    `(avy-lead-face-1     ((t :inherit est-emph)))
    `(avy-lead-face-2     ((t :inherit est-emph)))
 
-   `(boon-modeline-ins ((t :foreground ,est-color-bg-default :background ,(est-paint-over est-color-fg-default 0.7 est-color-fg-popout))))
-   `(boon-modeline-spc ((t :foreground ,est-color-bg-default :background ,(est-paint-over est-color-fg-default 0.7 est-color-fg-salient))))
-   `(boon-modeline-cmd ((t :inherit (est-subtle default))))
-   `(boon-modeline-off ((t :inherit error)))
 
-   `(buffer-menu-buffer           ((t :inherit est-strong)))
-
-   `(custom-group-tag-1 ((t :inherit est-heading-1)))
-   `(custom-group-tag ((t :inherit est-heading-2)))
-   `(custom-variable-tag ((t :inherit est-heading)))
-   `(custom-state ((t :inherit est-emph)))
-   `(custom-changed ((t :inherit est-highlight-1)))
-   `(custom-modified ((t :inherit est-highlight-1)))
-   `(custom-invalid ((t :inherit (est-critical est-subtle))))
-   `(custom-rogue ((t :inherit (est-critical est-subtle))))
-   `(custom-set ((t :inherit est-highlight-2)))
+   `(custom-group-tag-1       ((t :inherit est-heading-1)))
+   `(custom-group-tag         ((t :inherit est-heading-2)))
+   `(custom-variable-tag      ((t :inherit est-heading)))
+   `(custom-state             ((t :inherit est-emph)))
+   `(custom-changed           ((t :inherit est-highlight-1)))
+   `(custom-modified          ((t :inherit est-highlight-1)))
+   `(custom-invalid           ((t :inherit (est-critical est-subtle))))
+   `(custom-rogue             ((t :inherit (est-critical est-subtle))))
+   `(custom-set               ((t :inherit est-highlight-2)))
    `(custom-variable-obsolete ((t :inherit est-faded)))
 
    `(company-scrollbar-bg       ((t :inherit est-subtle)))
@@ -371,13 +450,9 @@ background color that is barely perceptible."
    `(font-latex-verbatim-face       ((t :inherit est-faded)))
 
    `(magit-diff-hunk-heading           ((t :extend t :inherit est-heading)))
-   `(magit-diff-added                  ((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 "#00FF00"))))
-   `(magit-diff-removed                ((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 "#FF0000"))))
 
    `(magit-diff-hunk-heading-highlight ((t :extend t :inherit (est-heading est-choice))))
    `(magit-diff-context-highlight      ((t :extend t :inherit est-choice)))
-   `(magit-diff-added-highlight        ((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 "#00FF00"))))
-   `(magit-diff-removed-highlight      ((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 "#FF0000"))))
 
    `(magit-section-heading             ((t :inherit est-heading-3)))
    `(magit-section-highlight           ((t :inherit est-choice)))
@@ -454,6 +529,8 @@ background color that is barely perceptible."
    `(swiper-match-face-3 ((t :inherit match)))
    `(swiper-match-face-4 ((t :inherit match)))
 
+   `(eshell-prompt ((t :inherit est-strong)))
+
    `(widget-field ((t :inherit (est-faded est-subtle))))
    )))
 
@@ -468,7 +545,7 @@ CUSTOM-VARS."
        (est-build-theme ,theme))))
 
 
-(est-build-theme-with 'est-lunarized-dark 'est-themes ;; solarized inspiration theme
+(est-build-theme-with 'est-lunarized-dark 'est-themes ;; solarized inspire theme
   ((est-color-fg-default  "#839496")
    (est-color-fg-salient  "#268bd2")
    (est-color-fg-popout   "#eee8d5")
@@ -476,7 +553,8 @@ CUSTOM-VARS."
    (est-color-bg-subtle    "#06303c")
    (est-color-bg-selected  "#073642")))
 
-(est-build-theme-with 'est-lunarized-light 'est-themes ;; solarized inspiration theme
+
+(est-build-theme-with 'est-lunarized-light 'est-themes ;; solarized inspired theme
   ((est-color-fg-default  "#657b83")
    (est-color-fg-salient  "#268bd2")
    (est-color-fg-popout   "#d33682")
@@ -484,7 +562,7 @@ CUSTOM-VARS."
    (est-color-bg-subtle    "#eee8d5")
    (est-color-bg-selected  "#ffffff")))
 
-(est-build-theme-with 'est-cloudy-day 'est-themes
+(est-build-theme-with 'est-cloudy-day 'est-themes ;; light palette, blue tones
  ((est-color-fg-default     "#3e4759")
   (est-color-bg-default     "#ffffff")
   (est-color-bg-subtle      "#eef1f6")
@@ -492,7 +570,7 @@ CUSTOM-VARS."
   (est-color-fg-salient     "#2056a2")
   (est-color-fg-popout      "#00e0ff")))
 
-(est-build-theme-with 'est-cloudy-night 'est-themes ;; dark palette
+(est-build-theme-with 'est-cloudy-night 'est-themes ;; dark palette, blue accents
   ((est-color-bg-selected "#192435")
    (est-color-bg-subtle   "#242e41")
    (est-color-bg-default  "#2b3547")
@@ -500,7 +578,15 @@ CUSTOM-VARS."
    (est-color-fg-salient  "#5a8bca")
    (est-color-fg-popout   "#00c8ff")))
 
-(jyp-switch-theme 'est-cloudy-night)
+(est-build-theme-with 'est-starry-night 'est-themes
+  ((est-color-bg-selected "#00128d")
+   (est-color-bg-subtle   "#000010")
+   (est-color-bg-default  "#000050")
+   (est-color-fg-default  "#819ce6")
+   (est-color-fg-salient  "#74a5b3")
+   (est-color-fg-popout   "#e7d97b")))
+
+;; (jyp-switch-theme 'est-cloudy-night)
 
 (provide 'est)
 

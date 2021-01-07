@@ -356,6 +356,20 @@ background color that is barely perceptible."
    `(ivy-virtual                    ((t :inherit est-faded)))
    `(ivy-yanked-word                ((t :inherit est-faded)))
 
+   `(font-latex-sectioning-1-face   ((t :inherit est-heading-1)))
+   `(font-latex-sectioning-2-face   ((t :inherit est-heading-2)))
+   `(font-latex-sectioning-3-face   ((t :inherit est-heading-3)))
+   `(font-latex-sectioning-4-face   ((t :inherit est-heading)))
+   `(font-latex-sectioning-5-face   ((t :inherit est-heading)))
+
+   `(font-latex-math-face           ((t :inherit est-salient)))
+   `(font-latex-script-char-face    ((t :inherit est-salient)))
+   `(font-latex-string-face         ((t :inherit est-faded)))
+   `(font-latex-string-face         ((t :inherit est-faded)))
+   `(font-latex-warning-face        ((t :inherit est-strong))) ; not really a warning face!
+   `(font-latex-italic-face         ((t :inherit est-emph)))
+   `(font-latex-verbatim-face       ((t :inherit est-faded)))
+
    `(magit-diff-hunk-heading           ((t :extend t :inherit est-heading)))
    `(magit-diff-added                  ((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 "#00FF00"))))
    `(magit-diff-removed                ((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 "#FF0000"))))
@@ -418,7 +432,7 @@ background color that is barely perceptible."
    `(org-scheduled-today          ((t :inherit est-faded)))
    `(org-sexp-date                ((t :inherit est-faded)))
    `(org-special-keyword          ((t :inherit est-faded)))
-   `(org-table                    ((t :inherit est-faded)))
+   `(org-table                    ((t :inherit default)))
    `(org-tag                      ((t :inherit est-faded)))
    `(org-tag-group                ((t :inherit est-faded)))
    `(org-target                   ((t :inherit est-faded)))

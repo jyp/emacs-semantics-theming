@@ -29,19 +29,37 @@
 
 ;; This file attempts to est ablish an Emacs Semantically-sound
 ;; Theming foundation. The goal is to provide a visually pleasant and
-;; semantically coherent meta-theme, which is easy to customize.
+;; semantically coherent meta-theme, which is easy to customize (with
+;; as little as a palette of six colors).
 ;;
-;; This a achieved through:
+;; This a achieved through a number of articulated parts:
 ;;
-;; - a small set of faces which are assigned a meaning. Sometimes
-;; standard emacs faces can be used for that (`shadow'), but otherwise
-;; we define new ones. Use customize-apropos-faces est- for a list of
-;; those.
+;; - a small layer of customisation on top of standard emacs
+;; customisation. 1. We can record customs are belonging to a set
+;; which must be re-evaluated. This means that a customs can depend on
+;; each others (possibly in a long chain of dependencies.) 2. Instead
+;; of customizing faces directly, we can customize their
+;; *specs*. 3. `est-reevaluate' re-evaluates all the special customs,
+;; including face specs, and reapply them to faces.
 ;;
-;; - a common theme base, mapping (many) emacs faces to this small set.
+;; - a small set of face(specs) which are assigned a meaning (use
+;; customize-apropos-faces est- for a list). However, these
+;; face(specs) are defined using the above customization system, which
+;; means that it's often better to customize them indirectly, by
+;; customizing the variables (colors) which occur in their spec
+;; standard value. The default for these faces are are meant to define
+;; a visually coherent set of faces.
+;; Besides, sometimes standard emacs faces are incorporated in the set
+;; (eg. `shadow') --- and in this case their specs
+;; are customised using the above mechanism.
 ;;
-;; - a way to define the small set of standard faces, in a visually
-;; coherent manner, from an even smaller palette of colors.
+;; - a theme (`est-style') which defines a large number of (regular)
+;; faces as inheriting those from the above set. This means that it
+;; suffices to customize the small set (via customizing an even
+;; smaller set of variables).
+;;
+;; - a set of examples configurations. They configure a minimal
+;; palette of six colors, eventually theming everything.
 
 ;;  This is
 ;; achieved by inheriting from   See also
@@ -73,16 +91,15 @@
   (let ((spec-symbol (est-spec-symbol face-symbol)))
     `(progn
        (custom-declare-variable ',spec-symbol ',spec ,doc ,@args)
-       ()
        (push ',spec-symbol est-customs)
        (push ',face-symbol est-faces))))
-; (setq est-faces nil)
-; (setq est-customs nil)
 
 (defun est-reevaluate ()
   ;; FIXME: est-customs should really be sorted according to their
-  ;; dependencies. But we don't have them now. Rely on them being
-  ;; declared in order of dependencies.
+  ;; dependencies. But we don't have them. In general it depends on
+  ;; the free variables in the custom themes. For now, we do the
+  ;; simple thing of assuming that they are declared in order of
+  ;; dependencies.
   (dolist (symbol (reverse est-customs))
     (custom-reevaluate-setting symbol))
   (dolist (face-symbol est-faces)

@@ -329,9 +329,6 @@ and secondary information."
 (est-defface est-heading-3 `((t :height 1.15 :inherit est-heading)) "Face for level 3 headings" :group 'est)
 (est-defface est-heading   `((t :inherit bold)) "Face for level 4 headings and below" :group 'est)
 
-(est-defface mode-line                    `((t :foreground ,est-color-bg-default :background ,est-color-fg-default)) "todo")
-(est-defface mode-line-highlight          `((t :foreground ,est-color-bg-default :background ,est-color-fg-faded)) "todo")
-(est-defface mode-line-inactive           `((t :foreground ,est-color-fg-faded :background ,est-color-bg-subtle)) "todo")
 (est-defface default                      `((t :foreground ,est-color-fg-default :background ,est-color-bg-default)) "todo")
 (est-defface cursor                       `((t :background ,est-color-fg-default)) "todo")
 (est-defface shadow                       `((t :foreground ,est-color-fg-shadowed)) "todo")
@@ -344,25 +341,17 @@ and secondary information."
 (est-defface smerge-refined-change  `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-added))) "todo")
 (est-defface smerge-refined-removed `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-removed))) "todo")
 
-(est-defface magit-diff-removed           `((t :inherit smerge-upper)) "todo") ;; independent
-(est-defface magit-diff-added             `((t :inherit smerge-lower)) "todo") ;; independent
 (est-defface magit-diff-removed-highlight `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-removed))) "todo")
 (est-defface magit-diff-added-highlight   `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-added))) "todo")
-
-(est-defface boon-modeline-ins `((t :foreground ,est-color-bg-default :background ,(est-paint-over est-color-fg-default 0.7 est-color-fg-popout))) "todo")
-(est-defface boon-modeline-spc `((t :foreground ,est-color-bg-default :background ,(est-paint-over est-color-fg-default 0.7 est-color-fg-salient))) "todo")
-(est-defface boon-modeline-cmd `((t :inherit (est-subtle default))) "todo") ;; independent
-(est-defface boon-modeline-off `((t :inherit error)) "todo") ;; independent
-
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Styling theme
 
 (deftheme est-style)
-(put 'est-style 'theme-settings nil) ; reset so this file can be eval'ed several times
+(put 'est-style 'theme-settings nil) ; reset so this file can be eval'ed several times (for development)
 (custom-theme-set-faces
  'est-style
-   `(buffer-menu-buffer           ((t :inherit est-strong)))
+   `(buffer-menu-buffer ((t :inherit est-salient)))
    `(success ((t :inherit est-strong)))
    `(warning ((t :inherit (est-salient bold))))
 
@@ -374,6 +363,10 @@ and secondary information."
    `(region  ((t :inherit est-subtle)))
    `(secondary-selection ((t :inherit est-subtle)))
    `(fringe  ((t :inherit est-faded)))
+
+   `(mode-line           ((t :overline t :inherit est-subtle)))
+   `(mode-line-highlight ((t :overline t :inherit (est-emph est-subtle))))
+   `(mode-line-inactive  ((t :overline t)))
 
    `(header-line         ((t :inherit est-heading)))
    `(hi-yellow           ((t :inherit est-highlight-1)))
@@ -390,6 +383,11 @@ and secondary information."
    `(avy-lead-face-0     ((t :inherit est-emph)))
    `(avy-lead-face-1     ((t :inherit est-emph)))
    `(avy-lead-face-2     ((t :inherit est-emph)))
+   
+   `(boon-modeline-ins ((t :inherit est-highlight-1)))
+   `(boon-modeline-spc ((t :inherit est-highlight-2)))
+   `(boon-modeline-cmd ((t )))
+   `(boon-modeline-off ((t :inherit error)))
 
    `(custom-group-tag-1       ((t :inherit est-heading-1)))
    `(custom-group-tag         ((t :inherit est-heading-2)))
@@ -498,6 +496,9 @@ and secondary information."
    `(magit-section-highlight           ((t :inherit est-choice)))
    `(magit-hash                        ((t :inherit shadow)))
    `(magit-log-author                  ((t :inherit est-faded)))
+   `(magit-diff-removed                ((t :inherit smerge-upper)))
+   `(magit-diff-added                  ((t :inherit smerge-lower)))
+
 
    `(makefile-space               ((t :inherit warning)))
 
@@ -557,9 +558,9 @@ and secondary information."
    `(org-verbatim                 ((t :inherit est-emph)))
    `(org-verse                    ((t :inherit est-faded)))
 
-   `(powerline-active1    ((t :inverse-video t :inherit (est-emph default))))
+   `(powerline-active1    ((t :inherit (est-strong est-subtle))))
    `(powerline-active2    ((t :inherit powerline-active1)))
-   `(powerline-inactive1  ((t :inherit (est-faded est-subtle))))
+   `(powerline-inactive1  ((t :inherit est-faded)))
    `(powerline-inactive2  ((t :inherit powerline-inactive1)))
 
    `(selectrum-primary-highlight ((t :inherit match)))

@@ -213,11 +213,18 @@ items, or delinate areas with stronger emphasis." :type 'color
 :group 'est)
 
 
+(defcustom est-taint-vc-base "#0000FF"
+"A taint to indicate base stuff in VC contexts.
+This is not used directly in faces, but blended with various background
+colors. So it is fine to use saturated bright colors here." :type 'color :group
+'est)
+
 (defcustom est-taint-vc-added "#00FF00"
 "A taint to indicate added stuff in VC contexts.
 This is not used directly in faces, but blended with various background
 colors. So it is fine to use saturated bright colors here." :type 'color :group
 'est)
+
 
 (defcustom est-taint-vc-removed "#FF0000"
 "A taint to indicate removed stuff in VC contexts.
@@ -305,28 +312,37 @@ and secondary information."
 (est-defface est-heading-3 `((t :height 1.15 :inherit est-heading)) "Face for level 3 headings" :group 'est)
 (est-defface est-heading   `((t :inherit bold)) "Face for level 4 headings and below" :group 'est)
 
-
 (est-defface mode-line                    `((t :foreground ,est-color-bg-default :background ,est-color-fg-default)) "todo")
 (est-defface mode-line-highlight          `((t :foreground ,est-color-bg-default :background ,est-color-fg-faded)) "todo")
 (est-defface mode-line-inactive           `((t :foreground ,est-color-fg-faded :background ,est-color-bg-subtle)) "todo")
 (est-defface default                      `((t :foreground ,est-color-fg-default :background ,est-color-bg-default)) "todo")
 (est-defface cursor                       `((t :background ,est-color-fg-default)) "todo")
 (est-defface shadow                       `((t :foreground ,est-color-fg-shadowed)) "todo")
-(est-defface magit-diff-removed           `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-removed))) "todo")
-(est-defface magit-diff-added             `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-added))) "todo")
+
+(est-defface smerge-base            `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-base))) "todo")
+(est-defface smerge-lower           `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-added))) "todo")
+(est-defface smerge-upper           `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-removed))) "todo")
+(est-defface smerge-markers         `((t inherit shadow)) "todo") ;; independent
+(est-defface smerge-refined-added   `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-added))) "todo")
+(est-defface smerge-refined-change  `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-added))) "todo")
+(est-defface smerge-refined-removed `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-removed))) "todo")
+
+(est-defface magit-diff-removed           `((t :inherit smerge-upper)) "todo") ;; independent
+(est-defface magit-diff-added             `((t :inherit smerge-lower)) "todo") ;; independent
 (est-defface magit-diff-removed-highlight `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-removed))) "todo")
 (est-defface magit-diff-added-highlight   `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-added))) "todo")
-(est-defface boon-modeline-ins            `((t :foreground ,est-color-bg-default :background ,(est-paint-over est-color-fg-default 0.7 est-color-fg-popout))) "todo")
-(est-defface boon-modeline-spc            `((t :foreground ,est-color-bg-default :background ,(est-paint-over est-color-fg-default 0.7 est-color-fg-salient))) "todo")
-(est-defface boon-modeline-cmd            `((t :inherit (est-subtle default))) "todo")
-(est-defface boon-modeline-off            `((t :inherit error)) "todo")
+
+(est-defface boon-modeline-ins `((t :foreground ,est-color-bg-default :background ,(est-paint-over est-color-fg-default 0.7 est-color-fg-popout))) "todo")
+(est-defface boon-modeline-spc `((t :foreground ,est-color-bg-default :background ,(est-paint-over est-color-fg-default 0.7 est-color-fg-salient))) "todo")
+(est-defface boon-modeline-cmd `((t :inherit (est-subtle default))) "todo") ;; independent
+(est-defface boon-modeline-off `((t :inherit error)) "todo") ;; independent
 
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Styling theme
 
 (deftheme est-style)
-
+(put 'est-style 'theme-settings nil) ; reset so this file can be eval'ed several times
 (custom-theme-set-faces
  'est-style
    `(buffer-menu-buffer           ((t :inherit est-strong)))
@@ -351,14 +367,12 @@ and secondary information."
    `(show-paren-match    ((t :inherit est-popout)))
    `(show-paren-mismatch ((t :inherit est-critical)))
    `(trailing-whitespace ((t :inherit est-subtle)))
-   
 
    `(avy-background-face ((t :inherit shadow)))
    `(avy-lead-face       ((t :inherit est-popout)))
    `(avy-lead-face-0     ((t :inherit est-emph)))
    `(avy-lead-face-1     ((t :inherit est-emph)))
    `(avy-lead-face-2     ((t :inherit est-emph)))
-
 
    `(custom-group-tag-1       ((t :inherit est-heading-1)))
    `(custom-group-tag         ((t :inherit est-heading-2)))
@@ -461,14 +475,12 @@ and secondary information."
    `(font-latex-verbatim-face       ((t :inherit est-faded)))
 
    `(magit-diff-hunk-heading           ((t :extend t :inherit est-heading)))
-
    `(magit-diff-hunk-heading-highlight ((t :extend t :inherit (est-heading est-choice))))
    `(magit-diff-context-highlight      ((t :extend t :inherit est-choice)))
-
    `(magit-section-heading             ((t :inherit est-heading-3)))
    `(magit-section-highlight           ((t :inherit est-choice)))
-
-   `(magit-hash                        ((t :inherit est-salient)))
+   `(magit-hash                        ((t :inherit shadow)))
+   `(magit-log-author                  ((t :inherit est-faded)))
 
    `(makefile-space               ((t :inherit warning)))
 

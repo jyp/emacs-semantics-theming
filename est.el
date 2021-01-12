@@ -324,6 +324,7 @@ and secondary information."
   See also `est-color-bg-subtle.'" :group 'est)
 
 
+(est-defface est-heading-0 `((t :height 1.5 :inherit  est-heading)) "Face for page-level headings (titles)" :group 'est)
 (est-defface est-heading-1 `((t :height 1.3 :inherit  est-heading)) "Face for level 1 headings" :group 'est)
 (est-defface est-heading-2 `((t :height 1.15 :inherit est-heading)) "Face for level 2 headings" :group 'est)
 (est-defface est-heading-3 `((t :height 1.15 :inherit est-heading)) "Face for level 3 headings" :group 'est)
@@ -364,9 +365,9 @@ and secondary information."
    `(secondary-selection ((t :inherit est-subtle)))
    `(fringe  ((t :inherit est-faded)))
 
-   `(mode-line           ((t :overline t :inherit est-subtle)))
-   `(mode-line-highlight ((t :overline t :inherit (est-emph est-subtle))))
-   `(mode-line-inactive  ((t :overline t)))
+   `(mode-line           ((t :overline ,est-color-fg-faded :inherit est-subtle)))
+   `(mode-line-highlight ((t :overline ,est-color-fg-faded :inherit (est-emph est-subtle))))
+   `(mode-line-inactive  ((t :overline ,est-color-fg-faded)))
 
    `(header-line         ((t :inherit est-heading)))
    `(hi-yellow           ((t :inherit est-highlight-1)))
@@ -451,7 +452,14 @@ and secondary information."
 
    `(isearch       ((t :inherit highlight)))
    `(isearch-fail  ((t :inherit est-faded)))
-   
+
+   `(info-title-1   ((t :inherit est-heading-0)))
+   `(info-title-2   ((t :inherit est-heading-1)))
+   `(info-title-3   ((t :inherit est-heading-2)))
+   `(info-title-4   ((t :inherit est-heading-3)))
+   `(info-menu-header ((t :inherit est-heading)))
+   `(info-menu-star ((t :inherit est-faded)))
+
    `(ivy-action                     ((t :inherit est-faded)))
    `(ivy-completions-annotations    ((t :inherit est-faded)))
    `(ivy-confirm-face               ((t :inherit est-faded)))
@@ -558,10 +566,12 @@ and secondary information."
    `(org-verbatim                 ((t :inherit est-emph)))
    `(org-verse                    ((t :inherit est-faded)))
 
-   `(powerline-active1    ((t :inherit (est-strong est-subtle))))
-   `(powerline-active2    ((t :inherit powerline-active1)))
-   `(powerline-inactive1  ((t :inherit est-faded)))
-   `(powerline-inactive2  ((t :inherit powerline-inactive1)))
+   `(powerline-active0    ((t :inherit (est-strong est-subtle))))
+   `(powerline-active1    ((t :inherit powerline-active0)))
+   `(powerline-active2    ((t :inherit powerline-active0)))
+   `(powerline-inactive0  ((t :inherit est-faded)))
+   `(powerline-inactive1  ((t :inherit powerline-inactive0)))
+   `(powerline-inactive2  ((t :inherit powerline-inactive0)))
 
    `(selectrum-primary-highlight ((t :inherit match)))
    

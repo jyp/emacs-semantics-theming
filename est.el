@@ -269,15 +269,17 @@ colors.  So it is fine to use saturated bright colors here."
              "Face for separators (such as --------)" :group 'est)
 
 (est-defface est-choice `((t :background ,est-color-bg-selected :extend t))
-  "Background face for the current selection (in completions frameworks, but also magit, etc.) Not the region!"
+  "Background face for the current selection.
+(in completions frameworks, but also magit, etc.) Not the region!"
   :group 'est)
 
-(est-defface est-highlight-1 `((t :background ,est-color-bg-hilight1)) "Face for semi-transient
-highlights. The meaning is similar to `est-popout', but for
-backgrounds (when changing the foreground color is somehow
-inappropriate)." :group 'est)
+(est-defface est-highlight-1 `((t :background ,est-color-bg-hilight1))
+  "Face for semi-transient highlights. The meaning is similar to
+`est-popout', but for backgrounds (when changing the foreground
+color is somehow inappropriate)." :group 'est)
 
-(est-defface est-highlight-2 `((t :background ,est-color-bg-hilight2)) "Face for secondary highlights" :group 'est)
+(est-defface est-highlight-2 `((t :background ,est-color-bg-hilight2))
+  "Face for secondary highlights" :group 'est)
 
 (est-defface est-critical `((t :foreground ,est-color-fg-critical))
   "Critical face is for information that requires immediate action.
@@ -330,9 +332,9 @@ and secondary information."
 (est-defface est-heading-3 `((t :height 1.15 :inherit est-heading)) "Face for level 3 headings" :group 'est)
 (est-defface est-heading   `((t :inherit bold)) "Face for level 4 headings and below" :group 'est)
 
-(est-defface default                      `((t :foreground ,est-color-fg-default :background ,est-color-bg-default)) "todo")
-(est-defface cursor                       `((t :background ,est-color-fg-default)) "todo")
-(est-defface shadow                       `((t :foreground ,est-color-fg-shadowed)) "todo")
+(est-defface default  `((t :foreground ,est-color-fg-default :background ,est-color-bg-default)) "todo")
+(est-defface cursor   `((t :background ,est-color-fg-default)) "todo")
+(est-defface shadow   `((t :foreground ,est-color-fg-shadowed)) "todo")
 
 (est-defface smerge-base            `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-base))) "todo")
 (est-defface smerge-lower           `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-added))) "todo")

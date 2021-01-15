@@ -61,9 +61,6 @@
 ;; - a set of examples configurations. They configure a minimal
 ;; palette of six colors, eventually theming everything.
 
-;;  This is
-;; achieved by inheriting from   See also
-;; `est-build-base-theme-with'"
 
 ;;; Code:
 

@@ -608,7 +608,7 @@ and secondary information."
         (est-color-bg-selected  "#ffffff"))
     (est-reevaluate)))
 
-(defun est-cloudy-day () ;; light palette, blue tones
+(defun est-cloudy-day () ;; light grey/white palette, blue tones
   (interactive)
   (let ((est-color-fg-default     "#3e4759")
         (est-color-bg-default     "#ffffff")
@@ -618,7 +618,7 @@ and secondary information."
         (est-color-fg-popout      "#00e0ff"))
     (est-reevaluate)))
 
-(defun est-cloudy-night () ;; dark palette, blue accents
+(defun est-cloudy-night () ;; dark grey palette, blue accents
   (interactive)
   (let ((est-color-bg-selected "#192435")
         (est-color-bg-subtle   "#242e41")
@@ -636,6 +636,26 @@ and secondary information."
         (est-color-fg-default  "#819ce6")
         (est-color-fg-salient  "#74a5b3")
         (est-color-fg-popout   "#e7d97b"))
+    (est-reevaluate)))
+
+(defun est-wood-palette ()
+  (interactive)
+  (let ((est-color-bg-selected "#896a3f")
+        (est-color-bg-subtle   "#5e454b")
+        (est-color-bg-default  "#4a3339")
+        (est-color-fg-default  "#f3f0d7")
+        (est-color-fg-salient  "#3fab9b")
+        (est-color-fg-popout   "#26f66a"))
+    (est-reevaluate)))
+
+(defun est-seaside-palette ()
+  (interactive)
+  (let ((est-color-bg-selected "#004b50")
+        (est-color-bg-subtle   "#3b4b60")
+        (est-color-bg-default  "#2c3c51")
+        (est-color-fg-default  "#c6cdda")
+        (est-color-fg-salient  "#a77b3f")
+        (est-color-fg-popout   "#00bbff"))
     (est-reevaluate)))
 
 

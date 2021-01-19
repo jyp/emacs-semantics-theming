@@ -492,7 +492,7 @@ and secondary information."
    `(font-latex-script-char-face    ((t :inherit est-salient)))
    `(font-latex-string-face         ((t :inherit est-faded)))
    `(font-latex-string-face         ((t :inherit est-faded)))
-   `(font-latex-warning-face        ((t :inherit est-strong))) ; not really a warning face!
+   `(font-latex-warning-face        ((t :inherit est-strong))) ; latex-warning face is not really a warning face!
    `(font-latex-italic-face         ((t :inherit est-emph)))
    `(font-latex-verbatim-face       ((t :inherit est-faded)))
 
@@ -505,7 +505,8 @@ and secondary information."
    `(magit-log-author                  ((t :inherit est-faded)))
    `(magit-diff-removed                ((t :inherit smerge-upper)))
    `(magit-diff-added                  ((t :inherit smerge-lower)))
-
+   `(magit-tag                         ((t :inherit emph)))
+   `(magit-dimmed                      ((t :inherit shadow)))
 
    `(makefile-space               ((t :inherit warning)))
 

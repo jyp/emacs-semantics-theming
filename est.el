@@ -323,11 +323,11 @@ and secondary information."
   See also `est-color-bg-subtle.'" :group 'est)
 
 
-(est-defface est-heading-0 `((t :height 1.5 :inherit  est-heading)) "Face for page-level headings (titles)" :group 'est)
+(est-defface est-heading-0 `((t :height 1.5 :inherit est-heading)) "Face for page-level headings (titles)" :group 'est)
 (est-defface est-heading-1 `((t :height 1.3 :inherit  est-heading)) "Face for level 1 headings" :group 'est)
 (est-defface est-heading-2 `((t :height 1.15 :inherit est-heading)) "Face for level 2 headings" :group 'est)
-(est-defface est-heading-3 `((t :height 1.15 :inherit est-heading)) "Face for level 3 headings" :group 'est)
-(est-defface est-heading   `((t :inherit bold)) "Face for level 4 headings and below" :group 'est)
+(est-defface est-heading-3 `((t :height 1.1 :inherit est-heading)) "Face for level 3 headings" :group 'est)
+(est-defface est-heading   `((t :inherit (bold variable-pitch))) "Face for level 4 headings and below" :group 'est)
 
 (est-defface default  `((t :foreground ,est-color-fg-default :background ,est-color-bg-default)) "todo")
 (est-defface cursor   `((t :background ,est-color-fg-default)) "todo")
@@ -344,6 +344,8 @@ and secondary information."
 (est-defface magit-diff-removed-highlight `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-removed))) "todo")
 (est-defface magit-diff-added-highlight   `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-added))) "todo")
 
+(defface est-magit-selection '((t)) "Common face for magit selections" :group 'est)
+
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Styling theme
 
@@ -351,6 +353,8 @@ and secondary information."
 (put 'est-style 'theme-settings nil) ; reset so this file can be eval'ed several times (for development)
 (custom-theme-set-faces
  'est-style
+   `(est-magit-selection ((t :inherit est-salient)))
+ 
    `(buffer-menu-buffer ((t :inherit est-salient)))
    `(success ((t :inherit est-strong)))
    `(warning ((t :inherit (est-salient bold))))
@@ -507,6 +511,9 @@ and secondary information."
    `(magit-diff-added                  ((t :inherit smerge-lower)))
    `(magit-tag                         ((t :inherit emph)))
    `(magit-dimmed                      ((t :inherit shadow)))
+   `(magit-diff-file-heading-selection ((t :inherit (est-magit-selection magit-diff-file-heading-highlight))))
+   `(magit-diff-hunk-heading-selection ((t :inherit (est-magit-selection magit-diff-hunk-heading))))
+   `(magit-section-heading-selection   ((t :inherit (est-magit-selection)))) ; doc is wrong for this face. So not assigned a section heading style (magit-section-heading)
 
    `(makefile-space               ((t :inherit warning)))
 
@@ -605,7 +612,7 @@ and secondary information."
         (est-color-fg-salient  "#268bd2")
         (est-color-fg-popout   "#d33682")
         (est-color-bg-default   "#fdf6e3")
-        (est-color-bg-subtle    "#eee8d5")
+        (est-color-bg-subtle    "#fff9d2")
         (est-color-bg-selected  "#ffffff"))
     (est-reevaluate)))
 

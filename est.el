@@ -330,6 +330,8 @@ and secondary information."
 (est-defface est-heading-3 `((t :height 1.1 :inherit est-heading)) "Face for level 3 headings" :group 'est)
 (est-defface est-heading   `((t :inherit bold)) "Face for level 4 headings and below" :group 'est)
 
+(est-defface est-invisible `((t :foreground ,est-color-bg-default)) "Face for invisible text" :group 'est)
+
 (est-defface default  `((t :foreground ,est-color-fg-default :background ,est-color-bg-default)) "todo")
 (est-defface cursor   `((t :background ,est-color-fg-default)) "todo")
 (est-defface shadow   `((t :foreground ,est-color-fg-shadowed)) "todo")
@@ -542,6 +544,7 @@ and secondary information."
    `(org-footnote                 ((t :inherit est-faded)))
    `(org-formula                  ((t :inherit est-faded)))
    `(org-headline-done            ((t :inherit est-faded)))
+   `(org-hide                     ((t :inherit est-invisible)))
    `(org-latex-and-related        ((t :inherit est-faded)))
    `(org-level-1                  ((t :inherit est-heading-1)))
    `(org-level-2                  ((t :inherit est-heading-2)))

@@ -327,7 +327,7 @@ and secondary information."
 (est-defface est-heading-1 `((t :height 1.3 :inherit  est-heading)) "Face for level 1 headings" :group 'est)
 (est-defface est-heading-2 `((t :height 1.15 :inherit est-heading)) "Face for level 2 headings" :group 'est)
 (est-defface est-heading-3 `((t :height 1.1 :inherit est-heading)) "Face for level 3 headings" :group 'est)
-(est-defface est-heading   `((t :inherit (bold variable-pitch))) "Face for level 4 headings and below" :group 'est)
+(est-defface est-heading   `((t :inherit bold)) "Face for level 4 headings and below" :group 'est)
 
 (est-defface default  `((t :foreground ,est-color-fg-default :background ,est-color-bg-default)) "todo")
 (est-defface cursor   `((t :background ,est-color-fg-default)) "todo")

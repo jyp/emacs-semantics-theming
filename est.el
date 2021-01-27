@@ -87,7 +87,7 @@
 (defmacro est-defface (face-symbol spec doc &rest args)
   (let ((spec-symbol (est-spec-symbol face-symbol)))
     `(progn
-       (custom-declare-variable ',spec-symbol ',spec ,doc ,@args)
+       (custom-declare-variable ',spec-symbol ',spec ,doc :type 'sexp ,@args)
        (push ',spec-symbol est-customs)
        (push ',face-symbol est-faces))))
 
@@ -109,7 +109,8 @@
 (defcustom est-gamma 1.5
   "Gamma correction parameter for `est'.
 2.2 is the standard value but for light palettes tends to yield
-too bright colors due to too accurate additive color.")
+too bright colors due to too accurate additive color."
+  :group 'est :type 'float)
 
 (defun est-scale-color (scale col)
   "Multiply every entry in COL by SCALE."
@@ -246,11 +247,11 @@ This is not used directly in faces, but blended with various background
 colors.  So it is fine to use saturated bright colors here."
 :type 'color :group 'est)
 
-(est-defcustom est-color-bg-hilight1  (est-paint-over  est-color-bg-default 0.15 est-color-fg-popout)  "bg. highlight 1st kind" :group 'est)
-(est-defcustom est-color-bg-hilight2  (est-paint-over  est-color-bg-default 0.15 est-color-fg-salient) "bg. highlight 2nd kind" :group 'est)
-(est-defcustom est-color-fg-shadowed  (est-paint-over  est-color-fg-default 0.6 est-color-bg-default)  "de-selected/disabled menu options" :group 'est)
-(est-defcustom est-color-fg-faded     (est-paint-over  est-color-fg-default 0.2 est-color-bg-default)  "de-emphasized (comments, etc.)" :group 'est)
-(est-defcustom est-color-fg-emph      (est-scrape-paint est-color-fg-default 0.2 est-color-bg-default) "subtle emphasis" :group 'est)
+(est-defcustom est-color-bg-hilight1  (est-paint-over  est-color-bg-default 0.15 est-color-fg-popout)  "bg. highlight 1st kind" :group 'est :type 'color)
+(est-defcustom est-color-bg-hilight2  (est-paint-over  est-color-bg-default 0.15 est-color-fg-salient) "bg. highlight 2nd kind" :group 'est :type 'color)
+(est-defcustom est-color-fg-shadowed  (est-paint-over  est-color-fg-default 0.6 est-color-bg-default)  "de-selected/disabled menu options" :group 'est :type 'color)
+(est-defcustom est-color-fg-faded     (est-paint-over  est-color-fg-default 0.2 est-color-bg-default)  "de-emphasized (comments, etc.)" :group 'est :type 'color)
+(est-defcustom est-color-fg-emph      (est-scrape-paint est-color-fg-default 0.2 est-color-bg-default) "subtle emphasis" :group 'est :type 'color)
 
 (est-defcustom hl-paren-colors
                (list est-color-fg-salient
@@ -336,7 +337,7 @@ and secondary information."
 (est-defface smerge-base            `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-base))) "todo")
 (est-defface smerge-lower           `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-added))) "todo")
 (est-defface smerge-upper           `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-removed))) "todo")
-(est-defface smerge-markers         `((t inherit shadow)) "todo") ;; independent
+(est-defface smerge-markers         `((t inherit shadow)) "todo" :group 'est) ;; independent
 (est-defface smerge-refined-added   `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-added))) "todo")
 (est-defface smerge-refined-change  `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-added))) "todo")
 (est-defface smerge-refined-removed `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-removed))) "todo")
@@ -416,6 +417,7 @@ and secondary information."
    `(completions-first-difference ((t :inherit default)))
 
    `(dired-directory ((t :inherit est-salient)))
+   `(dired-flagged   ((t :inherit est-popout)))
 
    `(font-lock-builtin-face       ((t :inherit default)))
    `(font-lock-comment-face       ((t :inherit est-faded)))

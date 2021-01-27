@@ -78,7 +78,7 @@
   (declare (doc-string 3) (debug (name body)))
   `(progn
      (push ',symbol est-customs)
-     (defcustom ,symbol ,standard ,doc ,@args)
+     (defcustom ,symbol ,standard ,doc :group 'est ,@args)
      ))
 
 (defun est-spec-symbol (face-symbol)
@@ -87,9 +87,12 @@
 (defmacro est-defface (face-symbol spec doc &rest args)
   (let ((spec-symbol (est-spec-symbol face-symbol)))
     `(progn
-       (custom-declare-variable ',spec-symbol ',spec ,doc :type 'sexp ,@args)
+       (custom-declare-variable ',spec-symbol ',spec ,doc :group 'est :type 'sexp ,@args)
        (push ',spec-symbol est-customs)
        (push ',face-symbol est-faces))))
+
+(defmacro est-stealface (face-symbol spec &rest args)
+  `(est-defface ,face-symbol ,spec (face-documentation ',face-symbol) ,@args))
 
 (defun est-reevaluate ()
   ;; FIXME: est-customs should really be sorted according to their
@@ -247,11 +250,11 @@ This is not used directly in faces, but blended with various background
 colors.  So it is fine to use saturated bright colors here."
 :type 'color :group 'est)
 
-(est-defcustom est-color-bg-hilight1  (est-paint-over  est-color-bg-default 0.15 est-color-fg-popout)  "bg. highlight 1st kind" :group 'est :type 'color)
-(est-defcustom est-color-bg-hilight2  (est-paint-over  est-color-bg-default 0.15 est-color-fg-salient) "bg. highlight 2nd kind" :group 'est :type 'color)
-(est-defcustom est-color-fg-shadowed  (est-paint-over  est-color-fg-default 0.6 est-color-bg-default)  "de-selected/disabled menu options" :group 'est :type 'color)
-(est-defcustom est-color-fg-faded     (est-paint-over  est-color-fg-default 0.2 est-color-bg-default)  "de-emphasized (comments, etc.)" :group 'est :type 'color)
-(est-defcustom est-color-fg-emph      (est-scrape-paint est-color-fg-default 0.2 est-color-bg-default) "subtle emphasis" :group 'est :type 'color)
+(est-defcustom est-color-bg-hilight1  (est-paint-over  est-color-bg-default 0.15 est-color-fg-popout)  "bg. highlight 1st kind" :type 'color)
+(est-defcustom est-color-bg-hilight2  (est-paint-over  est-color-bg-default 0.15 est-color-fg-salient) "bg. highlight 2nd kind" :type 'color)
+(est-defcustom est-color-fg-shadowed  (est-paint-over  est-color-fg-default 0.6 est-color-bg-default)  "de-selected/disabled menu options" :type 'color)
+(est-defcustom est-color-fg-faded     (est-paint-over  est-color-fg-default 0.2 est-color-bg-default)  "de-emphasized (comments, etc.)" :type 'color)
+(est-defcustom est-color-fg-emph      (est-scrape-paint est-color-fg-default 0.2 est-color-bg-default) "subtle emphasis" :type 'color)
 
 (est-defcustom hl-paren-colors
                (list est-color-fg-salient
@@ -264,30 +267,27 @@ colors.  So it is fine to use saturated bright colors here."
 
 
 (est-defface est-separator `((t :foreground ,est-color-bg-selected))
-             "Face for separators (such as --------)" :group 'est)
+             "Face for separators (such as --------)")
 
 (est-defface est-choice `((t :background ,est-color-bg-selected :extend t))
   "Background face for the current selection.
-(in completions frameworks, but also magit, etc.) Not the region!"
-  :group 'est)
+(in completions frameworks, but also magit, etc.) Not the region!")
 
 (est-defface est-highlight-1 `((t :background ,est-color-bg-hilight1))
   "Face for semi-transient highlights. The meaning is similar to
 `est-popout', but for backgrounds (when changing the foreground
-color is somehow inappropriate)." :group 'est)
+color is somehow inappropriate).")
 
 (est-defface est-highlight-2 `((t :background ,est-color-bg-hilight2))
-  "Face for secondary highlights" :group 'est)
+  "Face for secondary highlights")
 
 (est-defface est-critical `((t :foreground ,est-color-fg-critical))
   "Critical face is for information that requires immediate action.
-  See also `est-color-fg-critical'."
-  :group 'est)
+  See also `est-color-fg-critical'.")
 
 (est-defface est-popout `((t :foreground ,est-color-fg-popout))
   "Popout face is used for information that needs attention.
-See also `est-color-fg-popout'."
-  :group 'est)
+See also `est-color-fg-popout'.")
 
 (est-defface est-emph `((t :foreground ,est-color-fg-emph))
   "A mild emphasis face.
@@ -295,60 +295,56 @@ This roughly corresponds to italics in mainstream typsetting
 practice. By defaut the emphasis effect is achieved by using the
 `est-color-fg-emph' color, which is by default slightly more
 contrasted than the default color.  Besides, italics do not mesh
-well with monospace fonts."
-  :group 'est)
+well with monospace fonts.")
 
 
 (est-defface est-strong `((t :inherit (bold est-emph)))
   "A face with stronger emphasis than `est-emph'.
 Accordingly it is used more sparingly. By default the effect is
 achieved by using a bold weight together with a higher constrast
-(`est-color-fg-emph')."
-  :group 'est)
+(`est-color-fg-emph').")
 
 (est-defface est-salient `((t :foreground ,est-color-fg-salient))
   "Salient face is used for information of same urgency,
 but different nature than regular text. See also
-`est-color-fg-salient'."
-  :group 'est)
+`est-color-fg-salient'.")
 
 (est-defface est-faded `((t :foreground ,est-color-fg-faded))
   "Faded face is for information that is less important.
 It is achieved by using the same hue as the default foreground
 color, but with a lesser contrast. It can be used for comments
-and secondary information."
-  :group 'est)
+and secondary information.")
 
 (est-defface est-subtle `((t :background ,est-color-bg-subtle))
   "Subtle face is used to suggest a physical area on the screen.
-  See also `est-color-bg-subtle.'" :group 'est)
+  See also `est-color-bg-subtle.'")
 
 
-(est-defface est-heading-0 `((t :height 1.5 :inherit est-heading)) "Face for page-level headings (titles)" :group 'est)
-(est-defface est-heading-1 `((t :height 1.3 :inherit  est-heading)) "Face for level 1 headings" :group 'est)
-(est-defface est-heading-2 `((t :height 1.15 :inherit est-heading)) "Face for level 2 headings" :group 'est)
-(est-defface est-heading-3 `((t :height 1.1 :inherit est-heading)) "Face for level 3 headings" :group 'est)
-(est-defface est-heading   `((t :inherit bold)) "Face for level 4 headings and below" :group 'est)
+(est-defface est-heading-0 `((t :height 1.5 :inherit est-heading)) "Face for page-level headings (titles)")
+(est-defface est-heading-1 `((t :height 1.3 :inherit  est-heading)) "Face for level 1 headings")
+(est-defface est-heading-2 `((t :height 1.15 :inherit est-heading)) "Face for level 2 headings")
+(est-defface est-heading-3 `((t :height 1.1 :inherit est-heading)) "Face for level 3 headings")
+(est-defface est-heading   `((t :inherit bold)) "Face for level 4 headings and below")
 
-(est-defface est-invisible `((t :foreground ,est-color-bg-default)) "Face for invisible text" :group 'est)
+(est-defface est-invisible `((t :foreground ,est-color-bg-default)) "Face for invisible text")
 
-(est-defface default  `((t :foreground ,est-color-fg-default :background ,est-color-bg-default)) "todo")
-(est-defface cursor   `((t :background ,est-color-fg-default)) "todo")
-(est-defface shadow   `((t :foreground ,est-color-fg-shadowed)) "todo")
+(est-stealface default  `((t :foreground ,est-color-fg-default :background ,est-color-bg-default)))
+(est-stealface cursor   `((t :background ,est-color-fg-default)))
+(est-stealface shadow   `((t :foreground ,est-color-fg-shadowed)))
+(est-stealface smerge-base            `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-base))))
+(est-stealface smerge-lower           `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-added))))
+(est-stealface smerge-upper           `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-removed))))
+(est-stealface smerge-markers         `((t inherit shadow)))
+(est-stealface smerge-refined-added   `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-added))))
+(est-stealface smerge-refined-change  `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-added))))
+(est-stealface smerge-refined-removed `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-removed))))
+(est-stealface magit-diff-removed-highlight `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-removed))))
+(est-stealface magit-diff-added-highlight   `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-added))))
 
-(est-defface smerge-base            `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-base))) "todo")
-(est-defface smerge-lower           `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-added))) "todo")
-(est-defface smerge-upper           `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-removed))) "todo")
-(est-defface smerge-markers         `((t inherit shadow)) "todo" :group 'est) ;; independent
-(est-defface smerge-refined-added   `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-added))) "todo")
-(est-defface smerge-refined-change  `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-added))) "todo")
-(est-defface smerge-refined-removed `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-removed))) "todo")
+(est-stealface hi-yellow `((t :foreground ,(est-paint-over est-color-fg-default 0.5 est-color-fg-popout))))
+(est-stealface hi-pink   `((t :foreground ,(est-paint-over est-color-fg-default 0.5 "#ff0000"))))
 
-(est-defface magit-diff-removed-highlight `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-removed))) "todo")
-(est-defface magit-diff-added-highlight   `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-added))) "todo")
-
-(defface est-magit-selection '((t)) "Common face for magit selections" :group 'est)
-
+;; est-customs
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Styling theme
 
@@ -376,7 +372,7 @@ and secondary information."
    `(mode-line-inactive  ((t :overline ,est-color-fg-faded)))
 
    `(header-line         ((t :inherit est-heading)))
-   `(hi-yellow           ((t :inherit est-highlight-1)))
+   ;; `(hi-yellow           ((t :inherit est-highlight-1)))
    `(highlight           ((t :inherit est-choice)))
    `(hl-line             ((t :inherit est-subtle)))
    `(lazy-highlight      ((t :inherit est-subtle)))

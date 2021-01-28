@@ -104,7 +104,7 @@
     (custom-reevaluate-setting symbol))
   (dolist (face-symbol est-faces)
     ;; est-  faces are not controlled by custom. est- face specs are. So override the faces here.
-    (face-spec-set face-symbol (purecopy (eval (est-spec-symbol face-symbol))) 'face-defface-spec)))
+    (face-spec-set face-symbol (purecopy (eval (est-spec-symbol face-symbol))) 'face-defface-spec))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Color manipulation
@@ -183,7 +183,8 @@ Inputs colors are names."
                (apply 'color-rgb-to-hsl (color-name-to-rgb base))))
     (apply 'color-rgb-to-hex (color-hsl-to-rgb hue saturation lightness))))
 
-
+(defun est-color-lightness (name)
+  (car (apply 'color-srgb-to-lab (color-name-to-rgb name))))
 
 ;;;;;;;;;;;
 ;; Colors
@@ -249,6 +250,34 @@ colors. So it is fine to use saturated bright colors here." :type 'color :group
 This is not used directly in faces, but blended with various background
 colors.  So it is fine to use saturated bright colors here."
 :type 'color :group 'est)
+
+
+(est-defcustom est-mid-lightness (+ (* 0.8 (est-color-lightness est-color-fg-default)) (* 0.2 (est-color-lightness est-color-bg-default)))
+"A taint to indicate removed stuff in VC contexts.
+This is not used directly in faces, but blended with various background
+colors.  So it is fine to use saturated bright colors here."
+:type 'float :group 'est)
+
+(defun est-color-lab (l a b)
+  (apply 'color-rgb-to-hex (est-clamp (color-lab-to-srgb l a b))))
+
+(est-defcustom est-color-fg-yellow (est-color-lab est-mid-lightness 0 64) "yellow fg color")
+(est-defcustom est-color-fg-pink (est-color-lab est-mid-lightness 64 0) "pink fg color")
+(est-defcustom est-color-fg-teal (est-color-lab est-mid-lightness -64 0) "green fg teal")
+(est-defcustom est-color-fg-blue (est-color-lab est-mid-lightness 0 -64) "blue fg blue")
+(est-defcustom est-color-fg-green (est-color-lab est-mid-lightness -64 64) "green fg green")
+(est-defcustom est-color-fg-violet (est-color-lab est-mid-lightness 64 -64) "green fg green")
+(est-defcustom est-color-fg-red (est-color-lab est-mid-lightness 64 64) "green fg red")
+(est-defcustom est-color-fg-cyan (est-color-lab est-mid-lightness -64 -64) "green fg cyan")
+
+(est-defface est-fg-yellow `((t :foreground ,est-color-fg-yellow)) "yellow fg color")
+(est-defface est-fg-pink `((t :foreground ,est-color-fg-pink)) "pink fg color")
+(est-defface est-fg-teal `((t :foreground ,est-color-fg-teal)) "green fg teal")
+(est-defface est-fg-blue `((t :foreground ,est-color-fg-blue)) "blue fg blue")
+(est-defface est-fg-green `((t :foreground ,est-color-fg-green)) "green fg green")
+(est-defface est-fg-violet `((t :foreground ,est-color-fg-violet)) "green fg green")
+(est-defface est-fg-red `((t :foreground ,est-color-fg-red)) "green fg red")
+(est-defface est-fg-cyan `((t :foreground ,est-color-fg-cyan)) "green fg cyan")
 
 (est-defcustom est-color-bg-hilight1  (est-paint-over  est-color-bg-default 0.15 est-color-fg-popout)  "bg. highlight 1st kind" :type 'color)
 (est-defcustom est-color-bg-hilight2  (est-paint-over  est-color-bg-default 0.15 est-color-fg-salient) "bg. highlight 2nd kind" :type 'color)
@@ -341,8 +370,6 @@ and secondary information.")
 (est-stealface magit-diff-removed-highlight `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-removed))))
 (est-stealface magit-diff-added-highlight   `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-added))))
 
-(est-stealface hi-yellow `((t :foreground ,(est-paint-over est-color-fg-default 0.5 est-color-fg-popout))))
-(est-stealface hi-pink   `((t :foreground ,(est-paint-over est-color-fg-default 0.5 "#ff0000"))))
 
 ;; est-customs
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -350,6 +377,11 @@ and secondary information.")
 
 (deftheme est-style)
 (put 'est-style 'theme-settings nil) ; reset so this file can be eval'ed several times (for development)
+(custom-theme-set-variables
+ 'est-style
+ '(hi-lock-face-defaults
+   '("est-fg-teal" "est-fg-pink" "est-fg-yellow" "est-fg-blue" "est-fg-violet" "est-fg-green" "est-fg-cyan" "est-fg-red" )))
+  
 (custom-theme-set-faces
  'est-style
    `(est-magit-selection ((t :inherit est-salient)))
@@ -372,7 +404,6 @@ and secondary information.")
    `(mode-line-inactive  ((t :overline ,est-color-fg-faded)))
 
    `(header-line         ((t :inherit est-heading)))
-   ;; `(hi-yellow           ((t :inherit est-highlight-1)))
    `(highlight           ((t :inherit est-choice)))
    `(hl-line             ((t :inherit est-subtle)))
    `(lazy-highlight      ((t :inherit est-subtle)))
@@ -492,9 +523,9 @@ and secondary information.")
    `(font-latex-sectioning-4-face   ((t :inherit est-heading)))
    `(font-latex-sectioning-5-face   ((t :inherit est-heading)))
 
+   `(font-latex-bold-face           ((t :inherit bold)))
    `(font-latex-math-face           ((t :inherit est-salient)))
    `(font-latex-script-char-face    ((t :inherit est-salient)))
-   `(font-latex-string-face         ((t :inherit est-faded)))
    `(font-latex-string-face         ((t :inherit est-faded)))
    `(font-latex-warning-face        ((t :inherit est-strong))) ; latex-warning face is not really a warning face!
    `(font-latex-italic-face         ((t :inherit est-emph)))

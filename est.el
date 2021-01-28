@@ -104,7 +104,7 @@
     (custom-reevaluate-setting symbol))
   (dolist (face-symbol est-faces)
     ;; est-  faces are not controlled by custom. est- face specs are. So override the faces here.
-    (face-spec-set face-symbol (purecopy (eval (est-spec-symbol face-symbol))) 'face-defface-spec))
+    (face-spec-set face-symbol (purecopy (eval (est-spec-symbol face-symbol))) 'face-defface-spec)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Color manipulation

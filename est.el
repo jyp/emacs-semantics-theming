@@ -530,6 +530,9 @@ and secondary information.")
    '(font-latex-italic-face         ((t :inherit est-emph)))
    '(font-latex-verbatim-face       ((t :inherit est-faded)))
 
+   '(hi-yellow ((t :inherit est-highlight-1)))
+   '(hi-pink   ((t :inherit est-highlight-2)))
+
    '(magit-diff-hunk-heading           ((t :extend t :inherit est-heading)))
    '(magit-diff-hunk-heading-highlight ((t :extend t :inherit (est-heading est-choice))))
    '(magit-diff-context-highlight      ((t :extend t :inherit est-choice)))

@@ -653,7 +653,7 @@ and secondary information.")
         (est-color-bg-default     "#ffffff")
         (est-color-bg-subtle      "#eef1f6")
         (est-color-bg-selected    "#e5e9f0")
-        (est-color-fg-salient     "#1758ff")
+        (est-color-fg-salient     "#1756c2")
         (est-color-fg-popout      "#00e0ff"))
     (est-reevaluate)))
 

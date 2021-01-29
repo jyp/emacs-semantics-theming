@@ -370,6 +370,8 @@ and secondary information.")
 (est-stealface magit-diff-removed-highlight `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-removed))))
 (est-stealface magit-diff-added-highlight   `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-added))))
 
+(setq hi-lock-face-defaults ;; not a defcustom: simply override this.
+      '("est-fg-teal" "est-fg-pink" "est-fg-yellow" "est-fg-blue" "est-fg-violet" "est-fg-green" "est-fg-cyan" "est-fg-red" ))
 
 ;; est-customs
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -377,10 +379,7 @@ and secondary information.")
 
 (deftheme est-style)
 (put 'est-style 'theme-settings nil) ; reset so this file can be eval'ed several times (for development)
-(custom-theme-set-variables
- 'est-style
- '(hi-lock-face-defaults
-   '("est-fg-teal" "est-fg-pink" "est-fg-yellow" "est-fg-blue" "est-fg-violet" "est-fg-green" "est-fg-cyan" "est-fg-red" )))
+
   
 (custom-theme-set-faces
  'est-style

@@ -177,11 +177,11 @@ Inputs colors are names."
    (est-what-under-composite (est-alpha-name 1.0   base)
                              (est-alpha-name alpha addition))))
 
-(defun est-color-set-hue (base hue)
+(defun est-color-hue (name)
   "Set HUE of BASE."
-  (pcase-let ((`(,hue0 ,saturation ,lightness)
-               (apply 'color-rgb-to-hsl (color-name-to-rgb base))))
-    (apply 'color-rgb-to-hex (color-hsl-to-rgb hue saturation lightness))))
+  (pcase-let ((`(,l ,a ,b)
+               (apply 'color-srgb-to-lab (color-name-to-rgb name))))
+    (atan a b)))
 
 (defun est-color-lightness (name)
   (car (apply 'color-srgb-to-lab (color-name-to-rgb name))))
@@ -252,32 +252,52 @@ colors.  So it is fine to use saturated bright colors here."
 :type 'color :group 'est)
 
 
-(est-defcustom est-mid-lightness (+ (* 0.8 (est-color-lightness est-color-fg-default)) (* 0.2 (est-color-lightness est-color-bg-default)))
-"A taint to indicate removed stuff in VC contexts.
-This is not used directly in faces, but blended with various background
-colors.  So it is fine to use saturated bright colors here."
-:type 'float :group 'est)
+(est-defcustom est-accent-lightness (+ (* 0.6 (est-color-lightness est-color-fg-default))
+                                       (* 0.4 (est-color-lightness est-color-bg-default)))
+"Lightness for highlight colors.
+Usually somewhat not as bright/contrasted as that of the default
+fg."  :type 'float :group 'est)
 
 (defun est-color-lab (l a b)
   (apply 'color-rgb-to-hex (est-clamp (color-lab-to-srgb l a b))))
 
-(est-defcustom est-color-fg-yellow (est-color-lab est-mid-lightness 0 64) "yellow fg color")
-(est-defcustom est-color-fg-pink (est-color-lab est-mid-lightness 64 0) "pink fg color")
-(est-defcustom est-color-fg-teal (est-color-lab est-mid-lightness -64 0) "green fg teal")
-(est-defcustom est-color-fg-blue (est-color-lab est-mid-lightness 0 -64) "blue fg blue")
-(est-defcustom est-color-fg-green (est-color-lab est-mid-lightness -64 64) "green fg green")
-(est-defcustom est-color-fg-violet (est-color-lab est-mid-lightness 64 -64) "green fg green")
-(est-defcustom est-color-fg-red (est-color-lab est-mid-lightness 64 64) "green fg red")
-(est-defcustom est-color-fg-cyan (est-color-lab est-mid-lightness -64 -64) "green fg cyan")
+(defun est-color-lch (lightness chroma hue)
+  (est-color-lab lightness (* chroma (cos hue)) (* chroma (sin hue))))
 
-(est-defface est-fg-yellow `((t :foreground ,est-color-fg-yellow)) "yellow fg color")
-(est-defface est-fg-pink `((t :foreground ,est-color-fg-pink)) "pink fg color")
-(est-defface est-fg-teal `((t :foreground ,est-color-fg-teal)) "green fg teal")
-(est-defface est-fg-blue `((t :foreground ,est-color-fg-blue)) "blue fg blue")
-(est-defface est-fg-green `((t :foreground ,est-color-fg-green)) "green fg green")
-(est-defface est-fg-violet `((t :foreground ,est-color-fg-violet)) "green fg green")
-(est-defface est-fg-red `((t :foreground ,est-color-fg-red)) "green fg red")
-(est-defface est-fg-cyan `((t :foreground ,est-color-fg-cyan)) "green fg cyan")
+(defconst est-pi 3.141592653589793238463)
+(defcustom est-accent-chroma 50 "amount of chroma for accent colors")
+(est-defcustom est-hue-fundamental   (est-color-hue est-color-fg-popout) "fundamental accent hue")
+(est-defcustom est-hue-complementary (+ est-hue-fundamental est-pi) "complementary accent hue")
+(est-defcustom est-hue-analogous1   (+ est-hue-fundamental (/ est-pi 3)) "analogous1 accent hue")
+(est-defcustom est-hue-analogous2   (- est-hue-fundamental (/ est-pi 3)) "analogous2 accent hue")
+(est-defcustom est-hue-coanalogous1 (+ est-hue-complementary (/ est-pi 3)) "coanalogous1 accent hue")
+(est-defcustom est-hue-coanalogous2 (- est-hue-complementary (/ est-pi 3)) "coanalogous2 accent hue")
+
+(est-defface est-fg-complementary `((t :foreground ,(est-color-lch est-accent-lightness est-accent-chroma est-hue-complementary))) "todo")
+(est-defface est-fg-analogous1 `((t :foreground ,(est-color-lch est-accent-lightness est-accent-chroma est-hue-analogous1))) "todo")
+(est-defface est-fg-analogous2 `((t :foreground ,(est-color-lch est-accent-lightness est-accent-chroma est-hue-analogous2))) "todo")
+(est-defface est-fg-coanalogous1 `((t :foreground ,(est-color-lch est-accent-lightness est-accent-chroma est-hue-coanalogous1))) "todo")
+(est-defface est-fg-coanalogous2 `((t :foreground ,(est-color-lch est-accent-lightness est-accent-chroma est-hue-coanalogous2))) "todo")
+
+(setq hi-lock-face-defaults ;; not a defcustom: simply override this.
+      '("est-fg-complementary" "est-fg-coanalogous1" "est-fg-coanalogous2" "est-fg-analogous1" "est-fg-analogous2"))
+
+;; (est-defcustom est-color-fg-yellow (est-color-lch est-accent-lightness est-accent-chroma est-hue-yellow) "yellow fg color")
+;; (est-defcustom est-color-fg-pink   (est-color-lch est-accent-lightness est-accent-chroma est-hue-pink) "pink fg color")
+;; (est-defcustom est-color-fg-teal   (est-color-lch est-accent-lightness est-accent-chroma est-hue-teal) "teal fg color")
+;; (est-defcustom est-color-fg-blue   (est-color-lch est-accent-lightness est-accent-chroma est-hue-blue) "blue fg color")
+;; (est-defcustom est-color-fg-green  (est-color-lch est-accent-lightness est-accent-chroma est-hue-green) "green fg color")
+;; (est-defcustom est-color-fg-violet (est-color-lch est-accent-lightness est-accent-chroma est-hue-violet) "violet fg color")
+;; (est-defcustom est-color-fg-red    (est-color-lch est-accent-lightness est-accent-chroma est-hue-red) "red fg color")
+;; (est-defcustom est-color-fg-cyan   (est-color-lch est-accent-lightness est-accent-chroma est-hue-cyan) "cyan fg color")
+;; (est-defface est-fg-yellow `((t :foreground ,est-color-fg-yellow)) "yellow fg")
+;; (est-defface est-fg-pink   `((t :foreground ,est-color-fg-pink)) "pink fg")
+;; (est-defface est-fg-teal   `((t :foreground ,est-color-fg-teal)) "teal fg")
+;; (est-defface est-fg-blue   `((t :foreground ,est-color-fg-blue)) "blue fg")
+;; (est-defface est-fg-green  `((t :foreground ,est-color-fg-green)) "green fg")
+;; (est-defface est-fg-violet `((t :foreground ,est-color-fg-violet)) "violet fg")
+;; (est-defface est-fg-red	   `((t :foreground ,est-color-fg-red)) "red fg")
+;; (est-defface est-fg-cyan   `((t :foreground ,est-color-fg-cyan)) "cyan fg")
 
 (est-defcustom est-color-bg-hilight1  (est-paint-over  est-color-bg-default 0.15 est-color-fg-popout)  "bg. highlight 1st kind" :type 'color)
 (est-defcustom est-color-bg-hilight2  (est-paint-over  est-color-bg-default 0.15 est-color-fg-salient) "bg. highlight 2nd kind" :type 'color)
@@ -374,8 +394,6 @@ and secondary information.")
 (est-stealface magit-diff-removed-highlight `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-removed))))
 (est-stealface magit-diff-added-highlight   `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-added))))
 
-(setq hi-lock-face-defaults ;; not a defcustom: simply override this.
-      '("est-fg-teal" "est-fg-pink" "est-fg-yellow" "est-fg-blue" "est-fg-violet" "est-fg-green" "est-fg-cyan" "est-fg-red" ))
 
 ;; est-customs
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -492,6 +510,7 @@ and secondary information.")
    '(info-title-4   ((t :inherit est-heading-3)))
    '(info-menu-header ((t :inherit est-heading)))
    '(info-menu-star ((t :inherit est-faded)))
+   '(info-node ((t :inherit italic est-emph)))
 
    '(ivy-action                     ((t :inherit est-faded)))
    '(ivy-completions-annotations    ((t :inherit est-faded)))
@@ -584,7 +603,6 @@ and secondary information.")
    '(org-level-6                  ((t :inherit est-heading)))
    '(org-level-7                  ((t :inherit est-heading)))
    '(org-level-8                  ((t :inherit est-heading)))
-   
    '(org-list-dt                  ((t :inherit est-faded)))
    '(org-macro                    ((t :inherit est-faded)))
    '(org-meta-line                ((t :inherit est-faded)))

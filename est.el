@@ -264,14 +264,13 @@ fg."  :type 'float :group 'est)
 (defun est-color-lch (lightness chroma hue)
   (est-color-lab lightness (* chroma (cos hue)) (* chroma (sin hue))))
 
-(defconst est-pi 3.141592653589793238463)
 (defcustom est-accent-chroma 50 "amount of chroma for accent colors")
 (est-defcustom est-hue-fundamental   (est-color-hue est-color-fg-popout) "fundamental accent hue")
-(est-defcustom est-hue-complementary (+ est-hue-fundamental est-pi) "complementary accent hue")
-(est-defcustom est-hue-analogous1   (+ est-hue-fundamental (/ est-pi 3)) "analogous1 accent hue")
-(est-defcustom est-hue-analogous2   (- est-hue-fundamental (/ est-pi 3)) "analogous2 accent hue")
-(est-defcustom est-hue-coanalogous1 (+ est-hue-complementary (/ est-pi 3)) "coanalogous1 accent hue")
-(est-defcustom est-hue-coanalogous2 (- est-hue-complementary (/ est-pi 3)) "coanalogous2 accent hue")
+(est-defcustom est-hue-complementary (+ est-hue-fundamental float-pi) "complementary accent hue")
+(est-defcustom est-hue-analogous1   (+ est-hue-fundamental (/ float-pi 3)) "analogous1 accent hue")
+(est-defcustom est-hue-analogous2   (- est-hue-fundamental (/ float-pi 3)) "analogous2 accent hue")
+(est-defcustom est-hue-coanalogous1 (+ est-hue-complementary (/ float-pi 3)) "coanalogous1 accent hue")
+(est-defcustom est-hue-coanalogous2 (- est-hue-complementary (/ float-pi 3)) "coanalogous2 accent hue")
 
 (est-defface est-fg-complementary `((t :foreground ,(est-color-lch est-accent-lightness est-accent-chroma est-hue-complementary))) "todo")
 (est-defface est-fg-analogous1 `((t :foreground ,(est-color-lch est-accent-lightness est-accent-chroma est-hue-analogous1))) "todo")
@@ -280,7 +279,7 @@ fg."  :type 'float :group 'est)
 (est-defface est-fg-coanalogous2 `((t :foreground ,(est-color-lch est-accent-lightness est-accent-chroma est-hue-coanalogous2))) "todo")
 
 (setq hi-lock-face-defaults ;; not a defcustom: simply override this.
-      '("est-fg-complementary" "est-fg-coanalogous1" "est-fg-coanalogous2" "est-fg-analogous1" "est-fg-analogous2"))
+      '("est-fg-analogous1" "est-fg-analogous2"  "est-fg-coanalogous1" "est-fg-coanalogous2" "est-fg-complementary"))
 
 ;; (est-defcustom est-color-fg-yellow (est-color-lch est-accent-lightness est-accent-chroma est-hue-yellow) "yellow fg color")
 ;; (est-defcustom est-color-fg-pink   (est-color-lch est-accent-lightness est-accent-chroma est-hue-pink) "pink fg color")

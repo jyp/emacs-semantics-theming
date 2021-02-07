@@ -1,4 +1,3 @@
-;;; Commentary
 
 ;; Copyright: FSF
 
@@ -367,7 +366,6 @@ and secondary information.")
   "Subtle face is used to suggest a physical area on the screen.
   See also `est-color-bg-subtle.'")
 
-
 (est-defface est-heading-0 `((t :height 1.5 :inherit est-heading)) "Face for page-level headings (titles)")
 (est-defface est-heading-1 `((t :height 1.3 :inherit  est-heading)) "Face for level 1 headings")
 (est-defface est-heading-2 `((t :height 1.15 :inherit est-heading)) "Face for level 2 headings")
@@ -383,13 +381,14 @@ and secondary information.")
 (est-stealface mode-line-highlight `((t :overline ,est-color-fg-faded :inherit (est-emph est-choice))))
 (est-stealface mode-line-inactive  `((t :overline ,est-color-fg-faded)))
 
+(est-stealface diff-added           `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-added))))
+(est-stealface diff-removed         `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-removed))))
+
 (est-stealface smerge-base            `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-base))))
-(est-stealface smerge-lower           `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-added))))
-(est-stealface smerge-upper           `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-removed))))
-(est-stealface smerge-markers         `((t inherit shadow)))
 (est-stealface smerge-refined-added   `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-added))))
-(est-stealface smerge-refined-change  `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-added))))
 (est-stealface smerge-refined-removed `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-removed))))
+(est-stealface smerge-refined-change  `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-added))))
+
 (est-stealface magit-diff-removed-highlight `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-removed))))
 (est-stealface magit-diff-added-highlight   `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-added))))
 
@@ -463,6 +462,9 @@ and secondary information.")
 
    '(dired-directory ((t :inherit est-salient)))
    '(dired-flagged   ((t :inherit est-popout)))
+
+   '(diff-file-header  ((t :inherit est-heading-3)))
+   '(diff-header       ((t :inherit est-heading-4)))
 
    '(font-lock-builtin-face       ((t :inherit default)))
    '(font-lock-comment-face       ((t :inherit est-faded)))
@@ -548,7 +550,7 @@ and secondary information.")
    '(font-latex-italic-face         ((t :inherit est-emph)))
    '(font-latex-verbatim-face       ((t :inherit est-faded)))
 
-   '(hi-yellow ((t :inherit est-highlight-1)))
+   '(hi-yellow ((t :inherit est-highlight-1))) ;; see also hi-lock-face-defaults
    '(hi-pink   ((t :inherit est-highlight-2)))
 
    '(magit-diff-hunk-heading           ((t :extend t :inherit est-heading)))
@@ -558,8 +560,8 @@ and secondary information.")
    '(magit-section-highlight           ((t :inherit est-choice)))
    '(magit-hash                        ((t :inherit shadow)))
    '(magit-log-author                  ((t :inherit est-faded)))
-   '(magit-diff-removed                ((t :inherit smerge-upper)))
-   '(magit-diff-added                  ((t :inherit smerge-lower)))
+   '(magit-diff-removed                ((t :inherit diff-removed)))
+   '(magit-diff-added                  ((t :inherit diff-added)))
    '(magit-tag                         ((t :inherit emph)))
    '(magit-dimmed                      ((t :inherit shadow)))
    '(magit-diff-lines-heading          ((t :inherit (est-magit-selection magit-diff-hunk-heading-highlight))))
@@ -582,7 +584,7 @@ and secondary information.")
    '(org-column-title             ((t :inherit est-faded)))
    '(org-date                     ((t :inherit est-faded)))
    '(org-date-selected            ((t :inherit est-faded)))
-   '(org-default                  ((t :inherit est-faded)))
+   '(org-default                  ((t :inherit default)))
    '(org-document-info            ((t :inherit est-faded)))
    '(org-document-info-keyword    ((t :inherit est-faded)))
    '(org-document-title           ((t :inherit est-faded)))
@@ -590,7 +592,7 @@ and secondary information.")
    '(org-drawer                   ((t :inherit est-faded)))
    '(org-ellipsis                 ((t :inherit est-faded)))
    '(org-footnote                 ((t :inherit est-faded)))
-   '(org-formula                  ((t :inherit est-faded)))
+   '(org-formula                  ((t :inherit est-salient)))
    '(org-headline-done            ((t :inherit est-faded)))
    '(org-hide                     ((t :inherit est-invisible)))
    '(org-latex-and-related        ((t :inherit est-faded)))
@@ -633,6 +635,12 @@ and secondary information.")
    '(powerline-inactive2  ((t :inherit powerline-inactive0)))
 
    '(selectrum-primary-highlight ((t :inherit match)))
+
+   '(sh-quoted-exec ((t :inherit salient)))
+
+   '(smerge-lower   ((t :inherit diff-added)))
+   '(smerge-upper   ((t :ihnerit diff-removed)))
+   '(smerge-markers ((t inherit shadow)))
    
    '(swiper-match-face-1 ((t :inherit match)))
    '(swiper-match-face-2 ((t :inherit match)))

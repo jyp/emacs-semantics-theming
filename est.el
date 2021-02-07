@@ -502,7 +502,7 @@ and secondary information.")
 
    '(ido-only-match ((t :inherit match)))
 
-   '(isearch       ((t :inherit highlight)))
+   '(isearch       ((t :inherit match)))
    '(isearch-fail  ((t :inherit est-faded)))
 
    '(info-title-1   ((t :inherit est-heading-0)))

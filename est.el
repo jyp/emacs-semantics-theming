@@ -409,6 +409,12 @@ and secondary information.")
 (deftheme est-style)
 (put 'est-style 'theme-settings nil) ; reset so this file can be eval'ed several times (for development)
 
+(custom-theme-set-variables
+ 'est-style
+ '(org-fontify-done-headline nil) ;; does not work with changing size of headlines
+ '(org-fontify-todo-headline nil) ;; does not work with changing size of headlines
+ )
+
 (custom-theme-set-faces
  'est-style
    '(est-magit-selection ((t :inherit est-salient)))

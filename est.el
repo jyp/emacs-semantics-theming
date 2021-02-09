@@ -413,6 +413,7 @@ and secondary information.")
  'est-style
  '(org-fontify-done-headline nil) ;; does not work with changing size of headlines
  '(org-fontify-todo-headline nil) ;; does not work with changing size of headlines
+ '(org-cycle-level-faces nil)
  )
 
 (custom-theme-set-faces
@@ -480,6 +481,32 @@ and secondary information.")
 
    '(diff-file-header  ((t :inherit est-heading-3)))
    '(diff-header       ((t :inherit est-heading-4)))
+
+   '(eshell-prompt        ((t :inherit est-strong)))
+   '(eshell-ls-directory  ((t :inherit dired-directory)))
+   '(eshell-ls-symlink    ((t :inherit dired-symlink)))
+   '(eshell-ls-executable ((t :inherit est-popout)))
+   '(eshell-ls-readonly   ((t :inherit default)))
+   '(eshell-ls-unreadable ((t :inherit dired-warning)))
+   '(eshell-ls-special    ((t :inherit dired-special)))
+   '(eshell-ls-missing    ((t :inherit error)))
+   '(eshell-ls-archive    ((t :inherit est-faded)))
+   '(eshell-ls-backup     ((t :inherit est-faded)))
+   '(eshell-ls-product    ((t :inherit est-faded)))
+   '(eshell-ls-clutter    ((t :inherit error)))
+
+   '(font-latex-sectioning-1-face   ((t :inherit est-heading-1)))
+   '(font-latex-sectioning-2-face   ((t :inherit est-heading-2)))
+   '(font-latex-sectioning-3-face   ((t :inherit est-heading-3)))
+   '(font-latex-sectioning-4-face   ((t :inherit est-heading)))
+   '(font-latex-sectioning-5-face   ((t :inherit est-heading)))
+   '(font-latex-bold-face           ((t :inherit bold)))
+   '(font-latex-math-face           ((t :inherit est-salient)))
+   '(font-latex-script-char-face    ((t :inherit est-salient)))
+   '(font-latex-string-face         ((t :inherit est-faded)))
+   '(font-latex-warning-face        ((t :inherit est-strong))) ; latex-warning face is not really a warning face!
+   '(font-latex-italic-face         ((t :inherit est-emph)))
+   '(font-latex-verbatim-face       ((t :inherit est-faded)))
 
    '(font-lock-builtin-face       ((t)))
    '(font-lock-comment-face       ((t :inherit est-faded)))
@@ -550,20 +577,6 @@ and secondary information.")
    '(ivy-subdir                     ((t :inherit est-faded)))
    '(ivy-virtual                    ((t :inherit est-faded)))
    '(ivy-yanked-word                ((t :inherit est-faded)))
-
-   '(font-latex-sectioning-1-face   ((t :inherit est-heading-1)))
-   '(font-latex-sectioning-2-face   ((t :inherit est-heading-2)))
-   '(font-latex-sectioning-3-face   ((t :inherit est-heading-3)))
-   '(font-latex-sectioning-4-face   ((t :inherit est-heading)))
-   '(font-latex-sectioning-5-face   ((t :inherit est-heading)))
-
-   '(font-latex-bold-face           ((t :inherit bold)))
-   '(font-latex-math-face           ((t :inherit est-salient)))
-   '(font-latex-script-char-face    ((t :inherit est-salient)))
-   '(font-latex-string-face         ((t :inherit est-faded)))
-   '(font-latex-warning-face        ((t :inherit est-strong))) ; latex-warning face is not really a warning face!
-   '(font-latex-italic-face         ((t :inherit est-emph)))
-   '(font-latex-verbatim-face       ((t :inherit est-faded)))
 
    '(git-commit-summary ((t :inherit est-emph)))
 
@@ -663,8 +676,6 @@ and secondary information.")
    '(swiper-match-face-2 ((t :inherit match)))
    '(swiper-match-face-3 ((t :inherit match)))
    '(swiper-match-face-4 ((t :inherit match)))
-
-   '(eshell-prompt ((t :inherit est-strong)))
 
    '(widget-field ((t :inherit (est-faded est-subtle)))))
 

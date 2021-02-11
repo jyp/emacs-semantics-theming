@@ -237,6 +237,12 @@ This is not used directly in faces, but blended with various background
 colors. So it is fine to use saturated bright colors here." :type 'color :group
 'est)
 
+(defcustom est-taint-vc-third "#FFFF00"
+"A taint to indicate third-party stuff in VC contexts.
+This is not used directly in faces, but blended with various background
+colors. So it is fine to use saturated bright colors here." :type 'color :group
+'est)
+
 (defcustom est-taint-vc-added "#00FF00"
 "A taint to indicate added stuff in VC contexts.
 This is not used directly in faces, but blended with various background
@@ -381,6 +387,10 @@ and secondary information.")
 (est-defface est-heading-3 `((t :height 1.1 :inherit est-heading)) "Face for level 3 headings")
 (est-defface est-heading   `((t :inherit bold)) "Face for level 4 headings and below")
 
+(est-defface est-frame-title
+             `((t :extend t :background ,est-color-fg-salient :foreground ,est-color-bg-default :height 1.7 :box (:line-width 40 :color ,est-color-fg-salient)))
+             "Frame title; presentations, etc.")
+
 (est-defface est-invisible `((t :foreground ,est-color-bg-default)) "Face for invisible text")
 
 (est-stealface default  `((t :foreground ,est-color-fg-default :background ,est-color-bg-default)))
@@ -390,17 +400,37 @@ and secondary information.")
 (est-stealface mode-line-highlight `((t :overline ,est-color-fg-faded :inherit (est-emph est-choice))))
 (est-stealface mode-line-inactive  `((t :overline ,est-color-fg-faded)))
 
+
+(est-stealface ediff-current-diff-face-Ancestor `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-base))))
+(est-stealface ediff-current-diff-face-A        `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-added))))
+(est-stealface ediff-current-diff-face-B        `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-removed))))
+(est-stealface ediff-current-diff-face-C        `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-third))))
+(est-stealface ediff-fine-diff-face-Ancestor    `((t           :background ,(est-paint-over est-color-bg-selected 0.2 est-taint-vc-base))))
+(est-stealface ediff-fine-diff-face-A           `((t           :background ,(est-paint-over est-color-bg-selected 0.2 est-taint-vc-added))))
+(est-stealface ediff-fine-diff-face-B           `((t           :background ,(est-paint-over est-color-bg-selected 0.2 est-taint-vc-removed))))
+(est-stealface ediff-fine-diff-face-C           `((t           :background ,(est-paint-over est-color-bg-selected 0.2 est-taint-vc-third))))
+(est-stealface ediff-odd-diff-face-Ancestor     `((t :extend t :background ,(est-paint-over est-color-bg-subtle   0.1 est-taint-vc-base))))
+(est-stealface ediff-odd-diff-face-A            `((t :extend t :background ,(est-paint-over est-color-bg-subtle   0.1 est-taint-vc-added))))
+(est-stealface ediff-odd-diff-face-B            `((t :extend t :background ,(est-paint-over est-color-bg-subtle   0.1 est-taint-vc-removed))))
+(est-stealface ediff-odd-diff-face-C            `((t :extend t :background ,(est-paint-over est-color-bg-subtle   0.1 est-taint-vc-third))))
+(est-stealface ediff-even-diff-face-Ancestor    `((t :extend t :background ,(est-paint-over est-color-bg-default  0.1 est-taint-vc-base))))
+(est-stealface ediff-even-diff-face-A           `((t :extend t :background ,(est-paint-over est-color-bg-default  0.1 est-taint-vc-added))))
+(est-stealface ediff-even-diff-face-B           `((t :extend t :background ,(est-paint-over est-color-bg-default  0.1 est-taint-vc-removed))))
+(est-stealface ediff-even-diff-face-C           `((t :extend t :background ,(est-paint-over est-color-bg-default  0.1 est-taint-vc-third))))
+
+(est-stealface smerge-base            `((t :inherit ediff-even-diff-face-Ancestor)))
+(est-stealface smerge-refined-added   `((t :inherit ediff-fine-diff-face-A)))
+(est-stealface smerge-refined-removed `((t :inherit ediff-fine-diff-face-B)))
+(est-stealface smerge-refined-change  `((t :inherit ediff-fine-diff-face-C)))
+
 (est-stealface diff-added           `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-added))))
 (est-stealface diff-removed         `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-removed))))
-
-(est-stealface smerge-base            `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-base))))
-(est-stealface smerge-refined-added   `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-added))))
-(est-stealface smerge-refined-removed `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-removed))))
-(est-stealface smerge-refined-change  `((t :background ,(est-paint-over est-color-bg-default 0.2 est-taint-vc-added))))
 
 (est-stealface magit-diff-removed-highlight `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-removed))))
 (est-stealface magit-diff-added-highlight   `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-added))))
 
+(defface est-force-fixed-pitch '((t)) "Face for explicitly fixed
+pitch. Can be useful if the default face is variable pitch.")
 
 ;; est-customs
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -603,14 +633,14 @@ and secondary information.")
 
    '(org-default                  ((t :inherit variable-pitch))) ;; use (add-hook 'org-mode-hook 'buffer-face-mode) to actually use this.
    '(org-archived                 ((t :inherit est-faded)))
-   '(org-block                    ((t :inherit fixed-pitch)))
-   '(org-block-begin-line         ((t :inherit fixed-pitch)))
-   '(org-block-end-line           ((t :inherit fixed-pitch)))
-   '(org-checkbox                 ((t :inherit (fixed-pitch est-emph))))
+   '(org-block                    ((t :inherit est-force-fixed-pitch)))
+   '(org-block-begin-line         ((t :inherit est-force-fixed-pitch)))
+   '(org-block-end-line           ((t :inherit est-force-fixed-pitch)))
+   '(org-checkbox                 ((t :inherit (est-emph est-force-fixed-pitch))))
    '(org-checkbox-statistics-done ((t :inherit est-faded)))
    '(org-checkbox-statistics-todo ((t :inherit est-faded)))
    '(org-clock-overlay            ((t :inherit est-faded)))
-   '(org-code                     ((t :inherit fixed-pitch)))
+   '(org-code                     ((t :inherit est-force-fixed-pitch)))
    '(org-column                   ((t :inherit est-faded)))
    '(org-column-title             ((t :inherit est-faded)))
    '(org-date                     ((t :inherit est-faded)))
@@ -624,7 +654,7 @@ and secondary information.")
    '(org-footnote                 ((t :inherit est-faded)))
    '(org-formula                  ((t :inherit est-salient)))
    '(org-headline-done            ((t :inherit est-faded)))
-   '(org-hide                     ((t :inherit (fixed-pitch est-invisible))))
+   '(org-hide                     ((t :inherit (est-invisible est-force-fixed-pitch))))
    '(org-latex-and-related        ((t :inherit est-salient)))
    '(org-level-1                  ((t :inherit est-heading-1)))
    '(org-level-2                  ((t :inherit est-heading-2)))
@@ -647,14 +677,14 @@ and secondary information.")
    '(org-scheduled-today          ((t :inherit est-faded)))
    '(org-sexp-date                ((t :inherit est-faded)))
    '(org-special-keyword          ((t :inherit est-faded)))
-   '(org-table                    ((t :inherit fixed-pitch)))
+   '(org-table                    ((t :inherit est-force-fixed-pitch)))
    '(org-tag                      ((t :inherit est-faded)))
    '(org-tag-group                ((t :inherit est-faded)))
    '(org-target                   ((t :inherit est-faded)))
    '(org-time-grid                ((t :inherit est-faded)))
    '(org-todo                     ((t :inherit est-popout)))
    '(org-upcoming-deadline        ((t :inherit est-strong)))
-   '(org-verbatim                 ((t :inherit fixed-pitch est-emph)))
+   '(org-verbatim                 ((t :inherit est-emph est-force-fixed-pitch)))
    '(org-verse                    ((t :inherit est-faded)))
 
    '(powerline-active0    ((t :inherit (est-strong est-choice))))

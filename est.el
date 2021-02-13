@@ -495,6 +495,7 @@ pitch. Can be useful if the default face is variable pitch.")
    '(custom-set               ((t :inherit est-highlight-2)))
    '(custom-variable-obsolete ((t :inherit est-faded)))
 
+   '(company-preview-common     ((t :inherit match est-choice)))
    '(company-scrollbar-bg       ((t :inherit est-subtle)))
    '(company-tooltip            ((t :inherit est-subtle)))
    '(company-tooltip-selection  ((t :inherit est-choice)))
@@ -502,7 +503,7 @@ pitch. Can be useful if the default face is variable pitch.")
    '(company-tooltip-annotation ((t :inherit shadow)))
    '(company-scrollbar-bg       ((t :inverse-video t :inherit est-shadow)))
    '(company-scrollbar-fg       ((t :inverse-video t :inherit est-emph)))
-
+ 
    '(completions-common-part      ((t :inherit est-faded)))
    '(completions-first-difference ((t)))
 

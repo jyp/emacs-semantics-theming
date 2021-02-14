@@ -388,7 +388,8 @@ and secondary information.")
 (est-defface est-heading   `((t :inherit bold)) "Face for level 4 headings and below")
 
 (est-defface est-frame-title
-             `((t :extend t :background ,est-color-fg-salient :foreground ,est-color-bg-default :height 1.7 :box (:line-width 40 :color ,est-color-fg-salient)))
+             `((t :extend t :background ,est-color-fg-salient :foreground ,est-color-bg-default :height 1.7 :box (:line-width 40 :color "red" ; ,est-color-fg-salient
+                                                                                                                              )))
              "Frame title; presentations, etc.")
 
 (est-defface est-invisible `((t :foreground ,est-color-bg-default)) "Face for invisible text")
@@ -655,7 +656,7 @@ pitch. Can be useful if the default face is variable pitch.")
    '(org-footnote                 ((t :inherit est-faded)))
    '(org-formula                  ((t :inherit est-salient)))
    '(org-headline-done            ((t :inherit est-faded)))
-   '(org-hide                     ((t :inherit (est-invisible est-force-fixed-pitch))))
+   '(org-hide                     ((t :inherit est-invisible))) ;; must not be fixed-pitch, otherwise org indent gives wrong results with variable pitch font.
    '(org-latex-and-related        ((t :inherit est-salient)))
    '(org-level-1                  ((t :inherit est-heading-1)))
    '(org-level-2                  ((t :inherit est-heading-2)))

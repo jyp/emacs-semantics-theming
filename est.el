@@ -419,16 +419,6 @@ and secondary information.")
 (est-stealface ediff-even-diff-face-B           `((t :extend t :background ,(est-paint-over est-color-bg-default  0.1 est-taint-vc-removed))))
 (est-stealface ediff-even-diff-face-C           `((t :extend t :background ,(est-paint-over est-color-bg-default  0.1 est-taint-vc-third))))
 
-(est-stealface smerge-base            `((t :inherit ediff-even-diff-face-Ancestor)))
-(est-stealface smerge-refined-added   `((t :inherit ediff-fine-diff-face-A)))
-(est-stealface smerge-refined-removed `((t :inherit ediff-fine-diff-face-B)))
-(est-stealface smerge-refined-change  `((t :inherit ediff-fine-diff-face-C)))
-
-(est-stealface diff-added           `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-added))))
-(est-stealface diff-removed         `((t :extend t :background ,(est-paint-over est-color-bg-default 0.1 est-taint-vc-removed))))
-
-(est-stealface magit-diff-removed-highlight `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-removed))))
-(est-stealface magit-diff-added-highlight   `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-added))))
 
 (defface est-force-fixed-pitch '((t)) "Face for explicitly fixed
 pitch. Can be useful if the default face is variable pitch.")
@@ -513,6 +503,10 @@ pitch. Can be useful if the default face is variable pitch.")
 
    '(diff-file-header  ((t :inherit est-heading-3)))
    '(diff-header       ((t :inherit est-heading-4)))
+   '(diff-added           ((t :inherit ediff-even-diff-face-A)))
+   '(diff-removed         ((t :inherit ediff-even-diff-face-B)))
+
+
 
    '(eshell-prompt        ((t :inherit est-strong)))
    '(eshell-ls-directory  ((t :inherit dired-directory)))
@@ -630,6 +624,8 @@ pitch. Can be useful if the default face is variable pitch.")
    '(magit-diff-file-heading-selection ((t :inherit (est-magit-selection magit-diff-file-heading-highlight))))
    '(magit-diff-hunk-heading-selection ((t :inherit (est-magit-selection magit-diff-hunk-heading))))
    '(magit-section-heading-selection   ((t :inherit (est-magit-selection)))) ; doc is wrong for this face. So not assigned a section heading style (magit-section-heading)
+   '(magit-diff-removed-highlight ((t :inherit ediff-current-diff-face-A)))
+   '(magit-diff-added-highlight   ((t :inherit ediff-current-diff-face-B)))
 
    '(makefile-space               ((t :inherit warning)))
 
@@ -703,6 +699,10 @@ pitch. Can be useful if the default face is variable pitch.")
    '(smerge-lower   ((t :inherit diff-added)))
    '(smerge-upper   ((t :ihnerit diff-removed)))
    '(smerge-markers ((t inherit shadow)))
+   '(smerge-base            ((t :inherit ediff-even-diff-face-Ancestor)))
+   '(smerge-refined-added   ((t :inherit ediff-fine-diff-face-A)))
+   '(smerge-refined-removed ((t :inherit ediff-fine-diff-face-B)))
+   '(smerge-refined-change  ((t :inherit ediff-fine-diff-face-C)))
    
    '(swiper-match-face-1 ((t :inherit match)))
    '(swiper-match-face-2 ((t :inherit match)))

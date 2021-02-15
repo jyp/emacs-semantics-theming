@@ -623,8 +623,8 @@ pitch. Can be useful if the default face is variable pitch.")
    '(magit-diff-file-heading-selection ((t :inherit (est-magit-selection magit-diff-file-heading-highlight))))
    '(magit-diff-hunk-heading-selection ((t :inherit (est-magit-selection magit-diff-hunk-heading))))
    '(magit-section-heading-selection   ((t :inherit (est-magit-selection)))) ; doc is wrong for this face. So not assigned a section heading style (magit-section-heading)
-   '(magit-diff-removed-highlight ((t :inherit ediff-current-diff-face-A)))
-   '(magit-diff-added-highlight   ((t :inherit ediff-current-diff-face-B)))
+   '(magit-diff-added-highlight   ((t :inherit ediff-current-diff-face-A)))
+   '(magit-diff-removed-highlight ((t :inherit ediff-current-diff-face-B)))
 
    '(makefile-space               ((t :inherit warning)))
 

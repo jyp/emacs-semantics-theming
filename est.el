@@ -684,6 +684,8 @@ pitch. Can be useful if the default face is variable pitch.")
    '(org-verbatim                 ((t :inherit est-emph est-force-fixed-pitch)))
    '(org-verse                    ((t :inherit est-faded)))
 
+   '(org-superstar-leading        ((t :inherit org-hide)))
+
    '(powerline-active0    ((t :inherit (est-strong est-choice))))
    '(powerline-active1    ((t :inherit powerline-active0)))
    '(powerline-active2    ((t :inherit powerline-active0)))

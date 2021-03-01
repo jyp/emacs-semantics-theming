@@ -388,7 +388,7 @@ and secondary information.")
 (est-defface est-heading   `((t :inherit bold)) "Face for level 4 headings and below")
 
 (est-defface est-frame-title
-             `((t :extend t :background ,est-color-fg-salient :foreground ,est-color-bg-default :height 1.7 :box (:line-width 40 :color ,est-color-fg-salient)))
+             `((t :extend t :background ,est-color-fg-salient :weight bold :foreground ,est-color-bg-default :height 1.7 :box (:line-width 40 :color ,est-color-fg-salient)))
              "Frame title; presentations, etc.")
 
 (est-defface est-invisible `((t :foreground ,est-color-bg-default)) "Face for invisible text")

@@ -112,7 +112,7 @@
 (defcustom est-gamma 1.5
   "Gamma correction parameter for `est'.
 2.2 is the standard value but for light palettes tends to yield
-too bright colors due to too accurate additive color."
+too bright colors due to too accurate color addition."
   :group 'est :type 'float)
 
 (defun est-scale-color (scale col)
@@ -400,7 +400,6 @@ and secondary information.")
 (est-stealface cursor   `((t :background ,est-color-fg-default)))
 (est-stealface shadow   `((t :foreground ,est-color-fg-shadowed)))
 (est-stealface mode-line           `((t :overline ,est-color-fg-faded :inherit est-choice)))
-(est-stealface mode-line-highlight `((t :overline ,est-color-fg-faded :inherit (est-emph est-choice))))
 (est-stealface mode-line-inactive  `((t :overline ,est-color-fg-faded)))
 
 
@@ -693,11 +692,16 @@ pitch. Can be useful if the default face is variable pitch.")
    '(org-superstar-leading        ((t :inherit org-hide)))
 
    '(powerline-active0    ((t :inherit (est-strong est-choice))))
-   '(powerline-active1    ((t :inherit powerline-active0)))
-   '(powerline-active2    ((t :inherit powerline-active0)))
+   '(powerline-active1    ((t :inherit (est-highlight-1))))
+   '(powerline-active2    ((t :inherit (est-highlight-2))))
    '(powerline-inactive0  ((t :inherit est-faded)))
    '(powerline-inactive1  ((t :inherit powerline-inactive0)))
    '(powerline-inactive2  ((t :inherit powerline-inactive0)))
+   
+   '(mode-line-highlight ((t :inherit est-strong)))
+   '(mode-line-emphasis  ((t :inherit bold))) ; 
+   '(mode-line-buffer-id ((t :inherit emph)))
+   ;; '(mode-line-buffer-id-inactive)
 
    '(selectrum-primary-highlight ((t :inherit match)))
 

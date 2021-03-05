@@ -73,6 +73,7 @@
 (defvar est-faces   nil "List of faces to reset when applying est-theming")
 (setq est-customs nil
       est-faces nil)
+
 (defmacro est-defcustom (symbol standard doc &rest args)
   (declare (doc-string 3) (debug (name body)))
   `(progn
@@ -292,6 +293,8 @@ fg."  :type 'float :group 'est)
 
 (setq hi-lock-face-defaults ;; not a defcustom: simply override this. (The defaults have anti-semantics names (yellow, etc.))
       '("est-fg-analogous1" "est-fg-analogous2"  "est-fg-coanalogous1" "est-fg-coanalogous2" "est-fg-complementary"))
+(setq boon-hl-face-defaults
+      '(est-fg-analogous1 est-fg-analogous2  est-fg-coanalogous1 est-fg-coanalogous2 est-fg-complementary))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -471,7 +474,7 @@ pitch. Can be useful if the default face is variable pitch.")
    
    '(boon-modeline-ins ((t :inherit est-highlight-1)))
    '(boon-modeline-spc ((t :inherit est-highlight-2)))
-   '(boon-modeline-cmd ((t )))
+   '(boon-modeline-cmd ((t :inherit est-subtle)))
    '(boon-modeline-off ((t :inherit error)))
 
    '(custom-group-tag-1       ((t :inherit est-heading-1)))
@@ -793,6 +796,5 @@ pitch. Can be useful if the default face is variable pitch.")
 
 
 (provide 'est)
-
 
 ;;; est.el ends here

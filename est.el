@@ -691,9 +691,9 @@ pitch. Can be useful if the default face is variable pitch.")
 
    '(org-superstar-leading        ((t :inherit org-hide)))
 
-   '(powerline-active0    ((t :inherit (est-strong est-choice))))
-   '(powerline-active1    ((t :inherit (est-highlight-1))))
-   '(powerline-active2    ((t :inherit (est-highlight-2))))
+   '(powerline-active0    ((t :inherit est-choice)))
+   '(powerline-active1    ((t :inherit est-choice))) ;; est-highlight-1 or est-highlight-2 for extra flare
+   '(powerline-active2    ((t :inherit est-choice)))
    '(powerline-inactive0  ((t :inherit est-faded)))
    '(powerline-inactive1  ((t :inherit powerline-inactive0)))
    '(powerline-inactive2  ((t :inherit powerline-inactive0)))

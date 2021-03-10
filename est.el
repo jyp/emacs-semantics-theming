@@ -317,6 +317,8 @@ fg."  :type 'float :group 'est)
 
 (est-defcustom est-color-bg-hilight1  (est-paint-over  est-color-bg-default 0.15 est-color-fg-popout)  "bg. highlight 1st kind" :type 'color)
 (est-defcustom est-color-bg-hilight2  (est-paint-over  est-color-bg-default 0.15 est-color-fg-salient) "bg. highlight 2nd kind" :type 'color)
+(est-defcustom est-color-bg-selected-hilight1  (est-paint-over  est-color-bg-selected 0.15 est-color-fg-popout)  "bg. selected highlight 1st kind" :type 'color)
+(est-defcustom est-color-bg-selected-hilight2  (est-paint-over  est-color-bg-selected 0.15 est-color-fg-salient) "bg. selected highlight 2nd kind" :type 'color)
 (est-defcustom est-color-fg-shadowed  (est-paint-over  est-color-fg-default 0.6 est-color-bg-default)  "de-selected/disabled menu options" :type 'color)
 (est-defcustom est-color-fg-faded     (est-paint-over  est-color-fg-default 0.2 est-color-bg-default)  "de-emphasized (comments, etc.)" :type 'color)
 (est-defcustom est-color-fg-emph      (est-scrape-paint est-color-fg-default 0.2 est-color-bg-default) "subtle emphasis" :type 'color)
@@ -345,6 +347,15 @@ color is somehow inappropriate).")
 
 (est-defface est-highlight-2 `((t :background ,est-color-bg-hilight2))
   "Face for secondary highlights")
+
+
+(est-defface est-choice-highlight-1 `((t :background ,est-color-bg-selected-hilight1))
+  "Face for semi-transient highlights over `est-choice'. The meaning is similar to
+`est-popout', but for backgrounds (when changing the foreground
+color is somehow inappropriate).")
+
+(est-defface est-choice-highlight-2 `((t :background ,est-color-bg-selected-hilight2))
+  "Face for secondary highlights over `est-choice'")
 
 (est-defface est-critical `((t :foreground ,est-color-fg-critical))
   "Critical face is for information that requires immediate action.
@@ -471,8 +482,8 @@ pitch. Can be useful if the default face is variable pitch.")
    '(avy-lead-face-1     ((t :inherit est-emph)))
    '(avy-lead-face-2     ((t :inherit est-emph)))
    
-   '(boon-modeline-ins ((t :inherit est-highlight-1)))
-   '(boon-modeline-spc ((t :inherit est-highlight-2)))
+   '(boon-modeline-ins ((t :inherit est-choice-highlight-1)))
+   '(boon-modeline-spc ((t :inherit est-choice-highlight-2)))
    '(boon-modeline-cmd ((t :inherit est-subtle)))
    '(boon-modeline-off ((t :inherit error)))
 
@@ -702,6 +713,11 @@ pitch. Can be useful if the default face is variable pitch.")
    '(mode-line-emphasis  ((t :inherit bold))) ; 
    '(mode-line-buffer-id ((t :inherit emph)))
    ;; '(mode-line-buffer-id-inactive)
+
+   '(spaceline-highlight-face ((t :inherit est-highlight-1)))
+   '(spaceline-flycheck-error ((t :inherit est-critical)))
+   '(spaceline-flycheck-warning ((t :inherit warning)))
+   '(spaceline-flycheck-info ((t :inherit est-emph)))
 
    '(selectrum-primary-highlight ((t :inherit match)))
 

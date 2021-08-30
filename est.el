@@ -257,6 +257,9 @@ This is not used directly in faces, but blended with various background
 colors.  So it is fine to use saturated bright colors here."
 :type 'color :group 'est)
 
+(est-defcustom
+ est-is-dark-mode (< (est-color-lightness est-color-bg-default) 40)
+ "non-nil if this is this a dark background mode")
 
 (est-defcustom est-accent-lightness (+ (* 0.6 (est-color-lightness est-color-fg-default))
                                        (* 0.4 (est-color-lightness est-color-bg-default)))

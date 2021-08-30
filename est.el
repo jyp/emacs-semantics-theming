@@ -81,6 +81,13 @@
      (defcustom ,symbol ,standard ,doc :group 'est ,@args)
      ))
 
+(defmacro est-stealcustom (file symbol standard)
+  (declare (doc-string 3) (debug (name body)))
+  `(with-eval-after-load ,file
+     (push ',symbol est-customs)
+     (defcustom ,symbol ,standard (documentation-property ',symbol 'variable-documentation t))
+     ))
+
 (defun est-spec-symbol (face-symbol)
   (intern (concat (symbol-name face-symbol) "-spec")))
 
@@ -326,11 +333,11 @@ fg."  :type 'float :group 'est)
 (est-defcustom est-color-fg-faded     (est-paint-over  est-color-fg-default 0.2 est-color-bg-default)  "de-emphasized (comments, etc.)" :type 'color)
 (est-defcustom est-color-fg-emph      (est-scrape-paint est-color-fg-default 0.2 est-color-bg-default) "subtle emphasis" :type 'color)
 
-(est-defcustom hl-paren-colors
+(est-stealcustom 'hl-paren hl-paren-colors
                (list est-color-fg-salient
                      (est-paint-over est-color-fg-salient 0.25 est-color-fg-emph)
                      (est-paint-over est-color-fg-salient 0.5 est-color-fg-emph)
-                     (est-paint-over est-color-fg-salient 0.75 est-color-fg-emph)) "todo: stolen by est")
+                     (est-paint-over est-color-fg-salient 0.75 est-color-fg-emph)))
 
 ;;;;;;;;;;;;;;;
 ;; Faces

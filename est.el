@@ -74,19 +74,25 @@
 (setq est-customs nil
       est-faces nil)
 
-(defmacro est-defcustom (symbol standard doc &rest args)
+(defmacro est-defcustom (symbol standard docstring &rest args)
+  "Define SYMBOL with STANDARD valued and DOCSTRING, with ARGS.
+Also register SYMBOL for evaluation by `est-reevaluate'."
   (declare (doc-string 3) (debug (name body)))
   `(progn
      (push ',symbol est-customs)
-     (defcustom ,symbol ,standard ,doc :group 'est ,@args)
+     (defcustom ,symbol ,standard ,docstring :group 'est ,@args)
      ))
 
 (defmacro est-stealcustom (file symbol standard)
+  "Re-define the standard value for SYMBOL as STANDARD.
+Also register SYMBOL for evaluation by `est-reevaluate'. SYMBOL
+should be originally defined in FILE, together with its doc,
+groups, etc.  So"
   (declare (doc-string 3) (debug (name body)))
   `(with-eval-after-load ,file
      (push ',symbol est-customs)
-     (defcustom ,symbol ,standard (documentation-property ',symbol 'variable-documentation t))
-     ))
+     (put ',symbol 'standard-value (purecopy (list ',standard)))
+     (set ',symbol ,standard)))
 
 (defun est-spec-symbol (face-symbol)
   (intern (concat (symbol-name face-symbol) "-spec")))
@@ -104,7 +110,7 @@
 (defun est-reevaluate ()
   ;; FIXME: est-customs should really be sorted according to their
   ;; dependencies. But we don't have them. In general it depends on
-  ;; the free variables in the custom themes. For now, we do the
+  ;; the free variables in the custom standard values. For now, we do the
   ;; simple thing of assuming that they are declared in order of
   ;; dependencies.
   (dolist (symbol (reverse est-customs))
@@ -268,7 +274,7 @@ colors.  So it is fine to use saturated bright colors here."
  est-is-dark-mode (< (est-color-lightness est-color-bg-default) 40)
  "non-nil if this is this a dark background mode")
 
-(est-stealcustom 'pdf-view pdf-view-midnight-colors (cons est-color-fg-default est-color-bg-default))
+(est-stealcustom 'pdf-view pdf-view-midnight-colors (cons est-color-fg-default est-color-bg-subtle))
 
 (est-defcustom est-accent-lightness (+ (* 0.6 (est-color-lightness est-color-fg-default))
                                        (* 0.4 (est-color-lightness est-color-bg-default)))
@@ -756,75 +762,75 @@ pitch. Can be useful if the default face is variable pitch.")
 ;; Quick palette re-theming
 
 (defun est-lunarized-dark () ;; solarized inspire theme
-  (let ((est-color-fg-default  "#839496")
-        (est-color-fg-salient  "#268bd2")
-        (est-color-fg-popout   "#eee8d5")
-        (est-color-bg-default   "#002b36")
-        (est-color-bg-subtle    "#06303c")
-        (est-color-bg-selected  "#073642"))
-    (est-reevaluate)))
+  (setq est-color-fg-default  "#839496"
+        est-color-fg-salient  "#268bd2"
+        est-color-fg-popout   "#eee8d5"
+        est-color-bg-default   "#002b36"
+        est-color-bg-subtle    "#06303c"
+        est-color-bg-selected  "#073642")
+    (est-reevaluate))
 
 
 (defun est-lunarized-light () ;; solarized inspired theme
   (interactive)
-  (let ((est-color-fg-default  "#657b83")
-        (est-color-fg-salient  "#268bd2")
-        (est-color-fg-popout   "#d33682")
-        (est-color-bg-default   "#fdf6e3")
-        (est-color-bg-subtle    "#fff9d2")
-        (est-color-bg-selected  "#ffffff"))
-    (est-reevaluate)))
+  (setq est-color-fg-default  "#657b83"
+        est-color-fg-salient  "#268bd2"
+        est-color-fg-popout   "#d33682"
+        est-color-bg-default   "#fdf6e3"
+        est-color-bg-subtle    "#fff9d2"
+        est-color-bg-selected  "#ffffff")
+    (est-reevaluate))
 
 (defun est-cloudy-day () ;; light grey/white palette, blue tones
   (interactive)
-  (let ((est-color-fg-default     "#3e4759")
-        (est-color-bg-default     "#ffffff")
-        (est-color-bg-subtle      "#eef1f6")
-        (est-color-bg-selected    "#e5e9f0")
-        (est-color-fg-salient     "#1756c2")
-        (est-color-fg-popout      "#00e0ff"))
-    (est-reevaluate)))
+  (setq est-color-fg-default     "#3e4759"
+        est-color-bg-default     "#ffffff"
+        est-color-bg-subtle      "#eef1f6"
+        est-color-bg-selected    "#e5e9f0"
+        est-color-fg-salient     "#1756c2"
+        est-color-fg-popout      "#00e0ff")
+    (est-reevaluate))
 
 (defun est-cloudy-night () ;; dark grey palette, blue accents
   (interactive)
-  (let ((est-color-bg-selected "#192435")
-        (est-color-bg-subtle   "#242e41")
-        (est-color-bg-default  "#2b3547")
-        (est-color-fg-default  "#cccfd4")
-        (est-color-fg-salient  "#5a8bff")
-        (est-color-fg-popout   "#00c8ff"))
-    (est-reevaluate)))
+  (setq est-color-bg-selected "#192435"
+        est-color-bg-subtle   "#242e41"
+        est-color-bg-default  "#2b3547"
+        est-color-fg-default  "#cccfd4"
+        est-color-fg-salient  "#5a8bff"
+        est-color-fg-popout   "#00c8ff")
+  (est-reevaluate))
 
 (defun est-starry-night-palette () ;; a masterpiece
   (interactive)
-  (let ((est-color-bg-selected "#00128d")
-        (est-color-bg-subtle   "#000010")
-        (est-color-bg-default  "#000050")
-        (est-color-fg-default  "#819ce6")
-        (est-color-fg-salient  "#74a5b3")
-        (est-color-fg-popout   "#e7d97b"))
-    (est-reevaluate)))
+  (setq est-color-bg-selected "#00128d"
+        est-color-bg-subtle   "#000010"
+        est-color-bg-default  "#000050"
+        est-color-fg-default  "#819ce6"
+        est-color-fg-salient  "#74a5b3"
+        est-color-fg-popout   "#e7d97b")
+  (est-reevaluate))
 
 (defun est-wood-palette ()
   (interactive)
-  (let ((est-color-bg-selected "#896a3f")
-        (est-color-bg-subtle   "#5e454b")
-        (est-color-bg-default  "#4a3339")
-        (est-color-fg-default  "#f3f0d7")
-        (est-color-fg-salient  "#3fab9b")
-        (est-color-fg-popout   "#26f66a")
-        (est-accent-chroma 35))
-    (est-reevaluate)))
+  (setq est-color-bg-selected "#896a3f"
+        est-color-bg-subtle   "#5e454b"
+        est-color-bg-default  "#4a3339"
+        est-color-fg-default  "#f3f0d7"
+        est-color-fg-salient  "#3fab9b"
+        est-color-fg-popout   "#26f66a"
+        est-accent-chroma 35)
+  (est-reevaluate))
 
 (defun est-seaside-palette ()
   (interactive)
-  (let ((est-color-bg-selected "#004b50")
-        (est-color-bg-subtle   "#3b4b60")
-        (est-color-bg-default  "#2c3c51")
-        (est-color-fg-default  "#c6cdda")
-        (est-color-fg-salient  "#a77b3f")
-        (est-color-fg-popout   "#00bbff"))
-    (est-reevaluate)))
+  (setq est-color-bg-selected "#004b50"
+        est-color-bg-subtle   "#3b4b60"
+        est-color-bg-default  "#2c3c51"
+        est-color-fg-default  "#c6cdda"
+        est-color-fg-salient  "#a77b3f"
+        est-color-fg-popout   "#00bbff")
+  (est-reevaluate))
 
 
 (provide 'est)

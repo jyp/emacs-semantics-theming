@@ -333,6 +333,7 @@ fg."  :type 'float :group 'est)
 ;; (est-defface est-fg-red	   `((t :foreground ,est-color-fg-red)) "red fg")
 ;; (est-defface est-fg-cyan   `((t :foreground ,est-color-fg-cyan)) "cyan fg")
 
+(est-defcustom est-color-bg-elusive   (est-paint-over  est-color-bg-default 0.5  est-color-bg-subtle)  "bg. elusive" :type 'color)
 (est-defcustom est-color-bg-hilight1  (est-paint-over  est-color-bg-default 0.15 est-color-fg-popout)  "bg. highlight 1st kind" :type 'color)
 (est-defcustom est-color-bg-hilight2  (est-paint-over  est-color-bg-default 0.15 est-color-fg-salient) "bg. highlight 2nd kind" :type 'color)
 (est-defcustom est-color-bg-selected-hilight1  (est-paint-over  est-color-bg-selected 0.15 est-color-fg-popout)  "bg. selected highlight 1st kind" :type 'color)
@@ -412,6 +413,11 @@ and secondary information.")
 (est-defface est-subtle `((t :background ,est-color-bg-subtle))
   "Subtle face is used to suggest a physical area on the screen.
   See also `est-color-bg-subtle.'")
+
+(est-defface est-elusive `((t :background ,est-color-bg-elusive))
+  "even more subltle face is used to suggest a physical area on the screen.
+  See also `est-color-bg-elusive.'")
+
 
 (est-defface est-heading-0 `((t :height 1.5 :inherit est-heading)) "Face for page-level headings (titles)")
 (est-defface est-heading-1 `((t :height 1.3 :inherit  est-heading)) "Face for level 1 headings")
@@ -663,9 +669,9 @@ pitch. Can be useful if the default face is variable pitch.")
 
    '(org-default                  ((t :inherit variable-pitch))) ;; use (add-hook 'org-mode-hook 'buffer-face-mode) to actually use this.
    '(org-archived                 ((t :inherit est-faded)))
-   '(org-block                    ((t :inherit est-force-fixed-pitch)))
-   '(org-block-begin-line         ((t :inherit est-force-fixed-pitch)))
-   '(org-block-end-line           ((t :inherit est-force-fixed-pitch)))
+   '(org-block                    ((t :inherit (est-force-fixed-pitch est-elusive))))
+   '(org-block-begin-line         ((t :inherit org-block)))
+   '(org-block-end-line           ((t :inherit org-block)))
    '(org-checkbox                 ((t :inherit (est-emph est-force-fixed-pitch))))
    '(org-checkbox-statistics-done ((t :inherit est-faded)))
    '(org-checkbox-statistics-todo ((t :inherit est-faded)))

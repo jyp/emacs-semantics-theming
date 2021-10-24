@@ -274,7 +274,7 @@ colors.  So it is fine to use saturated bright colors here."
  est-is-dark-mode (< (est-color-lightness est-color-bg-default) 40)
  "non-nil if this is this a dark background mode")
 
-(est-stealcustom 'pdf-view pdf-view-midnight-colors (cons est-color-fg-default est-color-bg-subtle))
+(est-stealcustom 'pdf-view pdf-view-midnight-colors (cons est-color-fg-default est-color-bg-default))
 
 (est-defcustom est-accent-lightness (+ (* 0.6 (est-color-lightness est-color-fg-default))
                                        (* 0.4 (est-color-lightness est-color-bg-default)))

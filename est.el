@@ -607,6 +607,8 @@ pitch. Can be useful if the default face is variable pitch.")
    '(helm-buffer-directory           ((t :inherit est-salient)))
    '(helm-buffer-saved-out           ((t :inherit est-critical)))
 
+   `(help-key-binding                ((t :inherit (est-emph est-subtle) :box (:line-width (1 . -1) :color ,est-color-fg-faded))))
+
    '(ido-only-match ((t :inherit match)))
 
    '(isearch       ((t :inherit match)))

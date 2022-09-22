@@ -532,8 +532,8 @@ pitch. Can be useful if the default face is variable pitch.")
    '(company-tooltip-annotation ((t :inherit shadow)))
    '(company-scrollbar-bg       ((t :inverse-video t :inherit est-shadow)))
    '(company-scrollbar-fg       ((t :inverse-video t :inherit est-emph)))
- 
-   '(completions-common-part      ((t :inherit est-faded)))
+
+   '(completions-common-part      ((t :inherit est-fg-analogous1)))
    '(completions-first-difference ((t)))
 
    '(dired-directory ((t :inherit est-salient)))
@@ -669,6 +669,11 @@ pitch. Can be useful if the default face is variable pitch.")
    '(magit-diff-removed-highlight ((t :inherit ediff-current-diff-face-B)))
 
    '(makefile-space               ((t :inherit warning)))
+
+   '(orderless-match-face-0 ((t :inherit completions-common-part)))
+   '(orderless-match-face-1 ((t :inherit est-fg-analogous2)))
+   '(orderless-match-face-2 ((t :inherit est-fg-coanalogous1)))
+   '(orderless-match-face-3 ((t :inherit est-fg-coanalogous1)))
 
    '(org-default                  ((t :inherit variable-pitch))) ;; use (add-hook 'org-mode-hook 'buffer-face-mode) to actually use this.
    '(org-archived                 ((t :inherit est-faded)))

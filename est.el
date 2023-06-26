@@ -538,6 +538,7 @@ pitch. Can be useful if the default face is variable pitch.")
 
    '(dired-directory ((t :inherit est-salient)))
    '(dired-flagged   ((t :inherit est-popout)))
+   '(dired-broken-symlink   ((t :inherit est-critical)))
 
    '(diff-file-header  ((t :inherit est-heading-3)))
    '(diff-header       ((t :inherit est-heading-4)))

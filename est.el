@@ -670,7 +670,17 @@ pitch. Can be useful if the default face is variable pitch.")
    '(magit-diff-removed-highlight ((t :inherit ediff-current-diff-face-B)))
 
    '(makefile-space               ((t :inherit warning)))
-
+   
+   '(marginalia-file-priv-no ((t :inherit (shadow est-force-fixed-pitch))))
+   '(marginalia-file-priv-dir ((t :inherit (font-lock-keyword-face est-force-fixed-pitch))))
+   '(marginalia-file-priv-link ((t :inherit (font-lock-keyword-face est-force-fixed-pitch))))
+   '(marginalia-file-priv-read ((t :inherit (font-lock-type-face est-force-fixed-pitch))))
+   '(marginalia-file-priv-write ((t :inherit (font-lock-builtin-face est-force-fixed-pitch))))
+   '(marginalia-file-priv-exec ((t :inherit (font-lock-function-name-face est-force-fixed-pitch))))
+   '(marginalia-file-priv-other ((t :inherit (font-lock-constant-face est-force-fixed-pitch))))
+   '(marginalia-file-priv-rare ((t :inherit (font-lock-variable-name-face est-force-fixed-pitch))))
+   
+   
    '(orderless-match-face-0 ((t :inherit match)))
    '(orderless-match-face-1 ((t :inherit match)))
    '(orderless-match-face-2 ((t :inherit match)))

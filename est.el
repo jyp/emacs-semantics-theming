@@ -679,6 +679,7 @@ pitch. Can be useful if the default face is variable pitch.")
    '(marginalia-file-priv-exec ((t :inherit (font-lock-function-name-face est-force-fixed-pitch))))
    '(marginalia-file-priv-other ((t :inherit (font-lock-constant-face est-force-fixed-pitch))))
    '(marginalia-file-priv-rare ((t :inherit (font-lock-variable-name-face est-force-fixed-pitch))))
+   '(marginalia-size ((t :inherit (marginalia-number est-force-fixed-pitch))))
    
    
    '(orderless-match-face-0 ((t :inherit match)))

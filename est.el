@@ -95,9 +95,11 @@ groups, etc.  So"
      (set ',symbol ,standard)))
 
 (defun est-spec-symbol (face-symbol)
+  ""
   (intern (concat (symbol-name face-symbol) "-spec")))
 
 (defmacro est-defface (face-symbol spec doc &rest args)
+  ""
   (let ((spec-symbol (est-spec-symbol face-symbol)))
     `(progn
        (custom-declare-variable ',spec-symbol ',spec ,doc :group 'est :type 'sexp ,@args)
@@ -429,6 +431,9 @@ and secondary information.")
              `((t :extend t :background ,est-color-fg-salient :weight bold :foreground ,est-color-bg-default :height 1.7 :box (:line-width 40 :color ,est-color-fg-salient)))
              "Frame title; presentations, etc.")
 
+(est-defface est-force-default  `((t :foreground ,est-color-fg-default :background ,est-color-bg-default))
+             "Just like default, but less likely to be stolen by other modes.")
+
 (est-defface est-invisible `((t :foreground ,est-color-bg-default)) "Face for invisible text")
 
 (est-stealface default  `((t :foreground ,est-color-fg-default :background ,est-color-bg-default)))
@@ -456,8 +461,8 @@ and secondary information.")
 (est-stealface ediff-even-diff-face-C           `((t :extend t :background ,(est-paint-over est-color-bg-default  0.1 est-taint-vc-third))))
 
 
-(defface est-force-fixed-pitch '((t)) "Face for explicitly fixed
-pitch. Can be useful if the default face is variable pitch.")
+(defface est-force-fixed-pitch '((t)) "Face for explicitly fixed pitch.
+Can be useful if the default face is variable pitch.")
 
 ;; est-customs
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -522,6 +527,12 @@ pitch. Can be useful if the default face is variable pitch.")
    '(custom-set               ((t :inherit est-highlight-2)))
    '(custom-variable-obsolete ((t :inherit est-faded)))
 
+
+   '(corfu-current ((t :inherit est-choice)))
+   '(corfu-default ((t :inherit (est-subtle est-force-default))))
+   '(corfu-border ((t :inherit est-popout)))
+   '(corfu-bar ((t :inherit est-highlight-2)))
+   
    '(company-preview            ((t :inherit est-choice)))
    '(company-preview-common     ((t :inherit (est-emph  company-preview))))
    '(company-preview-search     ((t :inherit (est-match company-preview))))
@@ -544,8 +555,6 @@ pitch. Can be useful if the default face is variable pitch.")
    '(diff-header       ((t :inherit est-heading-4)))
    '(diff-added           ((t :inherit ediff-even-diff-face-A)))
    '(diff-removed         ((t :inherit ediff-even-diff-face-B)))
-
-
 
    '(eshell-prompt        ((t :inherit est-strong)))
    '(eshell-ls-directory  ((t :inherit dired-directory)))

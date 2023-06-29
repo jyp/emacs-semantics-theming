@@ -790,6 +790,9 @@ Can be useful if the default face is variable pitch.")
    '(swiper-match-face-3 ((t :inherit match)))
    '(swiper-match-face-4 ((t :inherit match)))
 
+   '(transient-heading ((t :inherit (font-lock-keyword-face variable-pitch))))
+   ;; useful when transient-force-fixed-pitch is t
+   
    '(widget-field ((t :inherit (est-faded est-subtle)))))
 
 (enable-theme 'est-style)
@@ -815,7 +818,7 @@ Can be useful if the default face is variable pitch.")
         est-color-bg-default   "#fdf6e3"
         est-color-bg-subtle    "#fff9d2"
         est-color-bg-selected  "#ffffff")
-    (est-reevaluate))
+  (est-reevaluate))
 
 (defun est-cloudy-day () ;; light grey/white palette, blue tones
   (interactive)

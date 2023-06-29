@@ -461,7 +461,7 @@ and secondary information.")
 (est-stealface ediff-even-diff-face-C           `((t :extend t :background ,(est-paint-over est-color-bg-default  0.1 est-taint-vc-third))))
 
 
-(defface est-force-fixed-pitch '((t)) "Face for explicitly fixed pitch.
+(defface est-force-fixed-pitch '((t :inherit fixed-pitch)) "Face for explicitly fixed pitch.
 Can be useful if the default face is variable pitch.")
 
 ;; est-customs
@@ -665,7 +665,7 @@ Can be useful if the default face is variable pitch.")
    '(magit-diff-context-highlight      ((t :extend t :inherit est-choice)))
    '(magit-section-heading             ((t :inherit est-heading-3)))
    '(magit-section-highlight           ((t :inherit est-choice)))
-   '(magit-hash                        ((t :inherit shadow)))
+   '(magit-hash                        ((t :inherit (shadow est-force-fixed-pitch))))
    '(magit-log-author                  ((t :inherit est-faded)))
    '(magit-diff-removed                ((t :inherit diff-removed)))
    '(magit-diff-added                  ((t :inherit diff-added)))

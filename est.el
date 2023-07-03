@@ -75,7 +75,7 @@
       est-faces nil)
 
 (defmacro est-defcustom (symbol standard docstring &rest args)
-  "Define SYMBOL with STANDARD valued and DOCSTRING, with ARGS.
+  "Define SYMBOL with STANDARD value and DOCSTRING, with ARGS.
 Also register SYMBOL for evaluation by `est-reevaluate'."
   (declare (doc-string 3) (debug (name body)))
   `(progn
@@ -412,6 +412,8 @@ It is achieved by using the same hue as the default foreground
 color, but with a lesser contrast. It can be used for comments
 and secondary information.")
 
+(defface est-quoted `((t :slant italic)) "Face for quoted text. (Strings, org-mode quotes, etc.)")
+
 (est-defface est-subtle `((t :background ,est-color-bg-subtle))
   "Subtle face is used to suggest a physical area on the screen.
   See also `est-color-bg-subtle.'")
@@ -516,22 +518,21 @@ Can be useful if the default face is variable pitch.")
    '(boon-modeline-cmd ((t :inherit est-subtle)))
    '(boon-modeline-off ((t :inherit error)))
 
-   '(custom-group-tag-1       ((t :inherit est-heading-1)))
-   '(custom-group-tag         ((t :inherit est-heading-2)))
-   '(custom-variable-tag      ((t :inherit est-heading)))
-   '(custom-state             ((t :inherit est-emph)))
-   '(custom-changed           ((t :inherit est-highlight-1)))
-   '(custom-modified          ((t :inherit est-highlight-1)))
-   '(custom-invalid           ((t :inherit (est-critical est-subtle))))
-   '(custom-rogue             ((t :inherit (est-critical est-subtle))))
-   '(custom-set               ((t :inherit est-highlight-2)))
-   '(custom-variable-obsolete ((t :inherit est-faded)))
+   '(custom-group-tag-1	((t :inherit est-heading-1)))
+   '(custom-group-tag	((t :inherit est-heading-2)))
+   '(custom-variable-tag	((t :inherit est-heading)))
+   '(custom-state	((t :inherit est-emph)))
+   '(custom-changed	((t :inherit est-highlight-1)))
+   '(custom-modified	((t :inherit est-highlight-1)))
+   '(custom-invalid	((t :inherit (est-critical est-subtle))))
+   '(custom-rogue	((t :inherit (est-critical est-subtle))))
+   '(custom-set	((t :inherit est-highlight-2)))
+   '(custom-variable-obsolete	((t :inherit est-faded)))
 
-
-   '(corfu-current ((t :inherit est-choice)))
-   '(corfu-default ((t :inherit (est-subtle est-force-default))))
-   '(corfu-border ((t :inherit est-popout)))
-   '(corfu-bar ((t :inherit est-highlight-2)))
+   '(corfu-current	((t :inherit est-choice)))
+   '(corfu-default	((t :inherit est-subtle)))
+   '(corfu-border	((t :inherit est-popout)))
+   '(corfu-bar	((t :inherit est-highlight-1)))
    
    '(company-preview            ((t :inherit est-choice)))
    '(company-preview-common     ((t :inherit (est-emph  company-preview))))
@@ -577,20 +578,21 @@ Can be useful if the default face is variable pitch.")
    '(font-latex-bold-face           ((t :inherit bold)))
    '(font-latex-math-face           ((t :inherit est-salient)))
    '(font-latex-script-char-face    ((t :inherit est-salient)))
-   '(font-latex-string-face         ((t :inherit est-faded)))
+   '(font-latex-string-face         ((t :inherit font-lock-string-face)))
    '(font-latex-warning-face        ((t :inherit est-strong))) ; latex-warning face is not really a warning face!
    '(font-latex-italic-face         ((t :inherit est-emph)))
    '(font-latex-verbatim-face       ((t :inherit est-faded)))
 
    '(font-lock-builtin-face       ((t)))
    '(font-lock-comment-face       ((t :inherit est-faded)))
-   '(font-lock-constant-face      ((t :inherit est-salient)))
+   '(font-lock-constant-face      ((t :inherit est-emph)))
    '(font-lock-function-name-face ((t :inherit est-strong)))
    '(font-lock-keyword-face       ((t :inherit est-emph)))
-   '(font-lock-string-face        ((t :inherit est-faded)))
+   '(font-lock-string-face        ((t :inherit est-quoted)))
    '(font-lock-type-face          ((t)))
    '(font-lock-variable-name-face ((t)))
    '(font-lock-warning-face       ((t :inherit warning)))
+   '(font-lock-preprocessor-face       ((t :inherit faded)))
 
    '(helm-candidate-number           ((t :inherit mode-line)))
    '(helm-candidate-number-suspended ((t :inherit (warning mode-line))))

@@ -369,7 +369,6 @@ color is somehow inappropriate).")
 (est-defface est-highlight-2 `((t :background ,est-color-bg-hilight2))
   "Face for secondary highlights")
 
-
 (est-defface est-choice-highlight-1 `((t :background ,est-color-bg-selected-hilight1))
   "Face for semi-transient highlights over `est-choice'. The meaning is similar to
 `est-popout', but for backgrounds (when changing the foreground
@@ -388,11 +387,12 @@ See also `est-color-fg-popout'.")
 
 (est-defface est-emph `((t :foreground ,est-color-fg-emph))
   "A mild emphasis face.
-This roughly corresponds to italics in mainstream typsetting
-practice. By defaut the emphasis effect is achieved by using the
+By defaut the emphasis effect is achieved by using the
 `est-color-fg-emph' color, which is by default slightly more
-contrasted than the default color.  Besides, italics do not mesh
-well with monospace fonts.")
+contrasted than the default color.  This kind of emphasis
+corresponds roughly to the emphasis effect achieved using
+italics, in mainstream typsetting practice. But italics do not
+mesh well with monospace fonts.")
 
 
 (est-defface est-strong `((t :inherit (bold est-emph)))
@@ -800,7 +800,7 @@ Can be useful if the default face is variable pitch.")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Quick palette re-theming
 
-(defun est-lunarized-dark () ;; solarized inspire theme
+(defun est-lunarized-dark () ;; solarized-inspired theme
   (setq est-color-fg-default  "#839496"
         est-color-fg-salient  "#268bd2"
         est-color-fg-popout   "#eee8d5"

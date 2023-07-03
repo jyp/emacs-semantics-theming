@@ -74,14 +74,18 @@
 (setq est-customs nil
       est-faces nil)
 
+(defmacro est-set-pattern (symbol pattern)
+  "Set the PATTERN for SYMBOL.
+This means that `est-reevaluate' will evaluate PATTERN when recomputing the value for SYMBOL."
+  `(put ',symbol 'standard-value (purecopy (list ',pattern))))
+
 (defmacro est-defcustom (symbol standard docstring &rest args)
   "Define SYMBOL with STANDARD value and DOCSTRING, with ARGS.
 Also register SYMBOL for evaluation by `est-reevaluate'."
   (declare (doc-string 3) (debug (name body)))
   `(progn
      (push ',symbol est-customs)
-     (defcustom ,symbol ,standard ,docstring :group 'est ,@args)
-     ))
+     (defcustom ,symbol ,standard ,docstring :group 'est ,@args)))
 
 (defmacro est-stealcustom (file symbol standard)
   "Re-define the standard value for SYMBOL as STANDARD.
@@ -91,11 +95,11 @@ groups, etc.  So"
   (declare (doc-string 3) (debug (name body)))
   `(with-eval-after-load ,file
      (push ',symbol est-customs)
-     (put ',symbol 'standard-value (purecopy (list ',standard)))
+     (est-set-pattern ,symbol ,standard)
      (set ',symbol ,standard)))
 
 (defun est-spec-symbol (face-symbol)
-  ""
+  "Make a face-spec symbol from a FACE-SYMBOL."
   (intern (concat (symbol-name face-symbol) "-spec")))
 
 (defmacro est-defface (face-symbol spec doc &rest args)

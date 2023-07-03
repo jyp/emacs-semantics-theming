@@ -437,16 +437,19 @@ and secondary information.")
              `((t :extend t :background ,est-color-fg-salient :weight bold :foreground ,est-color-bg-default :height 1.7 :box (:line-width 40 :color ,est-color-fg-salient)))
              "Frame title; presentations, etc.")
 
-(defcustom est-fixed-pitch-family "DejaVu Sans Mono" "Fixed-pitch (monospace) font family")
-(defcustom est-variable-pitch-family "DejaVu Sans" "Variable-pitch font family")
+(defcustom est-fixed-pitch-family "MonoSpace" "Fixed-pitch (monospace) font family")
+(defcustom est-fixed-pitch-serif-family "MonoSpace" "Fixed-pitch (monospace) font family")
+(defcustom est-variable-pitch-family "Sans Serif" "Variable-pitch font family")
 (est-defcustom est-default-family est-fixed-pitch-family "Default font family")
 
 (est-defface est-invisible `((t :foreground ,est-color-bg-default)) "Face for invisible text")
 
-(est-stealface default `((t :foreground ,est-color-fg-default :background ,est-color-bg-default
+(est-stealface default `((t :foreground ,est-color-fg-default
+                            :background ,est-color-bg-default
                             :family ,est-default-family)))
 (est-stealface variable-pitch	`((t :family ,est-fixed-pitch-family)))
 (est-stealface fixed-pitch	`((t :family ,est-fixed-pitch-family)))
+(est-stealface fixed-pitch-serif	`((t :family ,est-fixed-pitch-serif-family)))
 (est-stealface cursor	`((t :background ,est-color-fg-default)))
 (est-stealface shadow	`((t :foreground ,est-color-fg-shadowed)))
 (est-stealface mode-line	`((t :overline ,est-color-fg-faded :inherit est-choice)))

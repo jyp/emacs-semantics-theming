@@ -531,8 +531,8 @@ Can be useful if the default face is variable pitch.")
 
    '(corfu-current	((t :inherit est-choice)))
    '(corfu-default	((t :inherit est-subtle)))
-   '(corfu-border	((t :inherit est-popout)))
-   '(corfu-bar	((t :inherit est-highlight-1)))
+   '(corfu-border	((t :inherit shadow :inverse-video t)))
+   '(corfu-bar	((t :inverse-video t)))
    
    '(company-preview            ((t :inherit est-choice)))
    '(company-preview-common     ((t :inherit (est-emph  company-preview))))

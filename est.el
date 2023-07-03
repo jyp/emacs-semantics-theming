@@ -27,37 +27,37 @@
 ;;; Commentary:
 
 ;; This file attempts to est ablish an Emacs Semantically-sound
-;; Theming foundation. The goal is to provide a visually pleasant and
+;; Theming foundation.  The goal is to provide a visually pleasant and
 ;; semantically coherent meta-theme, which is easy to customize (with
 ;; as little as a palette of six colors).
 ;;
 ;; This a achieved through a number of articulated parts:
 ;;
-;; - a small layer of customisation on top of standard emacs
-;; customisation. 1. We can record customs are belonging to a set
-;; which must be re-evaluated. This means that a customs can depend on
+;; - a small layer of customisation on top of standard Emacs
+;; customisation.  1. We can record customs are belonging to a set
+;; which must be re-evaluated.  This means that a customs can depend on
 ;; each others (possibly in a long chain of dependencies.) 2. Instead
 ;; of customizing faces directly, we can customize their
-;; *specs*. 3. `est-reevaluate' re-evaluates all the special customs,
+;; *specs*.  3. `est-reevaluate' re-evaluates all the special customs,
 ;; including face specs, and reapply them to faces.
 ;;
 ;; - a small set of face(specs) which are assigned a meaning (use
-;; customize-apropos-faces est- for a list). However, these
+;; customize-apropos-faces est- for a list).  However, these
 ;; face(specs) are defined using the above customization system, which
 ;; means that it's often better to customize them indirectly, by
 ;; customizing the variables (colors) which occur in their spec
-;; standard value. The default for these faces are are meant to define
+;; standard value.  The default for these faces are are meant to define
 ;; a visually coherent set of faces.
-;; Besides, sometimes standard emacs faces are incorporated in the set
-;; (eg. `shadow') --- and in this case their specs
+;; Besides, sometimes standard Emacs faces are incorporated in the set
+;; (eg.  `shadow') --- and in this case their specs
 ;; are customised using the above mechanism.
 ;;
 ;; - a theme (`est-style') which defines a large number of (regular)
-;; faces as inheriting those from the above set. This means that it
+;; faces as inheriting those from the above set.  This means that it
 ;; suffices to customize the small set (via customizing an even
 ;; smaller set of variables).
 ;;
-;; - a set of examples configurations. They configure a minimal
+;; - a set of examples configurations.  They configure a minimal
 ;; palette of six colors, eventually theming everything.
 
 
@@ -69,14 +69,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Customisation infrastructure
 
-(defvar est-customs nil "List of customs to re-evaluate when applying est-theming")
-(defvar est-faces   nil "List of faces to reset when applying est-theming")
+(defvar est-customs nil "List of customs to re-evaluate when applying est-theming.")
+(defvar est-faces   nil "List of faces to reset when applying est-theming.")
 (setq est-customs nil
       est-faces nil)
 
 (defmacro est-set-pattern (symbol pattern)
   "Set the PATTERN for SYMBOL.
-This means that `est-reevaluate' will evaluate PATTERN when recomputing the value for SYMBOL."
+This means that `est-reevaluate' will evaluate PATTERN when
+recomputing the value for SYMBOL."
   `(put ',symbol 'standard-value (purecopy (list ',pattern))))
 
 (defmacro est-defcustom (symbol standard docstring &rest args)
@@ -89,31 +90,43 @@ Also register SYMBOL for evaluation by `est-reevaluate'."
 
 (defmacro est-stealcustom (file symbol standard)
   "Re-define the standard value for SYMBOL as STANDARD.
-Also register SYMBOL for evaluation by `est-reevaluate'. SYMBOL
+Also register SYMBOL for evaluation by `est-reevaluate'.  SYMBOL
 should be originally defined in FILE, together with its doc,
 groups, etc.  So"
   (declare (doc-string 3) (debug (name body)))
   `(with-eval-after-load ,file
+     (defvar ,symbol)
      (push ',symbol est-customs)
      (est-set-pattern ,symbol ,standard)
      (set ',symbol ,standard)))
 
-(defun est-spec-symbol (face-symbol)
-  "Make a face-spec symbol from a FACE-SYMBOL."
-  (intern (concat (symbol-name face-symbol) "-spec")))
+(eval-and-compile
+  (defun est-spec-symbol (face-symbol)
+    "Make a face-spec symbol from a FACE-SYMBOL."
+  (intern (concat (symbol-name face-symbol) "-spec"))))
 
-(defmacro est-defface (face-symbol spec doc &rest args)
-  ""
-  (let ((spec-symbol (est-spec-symbol face-symbol)))
+(defmacro est-defface (face spec doc &rest args)
+  "Declare FACE as a customizable face which defaults to the expression SPEC.
+This is similar to `defface', but SPEC is a s-expression which
+can depend on other customizable variables.  The face spec is
+recomputed when `est-reevaluate' is called.  FACE should not be
+quoted.  Third argument DOC is the face documentation.  See
+`defface' for the semantics of extra ARGS."
+  (let ((spec-symbol (est-spec-symbol face)))
     `(progn
        (custom-declare-variable ',spec-symbol ',spec ,doc :group 'est :type 'sexp ,@args)
        (push ',spec-symbol est-customs)
-       (push ',face-symbol est-faces))))
+       (push ',face est-faces))))
 
-(defmacro est-stealface (face-symbol spec &rest args)
-  `(est-defface ,face-symbol ,spec (face-documentation ',face-symbol) ,@args))
+(defmacro est-stealface (face-symbol spec)
+  "Steal an existing FACE-SYMBOL by setting its SPEC to the given expression.
+Works similarly to `est-defface', but no documentation is needed."
+  `(est-defface ,face-symbol ,spec (face-documentation ',face-symbol)))
 
 (defun est-reevaluate ()
+  "Re-evaluate `est-customs' and `est-faces'.
+These are variables and faces declared with `est-defface' and
+`est-defcustom'."
   ;; FIXME: est-customs should really be sorted according to their
   ;; dependencies. But we don't have them. In general it depends on
   ;; the free variables in the custom standard values. For now, we do the
@@ -197,12 +210,13 @@ Inputs colors are names."
                              (est-alpha-name alpha addition))))
 
 (defun est-color-hue (name)
-  "Set HUE of BASE."
+  "Get the hue of a color given by NAME."
   (pcase-let ((`(,l ,a ,b)
                (apply 'color-srgb-to-lab (color-name-to-rgb name))))
     (atan a b)))
 
 (defun est-color-lightness (name)
+  "Get the lightness of a color given by NAME."
   (car (apply 'color-srgb-to-lab (color-name-to-rgb name))))
 
 ;;;;;;;;;;;
@@ -254,19 +268,19 @@ items, or delinate areas with stronger emphasis." :type 'color
 (defcustom est-taint-vc-base "#0000FF"
 "A taint to indicate base stuff in VC contexts.
 This is not used directly in faces, but blended with various background
-colors. So it is fine to use saturated bright colors here." :type 'color :group
+colors.  So it is fine to use saturated bright colors here." :type 'color :group
 'est)
 
 (defcustom est-taint-vc-third "#FFFF00"
 "A taint to indicate third-party stuff in VC contexts.
 This is not used directly in faces, but blended with various background
-colors. So it is fine to use saturated bright colors here." :type 'color :group
+colors.  So it is fine to use saturated bright colors here." :type 'color :group
 'est)
 
 (defcustom est-taint-vc-added "#00FF00"
 "A taint to indicate added stuff in VC contexts.
 This is not used directly in faces, but blended with various background
-colors. So it is fine to use saturated bright colors here." :type 'color :group
+colors.  So it is fine to use saturated bright colors here." :type 'color :group
 'est)
 
 
@@ -278,7 +292,7 @@ colors.  So it is fine to use saturated bright colors here."
 
 (est-defcustom
  est-is-dark-mode (< (est-color-lightness est-color-bg-default) 40)
- "non-nil if this is this a dark background mode")
+ "Non-nil if this is this a dark background mode." :type 'boolean)
 
 (est-stealcustom 'pdf-view pdf-view-midnight-colors (cons est-color-fg-default est-color-bg-default))
 
@@ -289,18 +303,20 @@ Usually somewhat not as bright/contrasted as that of the default
 fg."  :type 'float :group 'est)
 
 (defun est-color-lab (l a b)
+  "Get a color name from position in the L A B space."
   (apply 'color-rgb-to-hex (est-clamp (color-lab-to-srgb l a b))))
 
 (defun est-color-lch (lightness chroma hue)
+  "Get a color name from position in the LIGHTNESS CHROMA HUE space."
   (est-color-lab lightness (* chroma (cos hue)) (* chroma (sin hue))))
 
-(defcustom est-accent-chroma 50 "amount of chroma for accent colors")
-(est-defcustom est-hue-fundamental   (est-color-hue est-color-fg-popout) "fundamental accent hue")
-(est-defcustom est-hue-complementary (+ est-hue-fundamental float-pi) "complementary accent hue")
-(est-defcustom est-hue-analogous1   (+ est-hue-fundamental (/ float-pi 3)) "analogous1 accent hue")
-(est-defcustom est-hue-analogous2   (- est-hue-fundamental (/ float-pi 3)) "analogous2 accent hue")
-(est-defcustom est-hue-coanalogous1 (+ est-hue-complementary (/ float-pi 3)) "coanalogous1 accent hue")
-(est-defcustom est-hue-coanalogous2 (- est-hue-complementary (/ float-pi 3)) "coanalogous2 accent hue")
+(defcustom est-accent-chroma 50 "Amount of chroma for accent colors." :type 'number :group 'est)
+(est-defcustom est-hue-fundamental   (est-color-hue est-color-fg-popout) "Fundamental accent hue." :type 'float )
+(est-defcustom est-hue-complementary (+ est-hue-fundamental float-pi) "Complementary accent hue." :type 'float)
+(est-defcustom est-hue-analogous1   (+ est-hue-fundamental (/ float-pi 3)) "Analogous1 accent hue." :type 'float)
+(est-defcustom est-hue-analogous2   (- est-hue-fundamental (/ float-pi 3)) "Analogous2 accent hue." :type 'float)
+(est-defcustom est-hue-coanalogous1 (+ est-hue-complementary (/ float-pi 3)) "Coanalogous1 accent hue." :type 'float)
+(est-defcustom est-hue-coanalogous2 (- est-hue-complementary (/ float-pi 3)) "Coanalogous2 accent hue." :type 'float)
 
 (est-defface est-fg-complementary `((t :foreground ,(est-color-lch est-accent-lightness est-accent-chroma est-hue-complementary))) "todo")
 (est-defface est-fg-analogous1 `((t :foreground ,(est-color-lch est-accent-lightness est-accent-chroma est-hue-analogous1))) "todo")
@@ -315,9 +331,9 @@ fg."  :type 'float :group 'est)
 (with-eval-after-load 'org
   (fset 'org-find-invisible-foreground (lambda () nil)))
 
-(setq hi-lock-face-defaults ;; not a defcustom: simply override this. (The defaults have anti-semantics names (yellow, etc.))
+(est-stealcustom 'hi-lock hi-lock-face-defaults ;; The defaults have concrete (non-semantic) names (yellow, etc.)
       '("est-fg-analogous1" "est-fg-analogous2"  "est-fg-coanalogous1" "est-fg-coanalogous2" "est-fg-complementary"))
-(setq boon-hl-face-defaults
+(est-stealcustom 'boon-hl boon-hl-face-defaults
       '(est-fg-analogous1 est-fg-analogous2  est-fg-coanalogous1 est-fg-coanalogous2 est-fg-complementary))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -339,14 +355,14 @@ fg."  :type 'float :group 'est)
 ;; (est-defface est-fg-red	   `((t :foreground ,est-color-fg-red)) "red fg")
 ;; (est-defface est-fg-cyan   `((t :foreground ,est-color-fg-cyan)) "cyan fg")
 
-(est-defcustom est-color-bg-elusive	(est-paint-over  est-color-bg-default 0.5  est-color-bg-subtle)	"bg. elusive"	:type 'color)
-(est-defcustom est-color-bg-hilight1	(est-paint-over  est-color-bg-default 0.15 est-color-fg-popout)	"bg. highlight 1st kind"	:type 'color)
-(est-defcustom est-color-bg-hilight2	(est-paint-over  est-color-bg-default 0.15 est-color-fg-salient)	"bg. highlight 2nd kind"	:type 'color)
-(est-defcustom est-color-bg-selected-hilight1	(est-paint-over  est-color-bg-selected 0.15 est-color-fg-popout)	"bg. selected highlight 1st kind"	:type 'color)
-(est-defcustom est-color-bg-selected-hilight2	(est-paint-over  est-color-bg-selected 0.15 est-color-fg-salient)	"bg. selected highlight 2nd kind"	:type 'color)
-(est-defcustom est-color-fg-shadowed	(est-paint-over  est-color-fg-default 0.6 est-color-bg-default)	"de-selected/disabled menu options"	:type 'color)
-(est-defcustom est-color-fg-faded	(est-paint-over  est-color-fg-default 0.2 est-color-bg-default)	"de-emphasized (comments, etc.)"	:type 'color)
-(est-defcustom est-color-fg-emph	(est-scrape-paint est-color-fg-default 0.2 est-color-bg-default)	"subtle emphasis"	:type 'color)
+(est-defcustom est-color-bg-elusive	(est-paint-over  est-color-bg-default 0.5  est-color-bg-subtle)	"Background elusive."	:type 'color)
+(est-defcustom est-color-bg-hilight1	(est-paint-over  est-color-bg-default 0.15 est-color-fg-popout)	"Background highlight 1st kind."	:type 'color)
+(est-defcustom est-color-bg-hilight2	(est-paint-over  est-color-bg-default 0.15 est-color-fg-salient)	"Background highlight 2nd kind."	:type 'color)
+(est-defcustom est-color-bg-selected-hilight1	(est-paint-over  est-color-bg-selected 0.15 est-color-fg-popout)	"Background selected highlight 1st kind."	:type 'color)
+(est-defcustom est-color-bg-selected-hilight2	(est-paint-over  est-color-bg-selected 0.15 est-color-fg-salient)	"Background selected highlight 2nd kind."	:type 'color)
+(est-defcustom est-color-fg-shadowed	(est-paint-over  est-color-fg-default 0.6 est-color-bg-default)	"De-selected/disabled menu options."	:type 'color)
+(est-defcustom est-color-fg-faded	(est-paint-over  est-color-fg-default 0.2 est-color-bg-default)	"De-emphasized (comments, etc.)."	:type 'color)
+(est-defcustom est-color-fg-emph	(est-scrape-paint est-color-fg-default 0.2 est-color-bg-default)	"Subtle emphasis foreground."	:type 'color)
 
 (est-stealcustom 'hl-paren hl-paren-colors
                  (list est-color-fg-salient
@@ -416,7 +432,8 @@ It is achieved by using the same hue as the default foreground
 color, but with a lesser contrast. It can be used for comments
 and secondary information.")
 
-(defface est-quoted `((t :slant italic)) "Face for quoted text. (Strings, org-mode quotes, etc.)")
+(defface est-quoted `((t :slant italic)) "Face for quoted text.
+For instance, this applies to strings, `org-mode' quotes, etc.")
 
 (est-defface est-subtle `((t :background ,est-color-bg-subtle))
   "Subtle face is used to suggest a physical area on the screen.
@@ -437,10 +454,10 @@ and secondary information.")
              `((t :extend t :background ,est-color-fg-salient :weight bold :foreground ,est-color-bg-default :height 1.7 :box (:line-width 40 :color ,est-color-fg-salient)))
              "Frame title; presentations, etc.")
 
-(defcustom est-fixed-pitch-family "MonoSpace" "Fixed-pitch (monospace) font family")
-(defcustom est-fixed-pitch-serif-family "MonoSpace" "Fixed-pitch (monospace) font family")
-(defcustom est-variable-pitch-family "Sans Serif" "Variable-pitch font family")
-(est-defcustom est-default-family est-fixed-pitch-family "Default font family")
+(defcustom est-fixed-pitch-family "MonoSpace" "Fixed-pitch (monospace) font family." :type 'string :group 'est)
+(defcustom est-fixed-pitch-serif-family "MonoSpace" "Fixed-pitch (monospace) font family." :type 'string :group 'est)
+(defcustom est-variable-pitch-family "Sans Serif" "Variable-pitch font family." :type 'string :group 'est)
+(est-defcustom est-default-family est-fixed-pitch-family "Default font family." :type 'string :group 'est)
 
 (est-defface est-invisible `((t :foreground ,est-color-bg-default)) "Face for invisible text")
 
@@ -472,10 +489,6 @@ and secondary information.")
 (est-stealface ediff-even-diff-face-A           `((t :extend t :background ,(est-paint-over est-color-bg-default  0.1 est-taint-vc-added))))
 (est-stealface ediff-even-diff-face-B           `((t :extend t :background ,(est-paint-over est-color-bg-default  0.1 est-taint-vc-removed))))
 (est-stealface ediff-even-diff-face-C           `((t :extend t :background ,(est-paint-over est-color-bg-default  0.1 est-taint-vc-third))))
-
-
-(defface est-force-fixed-pitch '((t :inherit fixed-pitch)) "Face for explicitly fixed pitch.
-Can be useful if the default face is variable pitch.")
 
 ;; est-customs
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -678,7 +691,7 @@ Can be useful if the default face is variable pitch.")
    '(magit-diff-context-highlight      ((t :extend t :inherit est-choice)))
    '(magit-section-heading             ((t :inherit est-heading-3)))
    '(magit-section-highlight           ((t :inherit est-choice)))
-   '(magit-hash                        ((t :inherit (shadow est-force-fixed-pitch))))
+   '(magit-hash                        ((t :inherit (shadow fixed-pitch))))
    '(magit-log-author                  ((t :inherit est-faded)))
    '(magit-diff-removed                ((t :inherit diff-removed)))
    '(magit-diff-added                  ((t :inherit diff-added)))
@@ -693,15 +706,15 @@ Can be useful if the default face is variable pitch.")
 
    '(makefile-space               ((t :inherit warning)))
    
-   '(marginalia-file-priv-no ((t :inherit (shadow est-force-fixed-pitch))))
-   '(marginalia-file-priv-dir ((t :inherit (font-lock-keyword-face est-force-fixed-pitch))))
-   '(marginalia-file-priv-link ((t :inherit (font-lock-keyword-face est-force-fixed-pitch))))
-   '(marginalia-file-priv-read ((t :inherit (font-lock-type-face est-force-fixed-pitch))))
-   '(marginalia-file-priv-write ((t :inherit (font-lock-builtin-face est-force-fixed-pitch))))
-   '(marginalia-file-priv-exec ((t :inherit (font-lock-function-name-face est-force-fixed-pitch))))
-   '(marginalia-file-priv-other ((t :inherit (font-lock-constant-face est-force-fixed-pitch))))
-   '(marginalia-file-priv-rare ((t :inherit (font-lock-variable-name-face est-force-fixed-pitch))))
-   '(marginalia-size ((t :inherit (marginalia-number est-force-fixed-pitch))))
+   '(marginalia-file-priv-no ((t :inherit (shadow fixed-pitch))))
+   '(marginalia-file-priv-dir ((t :inherit (font-lock-keyword-face fixed-pitch))))
+   '(marginalia-file-priv-link ((t :inherit (font-lock-keyword-face fixed-pitch))))
+   '(marginalia-file-priv-read ((t :inherit (font-lock-type-face fixed-pitch))))
+   '(marginalia-file-priv-write ((t :inherit (font-lock-builtin-face fixed-pitch))))
+   '(marginalia-file-priv-exec ((t :inherit (font-lock-function-name-face fixed-pitch))))
+   '(marginalia-file-priv-other ((t :inherit (font-lock-constant-face fixed-pitch))))
+   '(marginalia-file-priv-rare ((t :inherit (font-lock-variable-name-face fixed-pitch))))
+   '(marginalia-size ((t :inherit (marginalia-number fixed-pitch))))
    
    
    '(orderless-match-face-0 ((t :inherit match)))
@@ -711,14 +724,14 @@ Can be useful if the default face is variable pitch.")
 
    '(org-default                  ((t :inherit variable-pitch))) ;; use (add-hook 'org-mode-hook 'buffer-face-mode) to actually use this.
    '(org-archived                 ((t :inherit est-faded)))
-   '(org-block                    ((t :inherit (est-force-fixed-pitch est-elusive))))
+   '(org-block                    ((t :inherit (fixed-pitch est-elusive))))
    '(org-block-begin-line         ((t :inherit org-block)))
    '(org-block-end-line           ((t :inherit org-block)))
-   '(org-checkbox                 ((t :inherit (est-emph est-force-fixed-pitch))))
+   '(org-checkbox                 ((t :inherit (est-emph fixed-pitch))))
    '(org-checkbox-statistics-done ((t :inherit est-faded)))
    '(org-checkbox-statistics-todo ((t :inherit est-faded)))
    '(org-clock-overlay            ((t :inherit est-faded)))
-   '(org-code                     ((t :inherit est-force-fixed-pitch)))
+   '(org-code                     ((t :inherit fixed-pitch)))
    '(org-column                   ((t :inherit est-faded)))
    '(org-column-title             ((t :inherit est-faded)))
    '(org-date                     ((t :inherit est-faded)))
@@ -756,7 +769,7 @@ Can be useful if the default face is variable pitch.")
    '(org-scheduled-today          ((t :inherit est-faded)))
    '(org-sexp-date                ((t :inherit est-faded)))
    '(org-special-keyword          ((t :inherit est-faded)))
-   '(org-table                    ((t :inherit est-force-fixed-pitch)))
+   '(org-table                    ((t :inherit fixed-pitch)))
    '(org-tag                      ((t :inherit est-faded)))
    '(org-tag-group                ((t :inherit est-faded)))
    '(org-target                   ((t :inherit est-faded)))
@@ -764,7 +777,7 @@ Can be useful if the default face is variable pitch.")
    '(org-todo                     ((t :inherit est-popout)))
    '(org-done                     ((t :inherit est-faded)))
    '(org-upcoming-deadline        ((t :inherit est-strong)))
-   '(org-verbatim                 ((t :inherit est-emph est-force-fixed-pitch)))
+   '(org-verbatim                 ((t :inherit est-emph fixed-pitch)))
    '(org-verse                    ((t :inherit est-faded)))
 
    '(org-superstar-leading        ((t :inherit org-hide)))
@@ -813,7 +826,8 @@ Can be useful if the default face is variable pitch.")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Quick palette re-theming
 
-(defun est-lunarized-dark () ;; solarized-inspired theme
+(defun est-lunarized-dark ()
+  "Solarized-inspired theme (dark)."
   (setq est-color-fg-default  "#839496"
         est-color-fg-salient  "#268bd2"
         est-color-fg-popout   "#eee8d5"
@@ -823,7 +837,8 @@ Can be useful if the default face is variable pitch.")
     (est-reevaluate))
 
 
-(defun est-lunarized-light () ;; solarized inspired theme
+(defun est-lunarized-light ()
+  "Solarized-inspired theme (light)."
   (interactive)
   (setq est-color-fg-default  "#657b83"
         est-color-fg-salient  "#268bd2"
@@ -833,7 +848,8 @@ Can be useful if the default face is variable pitch.")
         est-color-bg-selected  "#ffffff")
   (est-reevaluate))
 
-(defun est-cloudy-day () ;; light grey/white palette, blue tones
+(defun est-cloudy-day ()
+  "Light grey/white palette, blue tones."
   (interactive)
   (setq est-color-fg-default     "#3e4759"
         est-color-bg-default     "#ffffff"
@@ -843,7 +859,8 @@ Can be useful if the default face is variable pitch.")
         est-color-fg-popout      "#00e0ff")
     (est-reevaluate))
 
-(defun est-cloudy-night () ;; dark grey palette, blue accents
+(defun est-cloudy-night ()
+  "Dark grey palette, blue accents."
   (interactive)
   (setq est-color-bg-selected "#192435"
         est-color-bg-subtle   "#242e41"
@@ -853,7 +870,8 @@ Can be useful if the default face is variable pitch.")
         est-color-fg-popout   "#00c8ff")
   (est-reevaluate))
 
-(defun est-starry-night-palette () ;; a masterpiece
+(defun est-starry-night-palette ()
+  "Inspired by Van Gogh's masterpiece."
   (interactive)
   (setq est-color-bg-selected "#00128d"
         est-color-bg-subtle   "#000010"
@@ -864,6 +882,7 @@ Can be useful if the default face is variable pitch.")
   (est-reevaluate))
 
 (defun est-wood-palette ()
+  "Wood and forest color tones."
   (interactive)
   (setq est-color-bg-selected "#896a3f"
         est-color-bg-subtle   "#5e454b"
@@ -875,6 +894,7 @@ Can be useful if the default face is variable pitch.")
   (est-reevaluate))
 
 (defun est-seaside-palette ()
+  "Seaweed and rocks."
   (interactive)
   (setq est-color-bg-selected "#004b50"
         est-color-bg-subtle   "#3b4b60"

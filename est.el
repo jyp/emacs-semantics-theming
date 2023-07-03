@@ -335,20 +335,20 @@ fg."  :type 'float :group 'est)
 ;; (est-defface est-fg-red	   `((t :foreground ,est-color-fg-red)) "red fg")
 ;; (est-defface est-fg-cyan   `((t :foreground ,est-color-fg-cyan)) "cyan fg")
 
-(est-defcustom est-color-bg-elusive   (est-paint-over  est-color-bg-default 0.5  est-color-bg-subtle)  "bg. elusive" :type 'color)
-(est-defcustom est-color-bg-hilight1  (est-paint-over  est-color-bg-default 0.15 est-color-fg-popout)  "bg. highlight 1st kind" :type 'color)
-(est-defcustom est-color-bg-hilight2  (est-paint-over  est-color-bg-default 0.15 est-color-fg-salient) "bg. highlight 2nd kind" :type 'color)
-(est-defcustom est-color-bg-selected-hilight1  (est-paint-over  est-color-bg-selected 0.15 est-color-fg-popout)  "bg. selected highlight 1st kind" :type 'color)
-(est-defcustom est-color-bg-selected-hilight2  (est-paint-over  est-color-bg-selected 0.15 est-color-fg-salient) "bg. selected highlight 2nd kind" :type 'color)
-(est-defcustom est-color-fg-shadowed  (est-paint-over  est-color-fg-default 0.6 est-color-bg-default)  "de-selected/disabled menu options" :type 'color)
-(est-defcustom est-color-fg-faded     (est-paint-over  est-color-fg-default 0.2 est-color-bg-default)  "de-emphasized (comments, etc.)" :type 'color)
-(est-defcustom est-color-fg-emph      (est-scrape-paint est-color-fg-default 0.2 est-color-bg-default) "subtle emphasis" :type 'color)
+(est-defcustom est-color-bg-elusive	(est-paint-over  est-color-bg-default 0.5  est-color-bg-subtle)	"bg. elusive"	:type 'color)
+(est-defcustom est-color-bg-hilight1	(est-paint-over  est-color-bg-default 0.15 est-color-fg-popout)	"bg. highlight 1st kind"	:type 'color)
+(est-defcustom est-color-bg-hilight2	(est-paint-over  est-color-bg-default 0.15 est-color-fg-salient)	"bg. highlight 2nd kind"	:type 'color)
+(est-defcustom est-color-bg-selected-hilight1	(est-paint-over  est-color-bg-selected 0.15 est-color-fg-popout)	"bg. selected highlight 1st kind"	:type 'color)
+(est-defcustom est-color-bg-selected-hilight2	(est-paint-over  est-color-bg-selected 0.15 est-color-fg-salient)	"bg. selected highlight 2nd kind"	:type 'color)
+(est-defcustom est-color-fg-shadowed	(est-paint-over  est-color-fg-default 0.6 est-color-bg-default)	"de-selected/disabled menu options"	:type 'color)
+(est-defcustom est-color-fg-faded	(est-paint-over  est-color-fg-default 0.2 est-color-bg-default)	"de-emphasized (comments, etc.)"	:type 'color)
+(est-defcustom est-color-fg-emph	(est-scrape-paint est-color-fg-default 0.2 est-color-bg-default)	"subtle emphasis"	:type 'color)
 
 (est-stealcustom 'hl-paren hl-paren-colors
-               (list est-color-fg-salient
-                     (est-paint-over est-color-fg-salient 0.25 est-color-fg-emph)
-                     (est-paint-over est-color-fg-salient 0.5 est-color-fg-emph)
-                     (est-paint-over est-color-fg-salient 0.75 est-color-fg-emph)))
+                 (list est-color-fg-salient
+                       (est-paint-over est-color-fg-salient 0.25 est-color-fg-emph)
+                       (est-paint-over est-color-fg-salient 0.5 est-color-fg-emph)
+                       (est-paint-over est-color-fg-salient 0.75 est-color-fg-emph)))
 
 ;;;;;;;;;;;;;;;
 ;; Faces

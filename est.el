@@ -687,6 +687,9 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
    '(hi-yellow ((t :inherit est-highlight-1))) ;; see also hi-lock-face-defaults
    '(hi-pink   ((t :inherit est-highlight-2)))
 
+   '(line-number ((t :inherit 'fixed-pitch)))
+   '(line-number-current-line ((t :inherit 'fixed-pitch)))
+
    '(magit-diff-hunk-heading           ((t :extend t :inherit est-heading)))
    '(magit-diff-hunk-heading-highlight ((t :extend t :inherit (est-heading est-choice))))
    '(magit-diff-context-highlight      ((t :extend t :inherit est-choice)))

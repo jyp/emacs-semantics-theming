@@ -306,9 +306,10 @@ fg."  :type 'float :group 'est)
   "Get a color name from position in the L A B space."
   (apply 'color-rgb-to-hex (est-clamp (color-lab-to-srgb l a b))))
 
-(defun est-color-lch (lightness chroma hue)
-  "Get a color name from position in the LIGHTNESS CHROMA HUE space."
-  (est-color-lab lightness (* chroma (cos hue)) (* chroma (sin hue))))
+(eval-and-compile ; because it is used in a defcustom; requiring a byte-compiled version of this package would error.
+  (defun est-color-lch (lightness chroma hue)
+    "Get a color name from position in the LIGHTNESS CHROMA HUE space."
+  (est-color-lab lightness (* chroma (cos hue)) (* chroma (sin hue)))))
 
 (defcustom est-accent-chroma 50 "Amount of chroma for accent colors." :type 'number :group 'est)
 (est-defcustom est-hue-fundamental   (est-color-hue est-color-fg-popout) "Fundamental accent hue." :type 'float )
@@ -455,7 +456,7 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
              "Frame title; presentations, etc.")
 
 (defcustom est-fixed-pitch-family "MonoSpace" "Fixed-pitch (monospace) font family." :type 'string :group 'est)
-(defcustom est-fixed-pitch-serif-family "MonoSpace" "Fixed-pitch (monospace) font family." :type 'string :group 'est)
+(defcustom est-fixed-pitch-serif-family "Monospace Serif" "Fixed-pitch (monospace) font family." :type 'string :group 'est)
 (defcustom est-variable-pitch-family "Sans Serif" "Variable-pitch font family." :type 'string :group 'est)
 (est-defcustom est-default-family est-fixed-pitch-family "Default font family." :type 'string :group 'est)
 
@@ -464,7 +465,7 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
 (est-stealface default `((t :foreground ,est-color-fg-default
                             :background ,est-color-bg-default
                             :family ,est-default-family)))
-(est-stealface variable-pitch	`((t :family ,est-fixed-pitch-family)))
+(est-stealface variable-pitch	`((t :family ,est-variable-pitch-family)))
 (est-stealface fixed-pitch	`((t :family ,est-fixed-pitch-family)))
 (est-stealface fixed-pitch-serif	`((t :family ,est-fixed-pitch-serif-family)))
 (est-stealface cursor	`((t :background ,est-color-fg-default)))

@@ -455,6 +455,7 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
              `((t :extend t :background ,est-color-fg-salient :weight bold :foreground ,est-color-bg-default :height 1.7 :box (:line-width 40 :color ,est-color-fg-salient)))
              "Frame title; presentations, etc.")
 
+(defcustom est-default-font-height 150 "Default font height." :type 'int :group 'est)
 (defcustom est-fixed-pitch-family "MonoSpace" "Fixed-pitch (monospace) font family." :type 'string :group 'est)
 (defcustom est-fixed-pitch-serif-family "Monospace Serif" "Fixed-pitch (monospace) font family." :type 'string :group 'est)
 (defcustom est-variable-pitch-family "Sans Serif" "Variable-pitch font family." :type 'string :group 'est)
@@ -464,7 +465,8 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
 
 (est-stealface default `((t :foreground ,est-color-fg-default
                             :background ,est-color-bg-default
-                            :family ,est-default-family)))
+                            :family ,est-default-family
+                            :height ,est-default-font-height)))
 (est-stealface variable-pitch	`((t :family ,est-variable-pitch-family)))
 (est-stealface fixed-pitch	`((t :family ,est-fixed-pitch-family)))
 (est-stealface fixed-pitch-serif	`((t :family ,est-fixed-pitch-serif-family)))
@@ -474,22 +476,22 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
 (est-stealface mode-line-inactive	`((t :overline ,est-color-fg-faded)))
 
 
-(est-stealface ediff-current-diff-face-Ancestor `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-base))))
-(est-stealface ediff-current-diff-face-A        `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-added))))
-(est-stealface ediff-current-diff-face-B        `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-removed))))
-(est-stealface ediff-current-diff-face-C        `((t :extend t :background ,(est-paint-over est-color-bg-selected 0.1 est-taint-vc-third))))
-(est-stealface ediff-fine-diff-face-Ancestor    `((t           :background ,(est-paint-over est-color-bg-selected 0.2 est-taint-vc-base))))
-(est-stealface ediff-fine-diff-face-A           `((t           :background ,(est-paint-over est-color-bg-selected 0.2 est-taint-vc-added))))
-(est-stealface ediff-fine-diff-face-B           `((t           :background ,(est-paint-over est-color-bg-selected 0.2 est-taint-vc-removed))))
-(est-stealface ediff-fine-diff-face-C           `((t           :background ,(est-paint-over est-color-bg-selected 0.2 est-taint-vc-third))))
-(est-stealface ediff-odd-diff-face-Ancestor     `((t :extend t :background ,(est-paint-over est-color-bg-subtle   0.1 est-taint-vc-base))))
-(est-stealface ediff-odd-diff-face-A            `((t :extend t :background ,(est-paint-over est-color-bg-subtle   0.1 est-taint-vc-added))))
-(est-stealface ediff-odd-diff-face-B            `((t :extend t :background ,(est-paint-over est-color-bg-subtle   0.1 est-taint-vc-removed))))
-(est-stealface ediff-odd-diff-face-C            `((t :extend t :background ,(est-paint-over est-color-bg-subtle   0.1 est-taint-vc-third))))
-(est-stealface ediff-even-diff-face-Ancestor    `((t :extend t :background ,(est-paint-over est-color-bg-default  0.1 est-taint-vc-base))))
-(est-stealface ediff-even-diff-face-A           `((t :extend t :background ,(est-paint-over est-color-bg-default  0.1 est-taint-vc-added))))
-(est-stealface ediff-even-diff-face-B           `((t :extend t :background ,(est-paint-over est-color-bg-default  0.1 est-taint-vc-removed))))
-(est-stealface ediff-even-diff-face-C           `((t :extend t :background ,(est-paint-over est-color-bg-default  0.1 est-taint-vc-third))))
+(est-stealface ediff-current-diff-face-Ancestor	`((t :extend t 	:background ,(est-paint-over est-color-bg-selected	0.1 est-taint-vc-base))))
+(est-stealface ediff-current-diff-face-A	`((t :extend t 	:background ,(est-paint-over est-color-bg-selected	0.1 est-taint-vc-added))))
+(est-stealface ediff-current-diff-face-B	`((t :extend t 	:background ,(est-paint-over est-color-bg-selected	0.1 est-taint-vc-removed))))
+(est-stealface ediff-current-diff-face-C	`((t :extend t 	:background ,(est-paint-over est-color-bg-selected	0.1 est-taint-vc-third))))
+(est-stealface ediff-fine-diff-face-Ancestor	`((t           	:background ,(est-paint-over est-color-bg-selected	0.2 est-taint-vc-base))))
+(est-stealface ediff-fine-diff-face-A	`((t           	:background ,(est-paint-over est-color-bg-selected	0.2 est-taint-vc-added))))
+(est-stealface ediff-fine-diff-face-B	`((t           	:background ,(est-paint-over est-color-bg-selected	0.2 est-taint-vc-removed))))
+(est-stealface ediff-fine-diff-face-C	`((t           	:background ,(est-paint-over est-color-bg-selected	0.2 est-taint-vc-third))))
+(est-stealface ediff-odd-diff-face-Ancestor	`((t :extend t 	:background ,(est-paint-over est-color-bg-subtle	0.1 est-taint-vc-base))))
+(est-stealface ediff-odd-diff-face-A	`((t :extend t 	:background ,(est-paint-over est-color-bg-subtle	0.1 est-taint-vc-added))))
+(est-stealface ediff-odd-diff-face-B	`((t :extend t 	:background ,(est-paint-over est-color-bg-subtle	0.1 est-taint-vc-removed))))
+(est-stealface ediff-odd-diff-face-C	`((t :extend t 	:background ,(est-paint-over est-color-bg-subtle	0.1 est-taint-vc-third))))
+(est-stealface ediff-even-diff-face-Ancestor	`((t :extend t 	:background ,(est-paint-over est-color-bg-default	0.1 est-taint-vc-base))))
+(est-stealface ediff-even-diff-face-A	`((t :extend t 	:background ,(est-paint-over est-color-bg-default	0.1 est-taint-vc-added))))
+(est-stealface ediff-even-diff-face-B	`((t :extend t 	:background ,(est-paint-over est-color-bg-default	0.1 est-taint-vc-removed))))
+(est-stealface ediff-even-diff-face-C	`((t :extend t 	:background ,(est-paint-over est-color-bg-default	0.1 est-taint-vc-third))))
 
 ;; est-customs
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -908,6 +910,51 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
         est-color-fg-popout   "#00bbff")
   (est-reevaluate))
 
+(defun est-roboto-fonts ()
+  "Use Roboto font set."
+  (interactive)
+  (setq est-fixed-pitch-family "Roboto Mono")
+  (setq est-variable-pitch-family "Roboto")
+  (est-reevaluate))
+
+(defun est-dejavu-fonts ()
+  "Use DejaVu font set."
+  (interactive)
+  (set-fontset-font "fontset-default"  '(#x1D00 . #x1DFF) "DejaVu Sans Mono")
+  ;; Phonetic Extensions,	Phonetic Extensions Supplement, Combining Diacritical Marks Supplement
+  (set-fontset-font "fontset-default"  '(#x2000 . #x2FFF) "DejaVu Sans Mono")
+  (setq est-fixed-pitch-family "DejaVu Sans Mono")
+  (setq est-variable-pitch-family "DejaVu Sans")
+  (est-reevaluate))
+
+(defun est-gnome-fonts ()
+  "Use Cantarell font."
+  (interactive)
+  (setq est-variable-pitch-family "Cantarell")
+  (setq est-fixed-pitch-family "Source Code Pro") ; ok choice?
+  (est-reevaluate))
+
+(defun est-libertinus-fonts ()
+  "Use Libertinus font set."
+  (interactive)
+  (setq est-fixed-pitch-family "Inconsolata LGC")
+  (setq est-variable-pitch-family "Libertinus Sans")
+  (setq est-fixed-pitch-serif-family "Libertinus Mono")
+  (est-reevaluate))
+
+(defun est-noto-fonts ()
+  "Use Noto font set."
+  (interactive)
+  (set-fontset-font "fontset-default"  '(#x2000 . #x23FF) "Noto Sans Math")
+  (set-fontset-font "fontset-default"  '(#x2000 . #x23FF) "Noto Sans Symbols" nil 'append)
+  (set-fontset-font "fontset-default"  '(#x2400 . #x27FF) "Noto Sans Symbols")
+  (setq est-fixed-pitch-family "Noto Sans Mono")
+  (setq est-variable-pitch-family "Noto Sans")
+  (setq est-fixed-pitch-serif-family "Noto Serif")
+  (est-reevaluate))
+
+;; sample character set:
+;; ∀∁⋀⋐⋠⋰⌀⁁⎀␀ⱼᵢ
 
 (provide 'est)
 

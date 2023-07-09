@@ -123,6 +123,11 @@ quoted.  Third argument DOC is the face documentation.  See
 Works similarly to `est-defface', but no documentation is needed."
   `(est-defface ,face-symbol ,spec (face-documentation ',face-symbol)))
 
+(defcustom est-reevaluate-hook nil
+  "Hook run after est-reevaluate."
+  :group 'est
+  :type 'hook)
+
 (defun est-reevaluate ()
   "Re-evaluate `est-customs' and `est-faces'.
 These are variables and faces declared with `est-defface' and
@@ -136,7 +141,8 @@ These are variables and faces declared with `est-defface' and
     (custom-reevaluate-setting symbol))
   (dolist (face-symbol est-faces)
     ;; est-  faces are not controlled by custom. est- face specs are. So override the faces here.
-    (face-spec-set face-symbol (purecopy (eval (est-spec-symbol face-symbol))) 'face-defface-spec)))
+    (face-spec-set face-symbol (purecopy (eval (est-spec-symbol face-symbol))) 'face-defface-spec))
+  (run-hooks est-reevaluate-hook))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Color manipulation

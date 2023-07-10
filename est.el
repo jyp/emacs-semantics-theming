@@ -128,6 +128,7 @@ Works similarly to `est-defface', but no documentation is needed."
   :group 'est
   :type 'hook)
 
+(defvar est-init-complete nil "Is the initialisation complete?")
 (defun est-reevaluate ()
   "Re-evaluate `est-customs' and `est-faces'.
 These are variables and faces declared with `est-defface' and
@@ -137,12 +138,18 @@ These are variables and faces declared with `est-defface' and
   ;; the free variables in the custom standard values. For now, we do the
   ;; simple thing of assuming that they are declared in order of
   ;; dependencies.
-  (dolist (symbol (reverse est-customs))
-    (custom-reevaluate-setting symbol))
-  (dolist (face-symbol est-faces)
-    ;; est-  faces are not controlled by custom. est- face specs are. So override the faces here.
-    (face-spec-set face-symbol (purecopy (eval (est-spec-symbol face-symbol))) 'face-defface-spec))
-  (run-hooks est-reevaluate-hook))
+  (unless est-init-complete ; run last in case several configurations happen during init time.
+    (dolist (symbol (reverse est-customs))
+      (custom-reevaluate-setting symbol))
+    (dolist (face-symbol est-faces)
+      ;; est-  faces are not controlled by custom. est- face specs are. So override the faces here.
+      (face-spec-set face-symbol (purecopy (eval (est-spec-symbol face-symbol))) 'face-defface-spec))
+    (run-hooks est-reevaluate-hook)))
+
+(add-hook 'after-init-hook
+          (defun est-init-complete ()
+            (setq est-init-complete t)
+            (est-reevaluate)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Color manipulation
@@ -934,10 +941,17 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
   (est-reevaluate))
 
 (defun est-gnome-fonts ()
-  "Use Cantarell font."
+  "Use Cantarell and Source Code fonts."
   (interactive)
   (setq est-variable-pitch-family "Cantarell")
   (setq est-fixed-pitch-family "Source Code Pro") ; ok choice?
+  (est-reevaluate))
+
+(defun est-source-fonts ()
+  "Use Source font set."
+  (interactive)
+  (setq est-variable-pitch-family "Source Sans 3")
+  (setq est-fixed-pitch-family "Source Code Pro")
   (est-reevaluate))
 
 (defun est-libertinus-fonts ()
@@ -961,6 +975,7 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
 
 ;; sample character set:
 ;; ∀∁⋀⋐⋠⋰⌀⁁⎀␀ⱼᵢ
+
 
 (provide 'est)
 

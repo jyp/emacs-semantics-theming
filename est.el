@@ -124,7 +124,7 @@ Works similarly to `est-defface', but no documentation is needed."
   `(est-defface ,face-symbol ,spec (face-documentation ',face-symbol)))
 
 (defcustom est-reevaluate-hook nil
-  "Hook run after est-reevaluate."
+  "Hook run after `est-reevaluate'."
   :group 'est
   :type 'hook)
 

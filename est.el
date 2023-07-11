@@ -144,7 +144,7 @@ These are variables and faces declared with `est-defface' and
     (dolist (face-symbol est-faces)
       ;; est-  faces are not controlled by custom. est- face specs are. So override the faces here.
       (face-spec-set face-symbol (purecopy (eval (est-spec-symbol face-symbol))) 'face-defface-spec))
-    (run-hooks est-reevaluate-hook)))
+    (run-hooks 'est-reevaluate-hook)))
 
 (add-hook 'after-init-hook
           (defun est-init-complete ()

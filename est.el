@@ -138,7 +138,7 @@ These are variables and faces declared with `est-defface' and
   ;; the free variables in the custom standard values. For now, we do the
   ;; simple thing of assuming that they are declared in order of
   ;; dependencies.
-  (unless est-init-complete ; run last in case several configurations happen during init time.
+  (when est-init-complete ; run last in case several configurations happen during init time.
     (dolist (symbol (reverse est-customs))
       (custom-reevaluate-setting symbol))
     (dolist (face-symbol est-faces)

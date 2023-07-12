@@ -494,7 +494,9 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
 (est-stealface fixed-pitch-serif	`((t :family ,est-fixed-pitch-serif-family)))
 (defcustom est-italic-fallback-spec-alist
   '(("Cantarell" . ((t :family "Noto Sans" :slant italic))))
-  "Alist mapping font families to their italic fallback spec.")
+  "Alist mapping font families to their italic fallback spec."
+  :type '(alist :key-type string :value-type sexp)
+  :group 'est)
 (est-stealface italic	(or (alist-get est-default-family est-italic-fallback-spec-alist nil nil #'string-equal) `((t :slant italic))))
 
 (est-stealface cursor	`((t :background ,est-color-fg-default)))

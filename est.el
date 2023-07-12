@@ -455,7 +455,7 @@ It is achieved by using the same hue as the default foreground
 color, but with a lesser contrast. It can be used for comments
 and secondary information.")
 
-(defface est-quoted `((t :slant italic)) "Face for quoted text.
+(defface est-quoted `((t :inherit italic)) "Face for quoted text.
 For instance, this applies to strings, `org-mode' quotes, etc.")
 
 (est-defface est-subtle `((t :background ,est-color-bg-subtle))
@@ -492,6 +492,11 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
 (est-stealface variable-pitch	`((t :family ,est-variable-pitch-family)))
 (est-stealface fixed-pitch	`((t :family ,est-fixed-pitch-family)))
 (est-stealface fixed-pitch-serif	`((t :family ,est-fixed-pitch-serif-family)))
+(defcustom est-italic-fallback-spec-alist
+  '(("Cantarell" . ((t :family "Noto Sans" :slant italic))))
+  "Alist mapping font families to their italic fallback spec.")
+(est-stealface italic	(or (alist-get est-default-family est-italic-fallback-spec-alist nil nil #'string-equal) `((t :slant italic))))
+
 (est-stealface cursor	`((t :background ,est-color-fg-default)))
 (est-stealface shadow	`((t :foreground ,est-color-fg-shadowed)))
 (est-stealface mode-line	`((t :overline ,est-color-fg-faded :inherit est-choice)))

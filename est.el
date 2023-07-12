@@ -111,7 +111,7 @@ groups, etc."
     "Set the standard spec of FACE to be SPEC.
 SPEC is a sexp which `est-reevaluate' will evaluate and assign
 to FACE  This function does not immediately set the value of
-FACE. FACE should not be quoted."
+FACE.  FACE should not be quoted."
   `(est-customize-variable ,(est-spec-symbol face) ,spec))
 
 (defmacro est-defface (face spec doc &rest args)
@@ -526,26 +526,22 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
  'est-style
  '(org-fontify-done-headline nil) ;; does not work with changing size of headlines
  '(org-fontify-todo-headline nil) ;; does not work with changing size of headlines
- '(org-cycle-level-faces nil)
- )
+ '(org-cycle-level-faces nil))
 
-(custom-theme-set-faces
- 'est-style
+(custom-theme-set-faces 'est-style
    '(est-magit-selection ((t :inherit est-salient)))
  
    '(buffer-menu-buffer ((t :inherit est-salient)))
    '(success ((t :inherit est-strong)))
    '(warning ((t :inherit (est-salient bold))))
 
-   '(error   ((t :inherit est-critical)))
-   '(link    ((t :inherit est-salient)))
-   '(link-visited ((t :inherit link)))
-   '(match   ((t :inherit est-popout))) ;;  "Face for matched substrings (helm, ivy, etc.) "
-
-   '(region  ((t :inherit est-subtle)))
-   '(secondary-selection ((t :inherit est-subtle)))
-   '(fringe  ((t :inherit est-faded)))
-
+   '(error	((t :inherit est-critical)))
+   '(link	((t :inherit est-salient)))
+   '(link-visited	((t :inherit link)))
+   '(match	((t :inherit est-popout))) ; "Face for matched substrings (isearch, helm, ivy, etc.) "
+   '(region	((t :inherit est-subtle)))
+   '(secondary-selection	((t :inherit est-subtle)))
+   '(fringe	((t :inherit est-faded)))
 
    '(header-line         ((t :inherit est-heading)))
    '(highlight           ((t :inherit est-choice)))
@@ -619,18 +615,18 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
    '(eshell-ls-product    ((t :inherit est-faded)))
    '(eshell-ls-clutter    ((t :inherit error)))
 
-   '(font-latex-sectioning-1-face   ((t :inherit est-heading-1)))
-   '(font-latex-sectioning-2-face   ((t :inherit est-heading-2)))
-   '(font-latex-sectioning-3-face   ((t :inherit est-heading-3)))
-   '(font-latex-sectioning-4-face   ((t :inherit est-heading)))
-   '(font-latex-sectioning-5-face   ((t :inherit est-heading)))
-   '(font-latex-bold-face           ((t :inherit bold)))
-   '(font-latex-math-face           ((t :inherit est-salient)))
-   '(font-latex-script-char-face    ((t :inherit est-salient)))
-   '(font-latex-string-face         ((t :inherit font-lock-string-face)))
-   '(font-latex-warning-face        ((t :inherit est-strong))) ; latex-warning face is not really a warning face!
-   '(font-latex-italic-face         ((t :inherit est-emph)))
-   '(font-latex-verbatim-face       ((t :inherit est-faded)))
+   '(font-latex-sectioning-1-face	((t :inherit est-heading-1)))
+   '(font-latex-sectioning-2-face	((t :inherit est-heading-2)))
+   '(font-latex-sectioning-3-face	((t :inherit est-heading-3)))
+   '(font-latex-sectioning-4-face	((t :inherit est-heading)))
+   '(font-latex-sectioning-5-face	((t :inherit est-heading)))
+   '(font-latex-bold-face	((t :inherit bold)))
+   '(font-latex-math-face	((t :inherit est-salient)))
+   '(font-latex-script-char-face	((t :inherit est-salient)))
+   '(font-latex-string-face	((t :inherit font-lock-string-face)))
+   '(font-latex-warning-face	((t :inherit est-strong))) ; latex-warning face is not really a warning face!
+   '(font-latex-italic-face	((t :inherit italic)))
+   '(font-latex-verbatim-face	((t :inherit est-faded)))
 
    '(font-lock-builtin-face       ((t)))
    '(font-lock-comment-face       ((t :inherit est-faded)))
@@ -848,6 +844,8 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
    ;; useful when transient-force-fixed-pitch is t
    
    '(widget-field ((t :inherit (est-faded est-subtle)))))
+
+(provide-theme 'est-style)
 
 (enable-theme 'est-style)
 

@@ -944,7 +944,19 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
   "Use Cantarell and Source Code fonts."
   (interactive)
   (setq est-variable-pitch-family "Cantarell")
+  (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "DejaVu Sans")
+  (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "Noto Sans Symbols" nil 'append)
   (setq est-fixed-pitch-family "Source Code Pro") ; ok choice?
+  (est-reevaluate))
+
+(defun est-adobe-fonts ()
+  "Use Cantarell and Source Code fonts."
+  (interactive)
+  (setq est-variable-pitch-family "Adobe Clean")
+  (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "DejaVu Sans")
+  (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "Noto Sans Symbols" nil 'append)
+  (setq est-fixed-pitch-family "Source Code Pro")
+  (setq est-fixed-pitch-serif-family "Adobe Clean Serif")
   (est-reevaluate))
 
 (defun est-source-fonts ()

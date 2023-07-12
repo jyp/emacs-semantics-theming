@@ -26,7 +26,7 @@
 
 ;;; Commentary:
 
-;; This file attempts to est ablish an Emacs Semantically-sound
+;; This file attempts to establish an Emacs Semantically-sound
 ;; Theming foundation.  The goal is to provide a visually pleasant and
 ;; semantically coherent meta-theme, which is easy to customize (with
 ;; as little as a palette of six colors).
@@ -74,11 +74,13 @@
 (setq est-customs nil
       est-faces nil)
 
-(defmacro est-set-pattern (symbol pattern)
-  "Set the PATTERN for SYMBOL.
-This means that `est-reevaluate' will evaluate PATTERN when
-recomputing the value for SYMBOL."
+(defmacro est-customize-variable (symbol pattern)
+  "Set the standard value of SYMBOL to be PATTERN.
+PATTERN is an expression which `est-reevaluate' will evaluate and assign
+to SYMBOL.  This function does not immediately set the value of
+SYMBOL.  Neither SYMBOL or PATTERN should be quoted."
   `(put ',symbol 'standard-value (purecopy (list ',pattern))))
+
 
 (defmacro est-defcustom (symbol standard docstring &rest args)
   "Define SYMBOL with STANDARD value and DOCSTRING, with ARGS.
@@ -92,18 +94,25 @@ Also register SYMBOL for evaluation by `est-reevaluate'."
   "Re-define the standard value for SYMBOL as STANDARD.
 Also register SYMBOL for evaluation by `est-reevaluate'.  SYMBOL
 should be originally defined in FILE, together with its doc,
-groups, etc.  So"
+groups, etc."
   (declare (doc-string 3) (debug (name body)))
   `(with-eval-after-load ,file
      (defvar ,symbol)
      (push ',symbol est-customs)
-     (est-set-pattern ,symbol ,standard)
+     (est-customize-variable ,symbol ,standard)
      (set ',symbol ,standard)))
 
 (eval-and-compile
   (defun est-spec-symbol (face-symbol)
     "Make a face-spec symbol from a FACE-SYMBOL."
   (intern (concat (symbol-name face-symbol) "-spec"))))
+
+(defmacro est-customize-face (face spec)
+    "Set the standard spec of FACE to be SPEC.
+SPEC is a sexp which `est-reevaluate' will evaluate and assign
+to FACE  This function does not immediately set the value of
+FACE. FACE should not be quoted."
+  `(est-customize-variable ,(est-spec-symbol face) ,spec))
 
 (defmacro est-defface (face spec doc &rest args)
   "Declare FACE as a customizable face which defaults to the expression SPEC.

@@ -69,18 +69,29 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Customisation infrastructure
 
+(defgroup highlight-indentation nil
+  "Semantic Theming."
+  :prefix "est-"
+  :group 'faces)
+
 (defvar est-customs nil "List of customs to re-evaluate when applying est-theming.")
 (defvar est-faces   nil "List of faces to reset when applying est-theming.")
 (setq est-customs nil
       est-faces nil)
+
+(defun est-set-standard-value (symbol pattern)
+  "Set the standard value of SYMBOL to be PATTERN.
+PATTERN is an expression which `est-reevaluate' will evaluate and assign
+to SYMBOL.  This function does not immediately set the value of
+SYMBOL.  Both SYMBOL and PATTERN should be quoted."
+  (put symbol 'standard-value (list (purecopy pattern))))
 
 (defmacro est-customize-variable (symbol pattern)
   "Set the standard value of SYMBOL to be PATTERN.
 PATTERN is an expression which `est-reevaluate' will evaluate and assign
 to SYMBOL.  This function does not immediately set the value of
 SYMBOL.  Neither SYMBOL or PATTERN should be quoted."
-  `(put ',symbol 'standard-value (purecopy (list ',pattern))))
-
+  `(est-set-standard-value ',symbol ',pattern))
 
 (defmacro est-defcustom (symbol standard docstring &rest args)
   "Define SYMBOL with STANDARD value and DOCSTRING, with ARGS.
@@ -493,7 +504,7 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
 (est-stealface fixed-pitch	`((t :family ,est-fixed-pitch-family)))
 (est-stealface fixed-pitch-serif	`((t :family ,est-fixed-pitch-serif-family)))
 (defcustom est-italic-fallback-spec-alist
-  '(("Cantarell" . ((t :family "Noto Sans" :slant italic))))
+  '(("Cantarell" . ((t :family "FiraGO" :slant italic :height 0.95))))
   "Alist mapping font families to their italic fallback spec."
   :type '(alist :key-type string :value-type sexp)
   :group 'est)
@@ -938,14 +949,17 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
   (est-reevaluate))
 
 (defun est-roboto-fonts ()
-  "Use Roboto font set."
+  "Use Roboto font set.
+Similar to Noto but more dense."
   (interactive)
   (setq est-fixed-pitch-family "Roboto Mono")
   (setq est-variable-pitch-family "Roboto")
   (est-reevaluate))
 
 (defun est-dejavu-fonts ()
-  "Use DejaVu font set."
+  "Use DejaVu font set.
+Very dense look and relatively wide characters.  Good unicode
+ coverage."
   (interactive)
   (set-fontset-font "fontset-default"  '(#x1D00 . #x1DFF) "DejaVu Sans Mono")
   ;; Phonetic Extensions,	Phonetic Extensions Supplement, Combining Diacritical Marks Supplement
@@ -955,16 +969,20 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
   (est-reevaluate))
 
 (defun est-gnome-fonts ()
-  "Use Cantarell and Source Code fonts."
+  "Use Cantarell and Source Code fonts.
+Balanced in terms of density."
   (interactive)
-  (setq est-variable-pitch-family "Cantarell") ; lacks italic variant 🙁.
+  (setq est-variable-pitch-family "Cantarell") ; lacks italic variant 🙁; see est-italic-fallback-spec-alist
   (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "DejaVu Sans")
   (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "Noto Sans Symbols" nil 'append)
   (setq est-fixed-pitch-family "Source Code Pro") ; ok choice?
   (est-reevaluate))
 
 (defun est-adobe-fonts ()
-  "Use Adobe Clean fontset."
+  "Use Adobe Clean fontset.
+Clean, distinctive look.  Like Cantarell, has a balanced
+density.  Taller than Cantarell, shows a couple of lines less.  Is
+more condensed (horizontally)."
   (interactive)
   (setq est-variable-pitch-family "Adobe Clean")
   (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "DejaVu Sans")
@@ -974,22 +992,32 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
   (est-reevaluate))
 
 (defun est-fira-fonts ()
-  "Use Fira fontset."
+  "Use Fira fontset.
+This fontset provides a consistent, condensed look with small
+interline spacing.  Many unicode characters are missing and Fira
+Math appears to be absent from nixpkgs.  Lowercase \"l\" has a
+visible curve.  Some glyphs have a very distinctive look, such as
+roman g, y, λ; or monospace r."
+  ; g y λ
   (interactive)
-  (setq est-variable-pitch-family "Fira Sans")
+  (setq est-variable-pitch-family "FiraGO")
   (setq est-fixed-pitch-family "Fira Code")
   (setq est-fixed-pitch-serif-family "Fira Code")
   (est-reevaluate))
 
 (defun est-source-fonts ()
-  "Use Source font set."
+  "Use Source font set.
+Clean look, similar to Noto but the lowercase \"l\" has a curve. Very
+wide interline spacing, shows comfortably only 34 lines."
   (interactive)
   (setq est-variable-pitch-family "Source Sans 3")
   (setq est-fixed-pitch-family "Source Code Pro")
   (est-reevaluate))
 
 (defun est-libertinus-fonts ()
-  "Use Libertinus font set."
+  "Use Libertinus font set.
+Its uneven stroke widths make it more suitable for print and
+large font sizes, or for effect."
   (interactive)
   (setq est-fixed-pitch-family "Inconsolata LGC")
   (setq est-variable-pitch-family "Libertinus Sans")
@@ -997,7 +1025,9 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
   (est-reevaluate))
 
 (defun est-noto-fonts ()
-  "Use Noto font set."
+  "Use Noto font set.
+A clean, commonplace fontset, with excellent unicode
+support.  Shows 37 lines."
   (interactive)
   (set-fontset-font "fontset-default"  '(#x2000 . #x23FF) "Noto Sans Math")
   (set-fontset-font "fontset-default"  '(#x2000 . #x23FF) "Noto Sans Symbols" nil 'append)
@@ -1009,6 +1039,7 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
 
 ;; sample character set:
 ;; ∀∁⋀⋐⋠⋰⌀⁁⎀␀ⱼᵢ
+; α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω
 
 
 (provide 'est)

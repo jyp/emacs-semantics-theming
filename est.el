@@ -504,7 +504,7 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
 (est-stealface fixed-pitch	`((t :family ,est-fixed-pitch-family)))
 (est-stealface fixed-pitch-serif	`((t :family ,est-fixed-pitch-serif-family)))
 (defcustom est-italic-fallback-spec-alist
-  '(("Cantarell" . ((t :family "FiraGO" :slant italic :height 0.95))))
+  '(("Cantarell" . ((t :family "Roboto" :slant italic :height 0.95)))) ;  :weight light
   "Alist mapping font families to their italic fallback spec."
   :type '(alist :key-type string :value-type sexp)
   :group 'est)
@@ -973,7 +973,8 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
 
 (defun est-roboto-fonts ()
   "Use Roboto font set.
-Similar to Noto but more dense."
+Same vertical density to Cantarell, but more condensed and
+heavier."
   (interactive)
   (setq est-fixed-pitch-family "Roboto Mono")
   (setq est-variable-pitch-family "Roboto")
@@ -998,7 +999,8 @@ Balanced in terms of density."
   (setq est-variable-pitch-family "Cantarell") ; lacks italic variant 🙁; see est-italic-fallback-spec-alist
   (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "DejaVu Sans")
   (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "Noto Sans Symbols" nil 'append)
-  (setq est-fixed-pitch-family "Source Code Pro") ; ok choice?
+  ;; (setq est-fixed-pitch-family "Roboto Mono") ; same vertical density but too high
+  (setq est-fixed-pitch-family "Source Code Pro")
   (est-reevaluate))
 
 (defun est-adobe-fonts ()

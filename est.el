@@ -1052,9 +1052,11 @@ large font sizes, or for effect."
 A clean, commonplace fontset, with excellent unicode
 support.  Shows 37 lines."
   (interactive)
+  ;; TODO: (new-fontset "-est-notosansset-*-*-*--*-*-*-*-*-*-fontset-*" (list (t . (font-spec :family "Noto Sans")))) ; define fontset so that we don't override default settings
   (set-fontset-font "fontset-default"  '(#x2000 . #x23FF) "Noto Sans Math")
   (set-fontset-font "fontset-default"  '(#x2000 . #x23FF) "Noto Sans Symbols" nil 'append)
   (set-fontset-font "fontset-default"  '(#x2400 . #x27FF) "Noto Sans Symbols")
+  ;; see https://gist.github.com/alanthird/7152752d384325a83677f4a90e1e1a05 for other Noto scripts
   (setq est-fixed-pitch-family "Noto Sans Mono")
   (setq est-variable-pitch-family "Noto Sans")
   (setq est-fixed-pitch-serif-family "Noto Serif")

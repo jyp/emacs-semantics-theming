@@ -489,26 +489,26 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
              "Frame title; presentations, etc.")
 
 (defcustom est-default-font-height 150 "Default font height." :type 'int :group 'est)
-(defcustom est-fixed-pitch-family "MonoSpace" "Fixed-pitch (monospace) font family." :type 'string :group 'est)
-(defcustom est-fixed-pitch-serif-family "Monospace Serif" "Fixed-pitch (monospace) font family." :type 'string :group 'est)
-(defcustom est-variable-pitch-family "Sans Serif" "Variable-pitch font family." :type 'string :group 'est)
-(est-defcustom est-default-family est-fixed-pitch-family "Default font family." :type 'string :group 'est)
+(defcustom est-fixed-pitch-font "MonoSpace" "Fixed-pitch (monospace) font family." :type 'string :group 'est)
+(defcustom est-fixed-pitch-serif-font "Monospace Serif" "Fixed-pitch (monospace) font family." :type 'string :group 'est)
+(defcustom est-variable-pitch-font "Sans Serif" "Variable-pitch font family." :type 'string :group 'est)
+(est-defcustom est-default-font est-fixed-pitch-font "Default font family." :type 'string :group 'est)
 
 (est-defface est-invisible `((t :foreground ,est-color-bg-default)) "Face for invisible text")
 
 (est-stealface default `((t :foreground ,est-color-fg-default
                             :background ,est-color-bg-default
-                            :family ,est-default-family
+                            :font ,est-default-font
                             :height ,est-default-font-height)))
-(est-stealface variable-pitch	`((t :family ,est-variable-pitch-family)))
-(est-stealface fixed-pitch	`((t :family ,est-fixed-pitch-family)))
-(est-stealface fixed-pitch-serif	`((t :family ,est-fixed-pitch-serif-family)))
+(est-stealface variable-pitch	`((t :font ,est-variable-pitch-font)))
+(est-stealface fixed-pitch	`((t :font ,est-fixed-pitch-font)))
+(est-stealface fixed-pitch-serif	`((t :font ,est-fixed-pitch-serif-font)))
 (defcustom est-italic-fallback-spec-alist
   '(("Cantarell" . ((t :family "Roboto" :slant italic :height 0.95)))) ;  :weight light
   "Alist mapping font families to their italic fallback spec."
   :type '(alist :key-type string :value-type sexp)
   :group 'est)
-(est-stealface italic	(or (alist-get est-default-family est-italic-fallback-spec-alist nil nil #'string-equal) `((t :slant italic))))
+(est-stealface italic	(or (alist-get est-default-font est-italic-fallback-spec-alist nil nil #'equal) `((t :slant italic))))
 
 (est-stealface cursor	`((t :background ,est-color-fg-default)))
 (est-stealface shadow	`((t :foreground ,est-color-fg-shadowed)))
@@ -976,8 +976,8 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
 Same vertical density to Cantarell, but more condensed and
 heavier."
   (interactive)
-  (setq est-fixed-pitch-family "Roboto Mono")
-  (setq est-variable-pitch-family "Roboto")
+  (setq est-fixed-pitch-font (font-spec :family "Roboto Mono"))
+  (setq est-variable-pitch-font (font-spec :family "Roboto"))
   (est-reevaluate))
 
 (defun est-dejavu-fonts ()
@@ -988,19 +988,20 @@ Very dense look and relatively wide characters.  Good unicode
   (set-fontset-font "fontset-default"  '(#x1D00 . #x1DFF) "DejaVu Sans Mono")
   ;; Phonetic Extensions,	Phonetic Extensions Supplement, Combining Diacritical Marks Supplement
   (set-fontset-font "fontset-default"  '(#x2000 . #x2FFF) "DejaVu Sans Mono")
-  (setq est-fixed-pitch-family "DejaVu Sans Mono")
-  (setq est-variable-pitch-family "DejaVu Sans")
+  (setq est-fixed-pitch-font (font-spec :family "DejaVu Sans Mono"))
+  (setq est-variable-pitch-font (font-spec :family "DejaVu Sans"))
   (est-reevaluate))
 
 (defun est-gnome-fonts ()
   "Use Cantarell and Source Code fonts.
 Balanced in terms of density."
   (interactive)
-  (setq est-variable-pitch-family "Cantarell") ; lacks italic variant 🙁; see est-italic-fallback-spec-alist
+  (setq est-variable-pitch-font (font-spec :family "Cantarell")) ; lacks italic variant 🙁; see est-italic-fallback-spec-alist
   (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "DejaVu Sans")
   (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "Noto Sans Symbols" nil 'append)
-  ;; (setq est-fixed-pitch-family "Roboto Mono") ; same vertical density but too high
-  (setq est-fixed-pitch-family "Source Code Pro")
+  ;; (setq est-fixed-pitch-font "Roboto Mono") ; same vertical density but too high
+  (setq est-fixed-pitch-font (font-spec :family "Source Code Pro"))
+  (setq est-fixed-pitch-serif-font (font-spec :family "Fira Code"))
   (est-reevaluate))
 
 (defun est-adobe-fonts ()
@@ -1009,11 +1010,11 @@ Clean, distinctive look.  Like Cantarell, has a balanced
 density.  Taller than Cantarell, shows a couple of lines less.  Is
 more condensed (horizontally)."
   (interactive)
-  (setq est-variable-pitch-family "Adobe Clean")
+  (setq est-variable-pitch-font (font-spec :family "Adobe Clean"))
   (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "DejaVu Sans")
   (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "Noto Sans Symbols" nil 'append)
-  (setq est-fixed-pitch-family "Source Code Pro")
-  (setq est-fixed-pitch-serif-family "Adobe Clean Serif")
+  (setq est-fixed-pitch-font (font-spec :family "Source Code Pro"))
+  (setq est-fixed-pitch-serif-font (font-spec :family "Adobe Clean Serif"))
   (est-reevaluate))
 
 (defun est-fira-fonts ()
@@ -1022,12 +1023,12 @@ This fontset provides a consistent, condensed look with small
 interline spacing.  Many unicode characters are missing and Fira
 Math appears to be absent from nixpkgs.  Lowercase \"l\" has a
 visible curve.  Some glyphs have a very distinctive look, such as
-roman g, y, λ; or monospace r."
+roman g, y, λ; or monospace r. Same vertical use as Cantarell."
   ; g y λ
   (interactive)
-  (setq est-variable-pitch-family "FiraGO")
-  (setq est-fixed-pitch-family "Fira Code")
-  (setq est-fixed-pitch-serif-family "Fira Code")
+  (setq est-variable-pitch-font (font-spec :family "FiraGO" :weight 'semilight))
+  (setq est-fixed-pitch-font (font-spec :family "Fira Code"))
+  (setq est-fixed-pitch-serif-font (font-spec :family "Fira Code"))
   (est-reevaluate))
 
 (defun est-source-fonts ()
@@ -1035,8 +1036,8 @@ roman g, y, λ; or monospace r."
 Clean look, similar to Noto but the lowercase \"l\" has a curve. Very
 wide interline spacing, shows comfortably only 34 lines."
   (interactive)
-  (setq est-variable-pitch-family "Source Sans 3")
-  (setq est-fixed-pitch-family "Source Code Pro")
+  (setq est-variable-pitch-font (font-spec :family "Source Sans 3"))
+  (setq est-fixed-pitch-font (font-spec :family "Source Code Pro"))
   (est-reevaluate))
 
 (defun est-libertinus-fonts ()
@@ -1044,9 +1045,9 @@ wide interline spacing, shows comfortably only 34 lines."
 Its uneven stroke widths make it more suitable for print and
 large font sizes, or for effect."
   (interactive)
-  (setq est-fixed-pitch-family "Inconsolata LGC")
-  (setq est-variable-pitch-family "Libertinus Sans")
-  (setq est-fixed-pitch-serif-family "Libertinus Mono")
+  (setq est-fixed-pitch-font (font-spec :family "Inconsolata LGC"))
+  (setq est-variable-pitch-font (font-spec :family "Libertinus Sans"))
+  (setq est-fixed-pitch-serif-font (font-spec :family "Libertinus Mono"))
   (est-reevaluate))
 
 (defun est-noto-fonts ()
@@ -1059,9 +1060,9 @@ support.  Shows 37 lines."
   (set-fontset-font "fontset-default"  '(#x2000 . #x23FF) "Noto Sans Symbols" nil 'append)
   (set-fontset-font "fontset-default"  '(#x2400 . #x27FF) "Noto Sans Symbols")
   ;; see https://gist.github.com/alanthird/7152752d384325a83677f4a90e1e1a05 for other Noto scripts
-  (setq est-fixed-pitch-family "Noto Sans Mono")
-  (setq est-variable-pitch-family "Noto Sans")
-  (setq est-fixed-pitch-serif-family "Noto Serif")
+  (setq est-fixed-pitch-font (font-spec :family "Noto Sans Mono"))
+  (setq est-variable-pitch-font (font-spec :family "Noto Sans"))
+  (setq est-fixed-pitch-serif-font (font-spec :family "Noto Serif"))
   (est-reevaluate))
 
 ;; sample character set:

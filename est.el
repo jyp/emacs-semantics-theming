@@ -489,9 +489,9 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
              "Frame title; presentations, etc.")
 
 (defcustom est-default-font-height 150 "Default font height." :type 'int :group 'est)
-(defcustom est-fixed-pitch-font "MonoSpace" "Fixed-pitch (monospace) font family." :type 'string :group 'est)
-(defcustom est-fixed-pitch-serif-font "Monospace Serif" "Fixed-pitch (monospace) font family." :type 'string :group 'est)
-(defcustom est-variable-pitch-font "Sans Serif" "Variable-pitch font family." :type 'string :group 'est)
+(defcustom est-fixed-pitch-font (font-spec :family "MonoSpace") "Fixed-pitch (monospace) font family." :type 'string :group 'est)
+(defcustom est-fixed-pitch-serif-font (font-spec :family "Monospace Serif") "Fixed-pitch (monospace) font family." :type 'string :group 'est)
+(defcustom est-variable-pitch-font (font-spec :family "Sans Serif") "Variable-pitch font family." :type 'string :group 'est)
 (est-defcustom est-default-font est-fixed-pitch-font "Default font family." :type 'string :group 'est)
 
 (est-defface est-invisible `((t :foreground ,est-color-bg-default)) "Face for invisible text")
@@ -504,11 +504,12 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
 (est-stealface fixed-pitch	`((t :font ,est-fixed-pitch-font)))
 (est-stealface fixed-pitch-serif	`((t :font ,est-fixed-pitch-serif-font)))
 (defcustom est-italic-fallback-spec-alist
-  '(("Cantarell" . ((t :family "Roboto" :slant italic :height 0.95)))) ;  :weight light
+  ;; '(("Cantarell" . ((t :font (font-spec :family "Roboto") :slant italic :height 0.95)))) ;  :weight light
+  `(("Cantarell" . ((t :font ,(font-spec :family "FiraGO" :weight 'semilight) :slant italic)))) ;  :weight light
   "Alist mapping font families to their italic fallback spec."
   :type '(alist :key-type string :value-type sexp)
   :group 'est)
-(est-stealface italic	(or (alist-get est-default-font est-italic-fallback-spec-alist nil nil #'equal) `((t :slant italic))))
+(est-stealface italic	(or (alist-get (font-get est-default-font :family) est-italic-fallback-spec-alist nil nil #'string-equal) `((t :slant italic))))
 
 (est-stealface cursor	`((t :background ,est-color-fg-default)))
 (est-stealface shadow	`((t :foreground ,est-color-fg-shadowed)))
@@ -1019,14 +1020,15 @@ more condensed (horizontally)."
 
 (defun est-fira-fonts ()
   "Use Fira fontset.
-This fontset provides a consistent, condensed look with small
-interline spacing.  Many unicode characters are missing and Fira
-Math appears to be absent from nixpkgs.  Lowercase \"l\" has a
-visible curve.  Some glyphs have a very distinctive look, such as
-roman g, y, λ; or monospace r. Same vertical use as Cantarell."
+This fontset provides a consistent look same vertical density as
+Roboto.  Many unicode characters are missing and Fira Math
+appears to be absent from nixpkgs.  Lowercase \"l\" has a visible
+curve.  Some glyphs have a very distinctive look, such as roman
+g, y, λ; or monospace r.  We use the semilight weight here to
+achieve similar greyness as other fontsets."
   ; g y λ
   (interactive)
-  (setq est-variable-pitch-font (font-spec :family "FiraGO" :weight 'semilight))
+  (setq est-variable-pitch-font (font-spec :family "FiraGO" :weight 'semilight)) ; 
   (setq est-fixed-pitch-font (font-spec :family "Fira Code"))
   (setq est-fixed-pitch-serif-font (font-spec :family "Fira Code"))
   (est-reevaluate))

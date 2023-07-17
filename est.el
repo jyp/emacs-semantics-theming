@@ -487,6 +487,9 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
 (est-defface est-frame-title
              `((t :extend t :background ,est-color-fg-salient :weight bold :foreground ,est-color-bg-default :height 1.7 :box (:line-width 40 :color ,est-color-fg-salient)))
              "Frame title; presentations, etc.")
+(est-defface est-modeline-common
+             `((t :overline ,est-color-fg-faded :height 0.95))
+             "Face attributes common to mode-line and mode-line-inactive")
 
 (defcustom est-default-font-height 150 "Default font height." :type 'int :group 'est)
 (defcustom est-fixed-pitch-font (font-spec :family "MonoSpace") "Fixed-pitch (monospace) font family." :type 'string :group 'est)
@@ -513,9 +516,6 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
 
 (est-stealface cursor	`((t :background ,est-color-fg-default)))
 (est-stealface shadow	`((t :foreground ,est-color-fg-shadowed)))
-(est-stealface mode-line	`((t :overline ,est-color-fg-faded :inherit est-choice)))
-(est-stealface mode-line-inactive	`((t :overline ,est-color-fg-faded)))
-
 
 (est-stealface ediff-current-diff-face-Ancestor	`((t :extend t 	:background ,(est-paint-over est-color-bg-selected	0.1 est-taint-vc-base))))
 (est-stealface ediff-current-diff-face-A	`((t :extend t 	:background ,(est-paint-over est-color-bg-selected	0.1 est-taint-vc-added))))
@@ -782,6 +782,8 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
    '(marginalia-file-priv-rare ((t :inherit (font-lock-variable-name-face fixed-pitch))))
    '(marginalia-size ((t :inherit (marginalia-number fixed-pitch))))
    
+   '(mode-line ((t :inherit (est-choice est-modeline-common))))
+   '(mode-line-inactive ((t :inherit est-modeline-common)))
    
    '(orderless-match-face-0 ((t :inherit match)))
    '(orderless-match-face-1 ((t :inherit match)))

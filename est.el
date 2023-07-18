@@ -153,6 +153,7 @@ Works similarly to `est-defface', but no documentation is needed."
   "Re-evaluate `est-customs' and `est-faces'.
 These are variables and faces declared with `est-defface' and
 `est-defcustom'."
+  (interactive)
   ;; FIXME: est-customs should really be sorted according to their
   ;; dependencies. But we don't have them. In general it depends on
   ;; the free variables in the custom standard values. For now, we do the
@@ -164,6 +165,7 @@ These are variables and faces declared with `est-defface' and
     (dolist (face-symbol est-faces)
       ;; est-  faces are not controlled by custom. est- face specs are. So override the faces here.
       (face-spec-set face-symbol (purecopy (eval (est-spec-symbol face-symbol))) 'face-defface-spec))
+    ;; sometimes emacs 29.0.90 does not perform the actual change until a new frame is opened.
     (run-hooks 'est-reevaluate-hook)))
 
 (add-hook 'after-init-hook
@@ -492,27 +494,31 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
              "Face attributes common to mode-line and mode-line-inactive")
 
 (defcustom est-default-font-height 150 "Default font height." :type 'int :group 'est)
-(defcustom est-fixed-pitch-font (font-spec :family "MonoSpace") "Fixed-pitch (monospace) font family." :type 'string :group 'est)
-(defcustom est-fixed-pitch-serif-font (font-spec :family "Monospace Serif") "Fixed-pitch (monospace) font family." :type 'string :group 'est)
-(defcustom est-variable-pitch-font (font-spec :family "Sans Serif") "Variable-pitch font family." :type 'string :group 'est)
+;; we cannot use actual font-spec objects because Emacs (29.0.90) has
+;; a bug where the properties from the font spec leak into the face
+;; spec.
+(defcustom est-fixed-pitch-font '(:family "MonoSpace") "Fixed-pitch (monospace) font family." :type 'string :group 'est)
+(defcustom est-fixed-pitch-serif-font '(:family "Monospace Serif") "Fixed-pitch (monospace) font family." :type 'string :group 'est)
+(defcustom est-variable-pitch-font '(:family "Sans Serif") "Variable-pitch font family." :type 'string :group 'est)
 (est-defcustom est-default-font est-fixed-pitch-font "Default font family." :type 'string :group 'est)
 
 (est-defface est-invisible `((t :foreground ,est-color-bg-default)) "Face for invisible text")
 
 (est-stealface default `((t :foreground ,est-color-fg-default
                             :background ,est-color-bg-default
-                            :font ,est-default-font
+                            ,@est-default-font
                             :height ,est-default-font-height)))
-(est-stealface variable-pitch	`((t :font ,est-variable-pitch-font)))
-(est-stealface fixed-pitch	`((t :font ,est-fixed-pitch-font)))
-(est-stealface fixed-pitch-serif	`((t :font ,est-fixed-pitch-serif-font)))
+;; emacs default face cannot inherit from anything, so we must re-invent the wheel here.
+(est-stealface variable-pitch	`((t ,@est-variable-pitch-font)))
+(est-stealface fixed-pitch	`((t ,@est-fixed-pitch-font)))
+(est-stealface fixed-pitch-serif	`((t ,@est-fixed-pitch-serif-font)))
 (defcustom est-italic-fallback-spec-alist
-  ;; '(("Cantarell" . ((t :font (font-spec :family "Roboto") :slant italic :height 0.95)))) ;  :weight light
-  `(("Cantarell" . ((t :font ,(font-spec :family "FiraGO" :weight 'semilight) :slant italic)))) ;  :weight light
+  ;; '(("Cantarell" . ((t :family "Roboto" :slant italic :height 0.95)))) ;  :weight light
+  `(("Cantarell" . ((t :family "FiraGO" :weight semilight :slant italic)))) ;  :weight light
   "Alist mapping font families to their italic fallback spec."
   :type '(alist :key-type string :value-type sexp)
   :group 'est)
-(est-stealface italic	(or (alist-get (font-get est-default-font :family) est-italic-fallback-spec-alist nil nil #'string-equal) `((t :slant italic))))
+(est-stealface italic	(or (alist-get (plist-get est-default-font :family) est-italic-fallback-spec-alist nil nil #'string-equal) `((t :slant italic))))
 
 (est-stealface cursor	`((t :background ,est-color-fg-default)))
 (est-stealface shadow	`((t :foreground ,est-color-fg-shadowed)))
@@ -980,8 +986,8 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
 Same vertical density to Cantarell, but more condensed and
 heavier."
   (interactive)
-  (setq est-fixed-pitch-font (font-spec :family "Roboto Mono"))
-  (setq est-variable-pitch-font (font-spec :family "Roboto"))
+  (setq est-fixed-pitch-font '(:family "Roboto Mono"))
+  (setq est-variable-pitch-font '(:family "Roboto"))
   (est-reevaluate))
 
 (defun est-dejavu-fonts ()
@@ -992,20 +998,20 @@ Very dense look and relatively wide characters.  Good unicode
   (set-fontset-font "fontset-default"  '(#x1D00 . #x1DFF) "DejaVu Sans Mono")
   ;; Phonetic Extensions,	Phonetic Extensions Supplement, Combining Diacritical Marks Supplement
   (set-fontset-font "fontset-default"  '(#x2000 . #x2FFF) "DejaVu Sans Mono")
-  (setq est-fixed-pitch-font (font-spec :family "DejaVu Sans Mono"))
-  (setq est-variable-pitch-font (font-spec :family "DejaVu Sans"))
+  (setq est-fixed-pitch-font '(:family "DejaVu Sans Mono"))
+  (setq est-variable-pitch-font '(:family "DejaVu Sans"))
   (est-reevaluate))
 
 (defun est-gnome-fonts ()
   "Use Cantarell and Source Code fonts.
 Balanced in terms of density."
   (interactive)
-  (setq est-variable-pitch-font (font-spec :family "Cantarell")) ; lacks italic variant 🙁; see est-italic-fallback-spec-alist
+  (setq est-variable-pitch-font '(:family "Cantarell")) ; lacks italic variant 🙁; see est-italic-fallback-spec-alist
   (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "DejaVu Sans")
   (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "Noto Sans Symbols" nil 'append)
   ;; (setq est-fixed-pitch-font "Roboto Mono") ; same vertical density but too high
-  (setq est-fixed-pitch-font (font-spec :family "Source Code Pro"))
-  (setq est-fixed-pitch-serif-font (font-spec :family "Fira Code"))
+  (setq est-fixed-pitch-font '(:family "Source Code Pro"))
+  (setq est-fixed-pitch-serif-font '(:family "Fira Code"))
   (est-reevaluate))
 
 (defun est-adobe-fonts ()
@@ -1014,11 +1020,11 @@ Clean, distinctive look.  Like Cantarell, has a balanced
 density.  Taller than Cantarell, shows a couple of lines less.  Is
 more condensed (horizontally)."
   (interactive)
-  (setq est-variable-pitch-font (font-spec :family "Adobe Clean"))
+  (setq est-variable-pitch-font '(:family "Adobe Clean"))
   (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "DejaVu Sans")
   (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "Noto Sans Symbols" nil 'append)
-  (setq est-fixed-pitch-font (font-spec :family "Source Code Pro"))
-  (setq est-fixed-pitch-serif-font (font-spec :family "Adobe Clean Serif"))
+  (setq est-fixed-pitch-font '(:family "Source Code Pro"))
+  (setq est-fixed-pitch-serif-font '(:family "Adobe Clean Serif"))
   (est-reevaluate))
 
 (defun est-fira-fonts ()
@@ -1031,9 +1037,9 @@ g, y, λ; or monospace r.  We use the semilight weight here to
 achieve similar greyness as other fontsets."
   ; g y λ ; examples in Roman slant.
   (interactive)
-  (setq est-variable-pitch-font (font-spec :family "FiraGO" :weight 'semilight)) ; 
-  (setq est-fixed-pitch-font (font-spec :family "Fira Code"))
-  (setq est-fixed-pitch-serif-font (font-spec :family "Fira Code"))
+  (setq est-variable-pitch-font '(:family "FiraGO" :weight semilight)) ; 
+  (setq est-fixed-pitch-font '(:family "Fira Code" :weight regular))
+  (setq est-fixed-pitch-serif-font est-fixed-pitch-font)
   (est-reevaluate))
 
 (defun est-source-fonts ()
@@ -1041,8 +1047,8 @@ achieve similar greyness as other fontsets."
 Clean look, similar to Noto but the lowercase \"l\" has a curve. Very
 wide interline spacing, shows comfortably only 34 lines."
   (interactive)
-  (setq est-variable-pitch-font (font-spec :family "Source Sans 3"))
-  (setq est-fixed-pitch-font (font-spec :family "Source Code Pro"))
+  (setq est-variable-pitch-font '(:family "Source Sans 3"))
+  (setq est-fixed-pitch-font '(:family "Source Code Pro"))
   (est-reevaluate))
 
 (defun est-libertinus-fonts ()
@@ -1050,9 +1056,9 @@ wide interline spacing, shows comfortably only 34 lines."
 Its uneven stroke widths make it more suitable for print and
 large font sizes, or for effect."
   (interactive)
-  (setq est-fixed-pitch-font (font-spec :family "Inconsolata LGC"))
-  (setq est-variable-pitch-font (font-spec :family "Libertinus Sans"))
-  (setq est-fixed-pitch-serif-font (font-spec :family "Libertinus Mono"))
+  (setq est-fixed-pitch-font '(:family "Inconsolata LGC"))
+  (setq est-variable-pitch-font '(:family "Libertinus Sans"))
+  (setq est-fixed-pitch-serif-font '(:family "Libertinus Mono"))
   (est-reevaluate))
 
 (defun est-noto-fonts ()
@@ -1060,14 +1066,14 @@ large font sizes, or for effect."
 A clean, commonplace fontset, with excellent unicode
 support.  Shows 37 lines."
   (interactive)
-  ;; TODO: (new-fontset "-est-notosansset-*-*-*--*-*-*-*-*-*-fontset-*" (list (t . (font-spec :family "Noto Sans")))) ; define fontset so that we don't override default settings
+  ;; TODO: (new-fontset "-est-notosansset-*-*-*--*-*-*-*-*-*-fontset-*" (list (t . '(:family "Noto Sans")))) ; define fontset so that we don't override default settings
   (set-fontset-font "fontset-default"  '(#x2000 . #x23FF) "Noto Sans Math")
   (set-fontset-font "fontset-default"  '(#x2000 . #x23FF) "Noto Sans Symbols" nil 'append)
   (set-fontset-font "fontset-default"  '(#x2400 . #x27FF) "Noto Sans Symbols")
   ;; see https://gist.github.com/alanthird/7152752d384325a83677f4a90e1e1a05 for other Noto scripts
-  (setq est-fixed-pitch-font (font-spec :family "Noto Sans Mono"))
-  (setq est-variable-pitch-font (font-spec :family "Noto Sans"))
-  (setq est-fixed-pitch-serif-font (font-spec :family "Noto Serif"))
+  (setq est-fixed-pitch-font '(:family "Noto Sans Mono"))
+  (setq est-variable-pitch-font '(:family "Noto Sans"))
+  (setq est-fixed-pitch-serif-font '(:family "Noto Serif"))
   (est-reevaluate))
 
 ;; sample character set:
@@ -1076,7 +1082,7 @@ support.  Shows 37 lines."
 ;; Greek
 ; α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω
 ;; Ligatures
-; ﬁ ﬂ ﬀ œ
+; fi -> ﬁ fl -> ﬂ ff -> ﬀ  oe -> œ
 
 (provide 'est)
 

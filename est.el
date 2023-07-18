@@ -1029,7 +1029,7 @@ appears to be absent from nixpkgs.  Lowercase \"l\" has a visible
 curve.  Some glyphs have a very distinctive look, such as roman
 g, y, λ; or monospace r.  We use the semilight weight here to
 achieve similar greyness as other fontsets."
-  ; g y λ
+  ; g y λ ; examples in Roman slant.
   (interactive)
   (setq est-variable-pitch-font (font-spec :family "FiraGO" :weight 'semilight)) ; 
   (setq est-fixed-pitch-font (font-spec :family "Fira Code"))
@@ -1071,9 +1071,12 @@ support.  Shows 37 lines."
   (est-reevaluate))
 
 ;; sample character set:
+;; Math
 ;; ∀∁⋀⋐⋠⋰⌀⁁⎀␀ⱼᵢ
+;; Greek
 ; α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω
-
+;; Ligatures
+; ﬁ ﬂ ﬀ œ
 
 (provide 'est)
 

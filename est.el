@@ -468,8 +468,8 @@ It is achieved by using the same hue as the default foreground
 color, but with a lesser contrast. It can be used for comments
 and secondary information.")
 
-(defface est-quoted `((t :inherit italic)) "Face for quoted text.
-For instance, this applies to strings, `org-mode' quotes, etc.")
+(defface est-quoted `((t :inherit italic))
+  "Face for quoted text, For instance `org-mode' quotes.")
 
 (est-defface est-subtle `((t :background ,est-color-bg-subtle))
   "Subtle face is used to suggest a physical area on the screen.
@@ -498,8 +498,9 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
 ;; a bug where the properties from the font spec leak into the face
 ;; spec.
 (defcustom est-fixed-pitch-font '(:family "MonoSpace") "Fixed-pitch (monospace) font family." :type 'string :group 'est)
-(defcustom est-fixed-pitch-serif-font '(:family "Monospace Serif") "Fixed-pitch (monospace) font family." :type 'string :group 'est)
+(defcustom est-variable-pitch-serif-font '(:family "Serif") "Serif font family." :type 'string :group 'est)
 (defcustom est-variable-pitch-font '(:family "Sans Serif") "Variable-pitch font family." :type 'string :group 'est)
+(defcustom est-fixed-pitch-serif-font '(:family "Monospace Serif") "Fixed-pitch (monospace) font family with serifs." :type 'string :group 'est)
 (est-defcustom est-default-font est-fixed-pitch-font "Default font family." :type 'string :group 'est)
 
 (est-defface est-invisible `((t :foreground ,est-color-bg-default)) "Face for invisible text")
@@ -512,6 +513,7 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
 (est-stealface variable-pitch	`((t ,@est-variable-pitch-font)))
 (est-stealface fixed-pitch	`((t ,@est-fixed-pitch-font)))
 (est-stealface fixed-pitch-serif	`((t ,@est-fixed-pitch-serif-font)))
+(est-defface est-serif `((t ,@est-variable-pitch-serif-font)) "Face for serif font")
 (defcustom est-italic-fallback-spec-alist
   ;; '(("Cantarell" . ((t :family "Roboto" :slant italic :height 0.95)))) ;  :weight light
   `(("Cantarell" . ((t :family "FiraGO" :weight semilight :slant italic)))) ;  :weight light
@@ -681,7 +683,7 @@ For instance, this applies to strings, `org-mode' quotes, etc.")
    '(font-lock-constant-face	((t :inherit est-emph)))
    '(font-lock-function-name-face	((t :inherit est-strong)))
    '(font-lock-keyword-face	((t :inherit est-emph)))
-   '(font-lock-string-face	((t :inherit est-quoted)))
+   '(font-lock-string-face	((t :inherit italic)))
    '(font-lock-type-face	((t)))
    '(font-lock-variable-name-face	((t)))
    '(font-lock-warning-face	((t :inherit warning)))
@@ -1073,7 +1075,8 @@ support.  Shows 37 lines."
   ;; see https://gist.github.com/alanthird/7152752d384325a83677f4a90e1e1a05 for other Noto scripts
   (setq est-fixed-pitch-font '(:family "Noto Sans Mono"))
   (setq est-variable-pitch-font '(:family "Noto Sans"))
-  (setq est-fixed-pitch-serif-font '(:family "Noto Serif"))
+  (setq est-variable-pitch-serif-font '(:family "Noto Serif"))
+  (setq est-fixed-pitch-serif-font '(:family "Noto Sans Mono")) ; yes
   (est-reevaluate))
 
 ;; sample character set:

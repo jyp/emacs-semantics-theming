@@ -652,6 +652,8 @@ and secondary information.")
    '(diff-added           ((t :inherit ediff-even-diff-face-A)))
    '(diff-removed         ((t :inherit ediff-even-diff-face-B)))
 
+   '(elastic-indent ((t (:inherit est-elusive))))
+   
    '(eshell-prompt        ((t :inherit est-strong)))
    '(eshell-ls-directory  ((t :inherit dired-directory)))
    '(eshell-ls-symlink    ((t :inherit dired-symlink)))

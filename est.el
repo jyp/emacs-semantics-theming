@@ -515,8 +515,9 @@ and secondary information.")
 (est-stealface fixed-pitch-serif	`((t ,@est-fixed-pitch-serif-font)))
 (est-defface est-serif `((t ,@est-variable-pitch-serif-font)) "Face for serif font")
 (defcustom est-italic-fallback-spec-alist
+  '(("Cantarell" . ((t :family "Lato" :slant italic)))) ;  :weight light
   ;; '(("Cantarell" . ((t :family "Roboto" :slant italic :height 0.95)))) ;  :weight light
-  `(("Cantarell" . ((t :family "FiraGO" :weight semilight :slant italic)))) ;  :weight light
+  ;; `(("Cantarell" . ((t :family "FiraGO" :weight semilight :slant italic))))
   "Alist mapping font families to their italic fallback spec."
   :type '(alist :key-type string :value-type sexp)
   :group 'est)

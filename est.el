@@ -569,6 +569,8 @@ and secondary information.")
    '(region	((t :inherit est-subtle)))
    '(secondary-selection	((t :inherit est-subtle)))
    '(fringe	((t :inherit est-faded)))
+   '(escape-glyph	((t :inherit est-salient)))
+   '(homoglyph	((t :inherit est-salient)))
   
    '(header-line	((t :inherit est-heading)))
    '(highlight	((t :inherit est-choice)))

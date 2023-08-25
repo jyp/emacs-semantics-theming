@@ -1081,6 +1081,20 @@ support.  Shows 37 lines."
   (setq est-fixed-pitch-serif-font	'(:family "Noto Sans Mono")) ; yes
   (est-reevaluate))
 
+(defun est-lato-fonts ()
+  (interactive)
+  ;; TODO: (new-fontset "-est-notosansset-*-*-*--*-*-*-*-*-*-fontset-*" (list (t . '(:family "Noto Sans")))) ; define fontset so that we don't override default settings
+  ;; see https://gist.github.com/alanthird/7152752d384325a83677f4a90e1e1a05 for other Noto scripts
+
+  (set-fontset-font "fontset-default"  '(#x1D00 . #x1DFF) "DejaVu Sans")
+  (set-fontset-font "fontset-default"  '(#x2000 . #x2FFF) "DejaVu Sans")  ;; Phonetic Extensions,	Phonetic Extensions Supplement, Combining Diacritical Marks Supplement
+  
+  (setq est-fixed-pitch-font	'(:family "DejaVu Sans Mono"))
+  (setq est-variable-pitch-font	'(:family "Lato"))
+  (setq est-variable-pitch-serif-font	'(:family "DejaVu Sans"))
+  (setq est-fixed-pitch-serif-font	'(:family "DejaVu Sans Mono")) ; yes
+  (est-reevaluate))
+
 ;; sample character set:
 ;; Math
 ;; ∀∁⋀⋐⋠⋰⌀⁁⎀␀ⱼᵢ

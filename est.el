@@ -1,4 +1,3 @@
-
 ;; Copyright: FSF
 
 ;; Author: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
@@ -683,19 +682,32 @@ and secondary information.")
    '(font-latex-italic-face	((t :inherit italic)))
    '(font-latex-verbatim-face	((t :inherit est-faded)))
  
+   '(font-lock-bracket-face	((t )))
    '(font-lock-builtin-face	((t)))
    '(font-lock-comment-face	((t :inherit est-faded)))
    '(font-lock-constant-face	((t :inherit est-emph)))
+   '(font-lock-delimiter-face	((t )))
+   '(font-lock-doc-face	((t :inherit (italic est-faded))))
+   '(font-lock-escape-face	((t :inherit est-emph)))
+   '(font-lock-function-call-face	((t )))
    '(font-lock-function-name-face	((t :inherit est-strong)))
    '(font-lock-keyword-face	((t :inherit est-emph)))
-   '(font-lock-doc-face	((t :inherit (italic est-faded))))
-   '(font-lock-string-face	((t :inherit italic)))
+   '(font-lock-misc-punctuation-face	((t )))
+   '(font-lock-negation-char-face	((t :inherit est-emph)))
+   '(font-lock-number-face	((t :inherit font-lock-constant-face)))
+   '(font-lock-operator-face	((t :inherit )))
+   '(font-lock-preprocessor-face	((t :inherit faded)))
+   '(font-lock-property-name-face	((t )))
+   '(font-lock-property-use-face	((t )))
+   '(font-lock-punctuation-face	((t )))
+   '(font-lock-regexp-face	((t :inherit est-salient)))
+   '(font-lock-regexp-grouping-backslash	((t :inherit font-lock-escape-face)))
+   '(font-lock-string-face	((t :inherit est-quoted)))
    '(font-lock-type-face	((t)))
    '(font-lock-variable-name-face	((t)))
+   '(font-lock-variable-use-face	((t )))
    '(font-lock-warning-face	((t :inherit warning)))
-   '(font-lock-preprocessor-face	((t :inherit faded)))
-   '(font-lock-negation-char-face	((t :inherit est-emph)))
-
+   
    '(helm-candidate-number           ((t :inherit mode-line)))
    '(helm-candidate-number-suspended ((t :inherit (warning mode-line))))
    '(helm-ff-directory               ((t :inherit est-strong)))

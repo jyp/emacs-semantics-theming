@@ -340,12 +340,15 @@ fg."  :type 'float :group 'est)
   "Get a color name from position in the L A B space."
   (apply 'color-rgb-to-hex (est-clamp (color-lab-to-srgb l a b))))
 
+(defcustom est-accent-chroma 50 "Amount of chroma for accent colors." :type 'number :group 'est)
+
 (eval-and-compile ; because it is used in a defcustom; requiring a byte-compiled version of this package would error.
   (defun est-color-lch (lightness chroma hue)
     "Get a color name from position in the LIGHTNESS CHROMA HUE space."
-  (est-color-lab lightness (* chroma (cos hue)) (* chroma (sin hue)))))
+    (est-color-lab lightness (* chroma (cos hue)) (* chroma (sin hue))))
+  (defun est-accent-color-by-hue (hue)
+    (est-color-lch est-accent-lightness est-accent-chroma hue)))
 
-(defcustom est-accent-chroma 50 "Amount of chroma for accent colors." :type 'number :group 'est)
 (est-defcustom est-hue-fundamental   (est-color-hue est-color-fg-popout) "Fundamental accent hue." :type 'float )
 (est-defcustom est-hue-complementary (+ est-hue-fundamental float-pi) "Complementary accent hue." :type 'float)
 (est-defcustom est-hue-analogous1   (+ est-hue-fundamental (/ float-pi 3)) "Analogous1 accent hue." :type 'float)
@@ -353,11 +356,13 @@ fg."  :type 'float :group 'est)
 (est-defcustom est-hue-coanalogous1 (+ est-hue-complementary (/ float-pi 3)) "Coanalogous1 accent hue." :type 'float)
 (est-defcustom est-hue-coanalogous2 (- est-hue-complementary (/ float-pi 3)) "Coanalogous2 accent hue." :type 'float)
 
-(est-defface est-fg-complementary `((t :foreground ,(est-color-lch est-accent-lightness est-accent-chroma est-hue-complementary))) "todo")
-(est-defface est-fg-analogous1 `((t :foreground ,(est-color-lch est-accent-lightness est-accent-chroma est-hue-analogous1))) "todo")
-(est-defface est-fg-analogous2 `((t :foreground ,(est-color-lch est-accent-lightness est-accent-chroma est-hue-analogous2))) "todo")
-(est-defface est-fg-coanalogous1 `((t :foreground ,(est-color-lch est-accent-lightness est-accent-chroma est-hue-coanalogous1))) "todo")
-(est-defface est-fg-coanalogous2 `((t :foreground ,(est-color-lch est-accent-lightness est-accent-chroma est-hue-coanalogous2))) "todo")
+
+
+(est-defface est-fg-complementary	`((t :foreground ,(est-accent-color-by-hue est-hue-complementary))) "todo")
+(est-defface est-fg-analogous1	`((t :foreground ,(est-accent-color-by-hue est-hue-analogous1))) "todo")
+(est-defface est-fg-analogous2	`((t :foreground ,(est-accent-color-by-hue est-hue-analogous2))) "todo")
+(est-defface est-fg-coanalogous1	`((t :foreground ,(est-accent-color-by-hue est-hue-coanalogous1))) "todo")
+(est-defface est-fg-coanalogous2	`((t :foreground ,(est-accent-color-by-hue est-hue-coanalogous2))) "todo")
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Hack against hacks
@@ -689,7 +694,7 @@ and secondary information.")
    '(font-lock-delimiter-face	((t )))
    '(font-lock-doc-face	((t :inherit (italic est-faded))))
    '(font-lock-escape-face	((t :inherit est-emph)))
-   '(font-lock-function-call-face	((t )))
+   '(font-lock-function-call-face	((t)))
    '(font-lock-function-name-face	((t :inherit est-strong)))
    '(font-lock-keyword-face	((t :inherit est-emph)))
    '(font-lock-misc-punctuation-face	((t )))
@@ -1098,6 +1103,7 @@ support.  Shows 37 lines."
   (est-reevaluate))
 
 (defun est-lato-fonts ()
+  "Use Lato fontset"
   (interactive)
   ;; TODO: (new-fontset "-est-notosansset-*-*-*--*-*-*-*-*-*-fontset-*" (list (t . '(:family "Noto Sans")))) ; define fontset so that we don't override default settings
   ;; see https://gist.github.com/alanthird/7152752d384325a83677f4a90e1e1a05 for other Noto scripts

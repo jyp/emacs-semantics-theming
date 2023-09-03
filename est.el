@@ -1,3 +1,4 @@
+;;; est --- Foundation for semantic themes
 ;; Copyright: FSF
 
 ;; Author: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
@@ -266,13 +267,17 @@ Inputs colors are names."
 
 (defcustom est-color-fg-salient "#2056a2"
   "Color of persistent accents.
-It is suitable for links and names which can be followed, such as
-directories, required elisp modules, etc." :type 'color :group 'est)
+This should be at least somewhat saturated, but of similar
+lightness as regular text.  It is suitable for links and names
+which can be followed, such as directories, required elisp
+modules, etc." :type 'color :group 'est)
 
 (defcustom est-color-fg-popout "#00e0ff"
 "Accented color which should be easy to spot.
 It is used mostly to attract attention immediately relevant
 portions of the display, whose relevant state is transient.
+Typically this is achieved by used by simultaneously using
+different lightness than usual text and a saturated color.
 Transience can be as low as isearch matches, balanced parens or
 high TODOs, etc.  Attention can be grabbed using a remarkable hue
 and high staturation." :type 'color :group 'est)
@@ -300,26 +305,26 @@ items, or delinate areas with stronger emphasis." :type 'color
 
 
 (defcustom est-taint-vc-base "#0000FF"
-"A taint to indicate base stuff in VC contexts.
+"A taint to indicate base stuff in version-control contexts.
 This is not used directly in faces, but blended with various background
 colors.  So it is fine to use saturated bright colors here." :type 'color :group
 'est)
 
 (defcustom est-taint-vc-third "#FFFF00"
-"A taint to indicate third-party stuff in VC contexts.
+"A taint to indicate third-party stuff in version-control contexts.
 This is not used directly in faces, but blended with various background
 colors.  So it is fine to use saturated bright colors here." :type 'color :group
 'est)
 
 (defcustom est-taint-vc-added "#00FF00"
-"A taint to indicate added stuff in VC contexts.
+"A taint to indicate added stuff in version-control contexts.
 This is not used directly in faces, but blended with various background
 colors.  So it is fine to use saturated bright colors here." :type 'color :group
 'est)
 
 
 (defcustom est-taint-vc-removed "#FF0000"
-"A taint to indicate removed stuff in VC contexts.
+"A taint to indicate removed stuff in version-control contexts.
 This is not used directly in faces, but blended with various background
 colors.  So it is fine to use saturated bright colors here."
 :type 'color :group 'est)
@@ -349,14 +354,12 @@ fg."  :type 'float :group 'est)
   (defun est-accent-color-by-hue (hue)
     (est-color-lch est-accent-lightness est-accent-chroma hue)))
 
-(est-defcustom est-hue-fundamental   (est-color-hue est-color-fg-popout) "Fundamental accent hue." :type 'float )
-(est-defcustom est-hue-complementary (+ est-hue-fundamental float-pi) "Complementary accent hue." :type 'float)
-(est-defcustom est-hue-analogous1   (+ est-hue-fundamental (/ float-pi 3)) "Analogous1 accent hue." :type 'float)
-(est-defcustom est-hue-analogous2   (- est-hue-fundamental (/ float-pi 3)) "Analogous2 accent hue." :type 'float)
-(est-defcustom est-hue-coanalogous1 (+ est-hue-complementary (/ float-pi 3)) "Coanalogous1 accent hue." :type 'float)
-(est-defcustom est-hue-coanalogous2 (- est-hue-complementary (/ float-pi 3)) "Coanalogous2 accent hue." :type 'float)
-
-
+(est-defcustom est-hue-fundamental	(est-color-hue est-color-fg-popout)	"Fundamental accent hue."	:type 'float)
+(est-defcustom est-hue-complementary	(+ est-hue-fundamental float-pi)	"Complementary accent hue."	:type 'float)
+(est-defcustom est-hue-analogous1	(+ est-hue-fundamental (/ float-pi 3))	"Analogous1 accent hue."	:type 'float)
+(est-defcustom est-hue-analogous2	(- est-hue-fundamental (/ float-pi 3))	"Analogous2 accent hue."	:type 'float)
+(est-defcustom est-hue-coanalogous1	(+ est-hue-complementary (/ float-pi 3))	"Coanalogous1 accent hue."	:type 'float)
+(est-defcustom est-hue-coanalogous2	(- est-hue-complementary (/ float-pi 3))	"Coanalogous2 accent hue."	:type 'float)
 
 (est-defface est-fg-complementary	`((t :foreground ,(est-accent-color-by-hue est-hue-complementary))) "todo")
 (est-defface est-fg-analogous1	`((t :foreground ,(est-accent-color-by-hue est-hue-analogous1))) "todo")
@@ -604,7 +607,7 @@ and secondary information.")
    ;; '(agda2-highlight-macro-face	((t :inherit font-lock-function-name-face)))
    ;; '(agda2-highlight-record-face	((t :inherit font-lock-variable-name-face)))
    ;; '(agda2-highlight-dotted-face	((t :inherit font-lock-variable-name-face)))
-   ;; '(agda2-highlight-operator-face	((t :inherit est-salient)))
+   ;; '(agda2-highlight-operator-face	((t :inherit est-serif)))
    ;; '(agda2-highlight-error-face	((t :inherit error)))
    ;; '(agda2-highlight-typechecks-face	((t :inherit est-highlight-1)))
    ;; '(agda2-highlight-typechecking-face	((t :inherit font-lock-preprocessor-face)))
@@ -700,7 +703,7 @@ and secondary information.")
    '(font-lock-misc-punctuation-face	((t )))
    '(font-lock-negation-char-face	((t :inherit est-emph)))
    '(font-lock-number-face	((t :inherit font-lock-constant-face)))
-   '(font-lock-operator-face	((t )))
+   '(font-lock-operator-face	((t :inherit est-serif)))
    '(font-lock-preprocessor-face	((t :inherit faded)))
    '(font-lock-property-name-face	((t )))
    '(font-lock-property-use-face	((t )))
@@ -712,6 +715,8 @@ and secondary information.")
    '(font-lock-variable-name-face	((t)))
    '(font-lock-variable-use-face	((t )))
    '(font-lock-warning-face	((t :inherit warning)))
+
+   '(eglot-highlight-symbol-face	((t :inherit est-popout)))
    
    '(helm-candidate-number           ((t :inherit mode-line)))
    '(helm-candidate-number-suspended ((t :inherit (warning mode-line))))
@@ -930,6 +935,7 @@ and secondary information.")
 
 (defun est-lunarized-dark ()
   "Solarized-inspired theme (dark)."
+  (interactive)
   (setq est-color-fg-default  "#839496"
         est-color-fg-salient  "#268bd2"
         est-color-fg-popout   "#eee8d5"
@@ -1103,7 +1109,7 @@ support.  Shows 37 lines."
   (est-reevaluate))
 
 (defun est-lato-fonts ()
-  "Use Lato fontset"
+  "Use Lato fontset."
   (interactive)
   ;; TODO: (new-fontset "-est-notosansset-*-*-*--*-*-*-*-*-*-fontset-*" (list (t . '(:family "Noto Sans")))) ; define fontset so that we don't override default settings
   ;; see https://gist.github.com/alanthird/7152752d384325a83677f4a90e1e1a05 for other Noto scripts

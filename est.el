@@ -1,4 +1,4 @@
-;;; est --- Foundation for semantic themes
+;;; est --- Foundation for semantic themes -*- lexical-binding: t -*-
 ;; Copyright: FSF
 
 ;; Author: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
@@ -246,7 +246,7 @@ Inputs colors are names."
 
 (defun est-color-hue (name)
   "Get the hue of a color given by NAME."
-  (pcase-let ((`(,l ,a ,b)
+  (pcase-let ((`(,_lightness ,a ,b)
                (apply 'color-srgb-to-lab (color-name-to-rgb name))))
     (atan a b)))
 
@@ -1080,6 +1080,7 @@ wide interline spacing, shows comfortably only 34 lines."
   (interactive)
   (setq est-variable-pitch-font '(:family "Source Sans 3"))
   (setq est-fixed-pitch-font '(:family "Source Code Pro"))
+  (setq est-variable-pitch-serif-font '(:family "Source Serif 4"))
   (est-reevaluate))
 
 (defun est-libertinus-fonts ()

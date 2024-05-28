@@ -923,6 +923,10 @@ and secondary information.")
 
    '(transient-heading ((t :inherit (font-lock-keyword-face variable-pitch))))
    ;; useful when transient-force-fixed-pitch is t
+
+   '(vc-removed-state	((t :inherit vc-state-base est-emph)))
+   '(vc-missing-state	((t :inherit vc-state-base est-emph)))
+   '(vc-conflict-state	((t :inherit vc-state-base vc-state warning )))
    
    '(widget-field ((t :inherit (est-faded est-subtle)))))
 

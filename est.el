@@ -1037,7 +1037,7 @@ Very dense look and relatively wide characters.  Good unicode
   (setq est-variable-pitch-font '(:family "DejaVu Sans"))
   (est-reevaluate))
 
-(defun est-gnome-fonts ()
+(defun est-gnome-legacy-fonts ()
   "Use Cantarell and Source Code fonts.
 Balanced in terms of density."
   (interactive)
@@ -1048,6 +1048,16 @@ Balanced in terms of density."
   (setq est-fixed-pitch-font '(:family "Source Code Pro"))
   (setq est-fixed-pitch-serif-font '(:family "Fira Code"))
   (est-reevaluate))
+
+(defun est-inter-fonts ()
+  "Inter"
+  (interactive)
+  (setq est-variable-pitch-font '(:family "Inter Variable" :otf (latn nil (cv05 cv08 zero) nil)))
+  (set-fontset-font "fontset-default"  nil (font-spec :family "Inter Variable" :otf '(latn nil (cv05 cv08 zero) nil)))
+  ; FIXME otf features don't actually enable anything, they only select fonts which have the required features 
+  (setq est-fixed-pitch-font '(:family "CommitMono"))
+  (est-reevaluate))
+
 
 (defun est-adobe-fonts ()
   "Use Adobe Clean fontset.

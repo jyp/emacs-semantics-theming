@@ -1054,7 +1054,8 @@ Balanced in terms of density."
   (interactive)
   (setq est-variable-pitch-font '(:family "Inter Variable" :otf (latn nil (cv05 cv08 zero) nil)))
   (set-fontset-font "fontset-default"  nil (font-spec :family "Inter Variable" :otf '(latn nil (cv05 cv08 zero) nil)))
-  ; FIXME otf features don't actually enable anything, they only select fonts which have the required features 
+  ;; FIXME otf features don't actually enable anything, they only select fonts which have the required features
+  ;; https://lists.gnu.org/archive/html/help-gnu-emacs/2023-09/msg00034.html
   (setq est-fixed-pitch-font '(:family "CommitMono"))
   (est-reevaluate))
 

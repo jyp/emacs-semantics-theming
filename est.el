@@ -1139,6 +1139,22 @@ support.  Shows 37 lines."
   (setq est-fixed-pitch-serif-font	'(:family "DejaVu Sans Mono")) ; yes
   (est-reevaluate))
 
+(defun est-pt-fonts ()
+  "Use PT (Paratype) fontset.
+An issue with this fontset is that the Mono variant appears to be
+much larger than the Sans variant.  It is also taking a lot of
+vertical space."
+  (interactive)
+
+  (set-fontset-font "fontset-default"  '(#x1D00 . #x1DFF) "DejaVu Sans")
+  (set-fontset-font "fontset-default"  '(#x2000 . #x2FFF) "DejaVu Sans")  ;; Phonetic Extensions,	Phonetic Extensions Supplement, Combining Diacritical Marks Supplement
+  
+  (setq est-fixed-pitch-font	'(:family "PT Mono"))
+  (setq est-variable-pitch-font	'(:family "PT Sans"))
+  (setq est-variable-pitch-serif-font	'(:family "PT Serif"))
+  (setq est-fixed-pitch-serif-font	'(:family "PT Mono")) ; yes
+  (est-reevaluate))
+
 ;; sample character set:
 ;; Math
 ;; ∀∁⋀⋐⋠⋰⌀⁁⎀␀ⱼᵢ

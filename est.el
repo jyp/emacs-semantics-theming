@@ -1037,6 +1037,15 @@ Very dense look and relatively wide characters.  Good unicode
   (setq est-variable-pitch-font '(:family "DejaVu Sans"))
   (est-reevaluate))
 
+(defun est-adwaita-fonts ()
+  "Use Adwaita fonts."
+  (interactive)
+  (setq est-variable-pitch-font '(:family "Adwaita Sans"))
+  (setq est-fixed-pitch-font '(:family "Adwaita Mono"))
+  (setq est-fixed-pitch-serif-font '(:family "Iosevka Serif"))
+  (est-reevaluate))
+
+
 (defun est-gnome-legacy-fonts ()
   "Use Cantarell and Source Code fonts.
 Balanced in terms of density."

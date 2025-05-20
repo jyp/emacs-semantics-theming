@@ -1038,13 +1038,23 @@ Very dense look and relatively wide characters.  Good unicode
   (est-reevaluate))
 
 (defun est-adwaita-fonts ()
-  "Use Adwaita fonts."
+  "Use Adwaita fonts.
+Default fontset from Gnome 48. Adwaita Mono being a variant of Iosevka,
+the chosen monospace serif font is set to Iosevka Slab."
   (interactive)
   (setq est-variable-pitch-font '(:family "Adwaita Sans"))
   (setq est-fixed-pitch-font '(:family "Adwaita Mono"))
-  (setq est-fixed-pitch-serif-font '(:family "Iosevka Serif"))
+  (setq est-fixed-pitch-serif-font '(:family "Iosevka Slab"))
   (est-reevaluate))
 
+(defun est-iosevka-fonts ()
+  "Use Iosevka fonts.
+Excellent unicode coverage and consistency with simple design."
+  (interactive)
+  (setq est-variable-pitch-font '(:family "Iosevka Aile"))
+  (setq est-fixed-pitch-font '(:family "Iosevka"))
+  (setq est-fixed-pitch-serif-font '(:family "Iosevka Slab"))
+  (est-reevaluate))
 
 (defun est-gnome-legacy-fonts ()
   "Use Cantarell and Source Code fonts.

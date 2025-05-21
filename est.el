@@ -1115,7 +1115,8 @@ wide interline spacing, shows comfortably only 34 lines."
   (setq est-variable-pitch-font '(:family "Source Sans 3"))
   (setq est-fixed-pitch-font '(:family "Source Code Pro"))
   (setq est-variable-pitch-serif-font '(:family "Source Serif 4"))
-  (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "DejaVu Sans")
+  (set-fontset-font "fontset-default"  '(#x2000 . #x2FFF) "DejaVu Sans") ; symbols
+  (set-fontset-font "fontset-default"  '(#x1d400 . #x1d7FF) "STIX Two Math") ; Mathematical Alphanumeric Symbols
   (est-reevaluate))
 
 (defun est-libertinus-fonts ()

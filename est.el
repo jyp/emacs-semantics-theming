@@ -1045,6 +1045,7 @@ the chosen monospace serif font is set to Iosevka Slab."
   (setq est-variable-pitch-font '(:family "Adwaita Sans"))
   (setq est-fixed-pitch-font '(:family "Adwaita Mono"))
   (setq est-fixed-pitch-serif-font '(:family "Iosevka Slab"))
+  (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "DejaVu Sans")
   (est-reevaluate))
 
 (defun est-iosevka-fonts ()
@@ -1072,7 +1073,7 @@ Balanced in terms of density."
   "Inter"
   (interactive)
   (setq est-variable-pitch-font '(:family "Inter Variable" :otf (latn nil (cv05 cv08 zero) nil)))
-  (set-fontset-font "fontset-default"  nil (font-spec :family "Inter Variable" :otf '(latn nil (cv05 cv08 zero) nil)))
+  (set-fontset-font "fontset-default"  '(#x2000 . #x27FF) "DejaVu Sans")
   ;; FIXME otf features don't actually enable anything, they only select fonts which have the required features
   ;; https://lists.gnu.org/archive/html/help-gnu-emacs/2023-09/msg00034.html
   (setq est-fixed-pitch-font '(:family "CommitMono"))

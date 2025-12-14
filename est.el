@@ -1115,8 +1115,22 @@ wide interline spacing, shows comfortably only 34 lines."
   (interactive)
   (setq est-variable-pitch-font '(:family "Source Sans 3"))
   (setq est-fixed-pitch-font '(:family "Source Code Pro"))
+  (setq est-fixed-pitch-serif-font	'(:family "Iosevka Slab"))
   (setq est-variable-pitch-serif-font '(:family "Source Serif 4"))
-  (set-fontset-font "fontset-default"  '(#x2000 . #x2FFF) "DejaVu Sans") ; symbols
+  (set-fontset-font "fontset-default"  '(#x2000 . #x21FF) "DejaVu Sans")
+  ;;  20xx = General Punctuation, Superscripts and Subscripts; Currency Symbols; Combining Diacritical Marks for Symbols
+  (set-fontset-font "fontset-default"  '(#x2200 . #x22FF) "STIX Two Math")
+  ;; 22xx = Mathematical Operators
+  (set-fontset-font "fontset-default"  '(#x2300 . #x27FF) "DejaVu Sans")
+  ;; 23xx = Miscellaneous Technical
+  ;; 25xx = Box Drawing, Block elements
+  ;; 24xx = Control Pictures, Optical Character Recognition, Enclosed Alphanumerics
+  ;; 26xx = Miscellaneous Symbols
+  ;; 27xx = Dingbats
+  (set-fontset-font "fontset-default"  '(#x2900 . #x2BFF) "STIX Two Math")
+  ;; 29xx = Supplemental Arrows-B,  Miscellaneous Mathematical Symbols-B
+  ;; 2Axx = Supplemental Mathematical Operators
+  ;; 2Bxx = Miscellaneous Symbols and Arrows
   (set-fontset-font "fontset-default"  '(#x1d400 . #x1d7FF) "STIX Two Math") ; Mathematical Alphanumeric Symbols
   (est-reevaluate))
 

@@ -1119,12 +1119,12 @@ wide interline spacing, shows comfortably only 34 lines."
   (setq est-variable-pitch-serif-font '(:family "Source Serif 4"))
   (set-fontset-font "fontset-default"  '(#x2000 . #x21FF) "DejaVu Sans")
   ;;  20xx = General Punctuation, Superscripts and Subscripts; Currency Symbols; Combining Diacritical Marks for Symbols
-  (set-fontset-font "fontset-default"  '(#x2200 . #x22FF) "STIX Two Math")
+  (set-fontset-font "fontset-default"  '(#x2200 . #x23FF) "STIX Two Math")
   ;; 22xx = Mathematical Operators
-  (set-fontset-font "fontset-default"  '(#x2300 . #x27FF) "DejaVu Sans")
-  ;; 23xx = Miscellaneous Technical
-  ;; 25xx = Box Drawing, Block elements
+  ;; 23xx = Miscellaneous Technical (used to draw math symbols)
+  (set-fontset-font "fontset-default"  '(#x2400 . #x27FF) "DejaVu Sans")
   ;; 24xx = Control Pictures, Optical Character Recognition, Enclosed Alphanumerics
+  ;; 25xx = Box Drawing, Block elements
   ;; 26xx = Miscellaneous Symbols
   ;; 27xx = Dingbats
   (set-fontset-font "fontset-default"  '(#x2900 . #x2BFF) "STIX Two Math")

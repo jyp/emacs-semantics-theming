@@ -1118,6 +1118,7 @@ wide interline spacing, shows comfortably only 34 lines."
   (setq est-fixed-pitch-serif-font	'(:family "Iosevka Slab"))
   (setq est-variable-pitch-serif-font '(:family "Source Serif 4"))
   (set-fontset-font "fontset-default"  '(#x2000 . #x21FF) "DejaVu Sans")
+  (set-fontset-font "fontset-default"  '(#x2100 . #x214F) "STIX Two Math") ;; letter-like symbols ℕ,ℚ,ℂ,ℝ, etc. (STIX matches the Source Sans metrics better)
   ;;  20xx = General Punctuation, Superscripts and Subscripts; Currency Symbols; Combining Diacritical Marks for Symbols
   (set-fontset-font "fontset-default"  '(#x2200 . #x23FF) "STIX Two Math")
   ;; 22xx = Mathematical Operators

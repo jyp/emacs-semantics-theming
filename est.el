@@ -689,7 +689,6 @@ and secondary information.")
    '(font-latex-string-face	((t :inherit font-lock-string-face)))
    '(font-latex-warning-face	((t :inherit est-strong))) ; latex-warning face is not really a warning face!
    '(font-latex-italic-face	((t :inherit italic)))
-   '(font-latex-verbatim-face	((t :inherit est-faded)))
  
    '(font-lock-bracket-face	((t )))
    '(font-lock-builtin-face	((t)))
